@@ -4,9 +4,10 @@ import { Phone, Mail, MapPin, MessageSquare, Facebook, Instagram, Linkedin, Yout
 interface FooterProps {
   onOpenScheduleModal: () => void;
   onOpenDomainModal?: () => void;
+  onOpenAdminLogin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = () => {
+export const Footer: React.FC<FooterProps> = ({ onOpenAdminLogin }) => {
   const phone = '+91 78704 33580';
   const email = 'info@krestate.in';
 
@@ -128,6 +129,17 @@ export const Footer: React.FC<FooterProps> = () => {
             <a href="#" className="hover:text-slate-900 transition-colors">Privacy Policy</a>
             <span>|</span>
             <a href="#" className="hover:text-slate-900 transition-colors">Terms &amp; Conditions</a>
+            {onOpenAdminLogin && (
+              <>
+                <span>|</span>
+                <button
+                  onClick={onOpenAdminLogin}
+                  className="hover:text-amber-800 transition-colors cursor-pointer font-semibold text-slate-700"
+                >
+                  Admin Portal
+                </button>
+              </>
+            )}
           </div>
         </div>
 

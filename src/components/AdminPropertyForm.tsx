@@ -180,6 +180,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
   };
 
   const [formData, setFormData] = useState<Partial<Property>>(() => getInitialFormData(propertyToEdit));
+  const [isVideoPortrait, setIsVideoPortrait] = useState(false);
 
   useEffect(() => {
     setFormData(getInitialFormData(propertyToEdit));
@@ -1199,20 +1200,38 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
                       {formData.videoTour.videoUrl.startsWith('http') ? 'Streaming URL' : 'Local Uploaded Video'}
                     </span>
                   </div>
-                  <div className="relative aspect-video max-h-56 w-full rounded-xl overflow-hidden bg-black border border-slate-200 shadow-inner">
+                  <div className={`relative ${isVideoPortrait ? 'aspect-[9/16] max-h-72 mx-auto' : 'aspect-video max-h-56 w-full'} rounded-xl overflow-hidden bg-black border border-slate-200 shadow-inner flex items-center justify-center transition-all`}>
+                    {isVideoPortrait && (
+                      <video
+                        src={formData.videoTour.videoUrl}
+                        muted
+                        playsInline
+                        autoPlay
+                        loop
+                        aria-hidden="true"
+                        className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125 pointer-events-none"
+                      />
+                    )}
                     {formData.videoTour.videoUrl.includes('youtube.com') || formData.videoTour.videoUrl.includes('youtu.be') ? (
                       <iframe
                         src={formData.videoTour.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
-                        className="w-full h-full"
+                        className="w-full h-full relative z-10"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />
                     ) : (
                       <video
+                        key={formData.videoTour.videoUrl}
                         src={formData.videoTour.videoUrl}
                         controls
                         playsInline
-                        className="w-full h-full object-contain"
+                        onLoadedMetadata={(e) => {
+                          const { videoWidth, videoHeight } = e.currentTarget;
+                          if (videoWidth && videoHeight) {
+                            setIsVideoPortrait(videoHeight > videoWidth);
+                          }
+                        }}
+                        className="w-full h-full object-contain relative z-10"
                       />
                     )}
                   </div>

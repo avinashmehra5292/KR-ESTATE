@@ -236,6 +236,7 @@ export default function App() {
         <Footer
           onOpenScheduleModal={() => handleOpenScheduleModal()}
           onOpenDomainModal={() => setDomainModalOpen(true)}
+          onOpenAdminLogin={() => setAdminLoginOpen(true)}
         />
 
         {/* Modals & Overlays */}

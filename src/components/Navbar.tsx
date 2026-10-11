@@ -83,13 +83,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>UP RERA Verified</span>
           </div>
 
-          {/* Book VIP Visit */}
+          {/* Book Visit */}
           <button
             onClick={() => onOpenScheduleModal()}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Book VIP Visit</span>
+            <span>Book Visit</span>
           </button>
 
           {/* Admin Icon button */}
@@ -103,12 +103,21 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mobile menu trigger */}
-        <div className="flex lg:hidden items-center gap-3">
+        <div className="flex lg:hidden items-center gap-2">
+          {/* Mobile Direct Admin Lock Button */}
+          <button
+            onClick={onOpenAdminLogin}
+            title="Admin Portal"
+            className="p-1.5 text-slate-500 hover:text-amber-800 transition-colors cursor-pointer"
+            aria-label="Admin Portal"
+          >
+            <Lock className="w-4 h-4 text-slate-600" />
+          </button>
           <button
             onClick={() => onOpenScheduleModal()}
             className="px-3.5 py-1.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-lg shadow-sm"
           >
-            Book VIP
+            Book Visit
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -160,7 +169,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="w-full py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-xl shadow-md"
             >
-              Book VIP Visit
+              Book Visit
+            </button>
+            {/* Admin Portal Button in Mobile Menu */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenAdminLogin();
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 text-xs font-semibold text-slate-800 bg-white/85 hover:bg-white border border-orange-200 rounded-xl shadow-xs transition-all cursor-pointer"
+            >
+              <Lock className="w-3.5 h-3.5 text-amber-700" />
+              <span>Admin Portal Login</span>
             </button>
           </div>
         </div>
