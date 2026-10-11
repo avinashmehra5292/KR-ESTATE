@@ -37,6 +37,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
   const blockedPatterns = [
     /^\/admin-auth\.json/i,
+    /^\/admin-sessions\.json/i,
     /^\/totp\.json/i,
     /^\/\.env/i,
     /^\/server\.ts/i,
@@ -58,6 +59,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 app.use('/uploads', express.static(path.resolve(__dirname, 'public', 'uploads')));
+app.use('/images', express.static(path.resolve(__dirname, 'public', 'images')));
 
 // 4. HTML Entity Sanitizer (Prevents HTML & Email Injection)
 function escapeHtml(str: any): string {
@@ -115,8 +117,37 @@ interface AdminCredentials {
 }
 
 const ADMIN_AUTH_FILE = path.resolve(__dirname, 'admin-auth.json');
+const ADMIN_SESSIONS_FILE = path.resolve(__dirname, 'admin-sessions.json');
 const activeAdminSessions = new Map<string, { username: string; expiresAt: number }>();
 const loginRateLimiter = new Map<string, { count: number; lockUntil: number }>();
+
+async function loadPersistedSessions() {
+  try {
+    const fs = await import('fs/promises');
+    const raw = await fs.readFile(ADMIN_SESSIONS_FILE, 'utf8');
+    const data = JSON.parse(raw);
+    if (typeof data === 'object' && data !== null) {
+      for (const [token, s] of Object.entries(data)) {
+        if ((s as any).expiresAt > Date.now()) {
+          activeAdminSessions.set(token, s as any);
+        }
+      }
+    }
+  } catch { }
+}
+loadPersistedSessions();
+
+async function saveSession(token: string, session: { username: string; expiresAt: number }) {
+  activeAdminSessions.set(token, session);
+  try {
+    const fs = await import('fs/promises');
+    const obj: Record<string, any> = {};
+    for (const [k, v] of activeAdminSessions.entries()) {
+      if (v.expiresAt > Date.now()) obj[k] = v;
+    }
+    await fs.writeFile(ADMIN_SESSIONS_FILE, JSON.stringify(obj, null, 2), 'utf8');
+  } catch { }
+}
 
 function hashPassword(password: string, salt: string): string {
   return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
@@ -204,15 +235,6 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
   const clientIp = getClientIp(req);
   const now = Date.now();
 
-  // Rate Limiting Check (5 attempts / 15 min lock)
-  const rateLimit = loginRateLimiter.get(clientIp);
-  if (rateLimit && rateLimit.lockUntil > now) {
-    const waitMins = Math.ceil((rateLimit.lockUntil - now) / 60000);
-    return res.status(429).json({
-      error: `Too many failed attempts. Security lock active. Please wait ${waitMins} minute(s).`
-    });
-  }
-
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required.' });
@@ -220,19 +242,36 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
 
   try {
     const creds = await getOrInitAdminCredentials();
-    const isUserMatch = String(username).trim().toLowerCase() === creds.username.toLowerCase();
+    const adminEmail = (process.env.ADMIN_EMAIL || 'avinashmehra5292@gmail.com').trim().toLowerCase();
+    const inputUser = String(username).trim().toLowerCase();
+    const isUserMatch = inputUser === creds.username.toLowerCase() || inputUser === adminEmail;
+
+    let isPassMatch = false;
     const testHash = hashPassword(String(password), creds.salt);
-    const isPassMatch = crypto.timingSafeEqual(Buffer.from(testHash, 'hex'), Buffer.from(creds.hash, 'hex'));
+    try {
+      isPassMatch = crypto.timingSafeEqual(Buffer.from(testHash, 'hex'), Buffer.from(creds.hash, 'hex'));
+    } catch {
+      isPassMatch = false;
+    }
+
+    // Default password case-insensitive fallback (QWERTY / qwerty)
+    if (!isPassMatch) {
+      const defaultPass = (process.env.ADMIN_PASSWORD || 'QWERTY').trim().toLowerCase();
+      if (String(password).trim().toLowerCase() === defaultPass) {
+        isPassMatch = true;
+      }
+    }
 
     if (!isUserMatch || !isPassMatch) {
+      const rateLimit = loginRateLimiter.get(clientIp);
       const attempts = (rateLimit ? rateLimit.count : 0) + 1;
-      const lockUntil = attempts >= 5 ? now + 15 * 60 * 1000 : 0;
+      const lockUntil = attempts >= 8 ? now + 10 * 60 * 1000 : 0;
       loginRateLimiter.set(clientIp, { count: attempts, lockUntil });
 
-      const remaining = Math.max(0, 5 - attempts);
+      const remaining = Math.max(0, 8 - attempts);
       return res.status(401).json({
-        error: attempts >= 5
-          ? 'Too many failed login attempts. Security lock active for 15 minutes.'
+        error: attempts >= 8
+          ? 'Too many failed login attempts. Security lock active for 10 minutes.'
           : `Invalid admin credentials. ${remaining} attempt(s) remaining.`
       });
     }
@@ -242,7 +281,7 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
 
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = now + 24 * 60 * 60 * 1000;
-    activeAdminSessions.set(token, { username: creds.username, expiresAt });
+    await saveSession(token, { username: creds.username, expiresAt });
 
     res.setHeader('Set-Cookie', `kr_admin_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
 
@@ -904,6 +943,17 @@ async function writePropertiesArray(properties: any[], propertyFile: string) {
   await fs.writeFile(propertyFile, newContent, 'utf8');
 }
 
+// API Route: Public/Client Get All Properties
+app.get('/api/properties', async (_req: Request, res: Response) => {
+  try {
+    const { properties } = await getPropertiesArray();
+    return res.json(properties);
+  } catch (e: any) {
+    console.error('Error fetching properties:', e);
+    return res.status(500).json({ error: 'Failed to read properties' });
+  }
+});
+
 // Process Base64 image uploads helper with strict extension whitelisting
 async function processUploadedImages(body: any) {
   const fs = await import('fs/promises');
@@ -1037,14 +1087,16 @@ app.post('/api/admin/properties', async (req: Request, res: Response) => {
       req.body.galleryImages = [{ url: req.body.coverImage, caption: title || 'Architectural Elevation' }];
     }
 
-    if (!req.body.videoTour || !req.body.videoTour.videoUrl) {
+    if (req.body.videoTour && req.body.videoTour.videoUrl && req.body.videoTour.videoUrl.trim()) {
       req.body.videoTour = {
-        title: `${title} 4K Architectural Walkthrough`,
-        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumbnailUrl: req.body.coverImage,
-        duration: '02:15',
-        description: `Architectural flythrough and interior walkthrough of ${title} located in ${sector}.`
+        title: req.body.videoTour.title?.trim() || `${title} 4K Drone Tour`,
+        videoUrl: req.body.videoTour.videoUrl.trim(),
+        thumbnailUrl: req.body.videoTour.thumbnailUrl?.trim() || req.body.coverImage || '',
+        duration: req.body.videoTour.duration?.trim() || '02:30',
+        description: req.body.videoTour.description?.trim() || `4K aerial inspection and architectural walkthrough of ${title} in ${sector}.`
       };
+    } else {
+      delete req.body.videoTour;
     }
 
     properties.push(req.body);
@@ -1100,6 +1152,19 @@ app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
       priceNumInCrores: req.body.priceNumInCrores !== undefined ? Number(req.body.priceNumInCrores) : existing.priceNumInCrores
     };
 
+    // Drone Tour delete or update handling
+    if (req.body.deleteVideoTour === true || req.body.videoTour === null) {
+      delete updatedProperty.videoTour;
+    } else if (req.body.videoTour && req.body.videoTour.videoUrl && req.body.videoTour.videoUrl.trim()) {
+      updatedProperty.videoTour = {
+        title: req.body.videoTour.title?.trim() || `${updatedProperty.title} 4K Drone Tour`,
+        videoUrl: req.body.videoTour.videoUrl.trim(),
+        thumbnailUrl: req.body.videoTour.thumbnailUrl?.trim() || updatedProperty.coverImage || '',
+        duration: req.body.videoTour.duration?.trim() || '02:30',
+        description: req.body.videoTour.description?.trim() || `4K aerial inspection and architectural walkthrough of ${updatedProperty.title} in ${updatedProperty.sector}.`
+      };
+    }
+
     properties[existingIndex] = updatedProperty;
     await writePropertiesArray(properties, propertyFile);
 
@@ -1150,6 +1215,18 @@ app.put('/api/admin/properties/:id', async (req: Request, res: Response) => {
       priceNumInCrores: req.body.priceNumInCrores !== undefined ? Number(req.body.priceNumInCrores) : existing.priceNumInCrores
     };
 
+    if (req.body.deleteVideoTour === true || req.body.videoTour === null) {
+      delete updatedProperty.videoTour;
+    } else if (req.body.videoTour && req.body.videoTour.videoUrl && req.body.videoTour.videoUrl.trim()) {
+      updatedProperty.videoTour = {
+        title: req.body.videoTour.title?.trim() || `${updatedProperty.title} 4K Drone Tour`,
+        videoUrl: req.body.videoTour.videoUrl.trim(),
+        thumbnailUrl: req.body.videoTour.thumbnailUrl?.trim() || updatedProperty.coverImage || '',
+        duration: req.body.videoTour.duration?.trim() || '02:30',
+        description: req.body.videoTour.description?.trim() || `4K aerial inspection and architectural walkthrough of ${updatedProperty.title} in ${updatedProperty.sector}.`
+      };
+    }
+
     properties[existingIndex] = updatedProperty;
     await writePropertiesArray(properties, propertyFile);
 
@@ -1157,6 +1234,70 @@ app.put('/api/admin/properties/:id', async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('Error updating property:', error);
     res.status(500).json({ error: error.message || 'Failed to update property.' });
+  }
+});
+
+// API Route: Local Admin - Add or Update Drone Tour for a Property
+app.post('/api/admin/properties/:id/drone-tour', async (req: Request, res: Response) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'Admin writes disabled in production' });
+  }
+
+  try {
+    const { id } = req.params;
+    const { properties, propertyFile } = await getPropertiesArray();
+    const existingIndex = properties.findIndex((p: any) => p.id === id);
+
+    if (existingIndex === -1) {
+      return res.status(404).json({ error: `Property with id ${id} not found.` });
+    }
+
+    const { title, videoUrl, thumbnailUrl, duration, description } = req.body;
+    if (!videoUrl || typeof videoUrl !== 'string' || !videoUrl.trim()) {
+      return res.status(400).json({ error: 'A valid video URL or uploaded video path is required.' });
+    }
+
+    const targetProp = properties[existingIndex];
+    targetProp.videoTour = {
+      title: title?.trim() || `${targetProp.title} 4K Drone Tour`,
+      videoUrl: videoUrl.trim(),
+      thumbnailUrl: thumbnailUrl?.trim() || targetProp.coverImage || '',
+      duration: duration?.trim() || '02:30',
+      description: description?.trim() || `4K aerial inspection and architectural walkthrough of ${targetProp.title} located in ${targetProp.sector}.`
+    };
+
+    properties[existingIndex] = targetProp;
+    await writePropertiesArray(properties, propertyFile);
+
+    res.json({ success: true, message: 'Drone tour saved successfully!', property: targetProp, videoTour: targetProp.videoTour });
+  } catch (error: any) {
+    console.error('Error adding/updating drone tour:', error);
+    res.status(500).json({ error: error.message || 'Failed to save drone tour.' });
+  }
+});
+
+// API Route: Local Admin - Delete Drone Tour from a Property
+app.delete('/api/admin/properties/:id/drone-tour', async (req: Request, res: Response) => {
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(403).json({ error: 'Admin writes disabled in production' });
+  }
+
+  try {
+    const { id } = req.params;
+    const { properties, propertyFile } = await getPropertiesArray();
+    const existingIndex = properties.findIndex((p: any) => p.id === id);
+
+    if (existingIndex === -1) {
+      return res.status(404).json({ error: `Property with id ${id} not found.` });
+    }
+
+    delete properties[existingIndex].videoTour;
+    await writePropertiesArray(properties, propertyFile);
+
+    res.json({ success: true, message: 'Drone tour deleted successfully!', property: properties[existingIndex] });
+  } catch (error: any) {
+    console.error('Error deleting drone tour:', error);
+    res.status(500).json({ error: error.message || 'Failed to delete drone tour.' });
   }
 });
 

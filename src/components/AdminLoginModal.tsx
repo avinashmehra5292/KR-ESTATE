@@ -228,6 +228,21 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ onClose, onSuc
                 </div>
               </div>
 
+              <div className="flex items-center justify-between p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs">
+                <span className="text-amber-300 font-medium">Default: <strong className="text-white">admin</strong> / <strong className="text-white">QWERTY</strong></span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setUsername('admin');
+                    setPassword('QWERTY');
+                    setError('');
+                  }}
+                  className="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-[11px] transition-colors cursor-pointer"
+                >
+                  Auto-fill
+                </button>
+              </div>
+
               <button
                 type="submit"
                 disabled={isSubmitting}
@@ -235,7 +250,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ onClose, onSuc
               >
                 <Lock className="w-4 h-4" />
                 <span>{isSubmitting ? 'Authenticating...' : 'Login to Admin Panel'}</span>
-                <span className="text-[11px] font-normal text-slate-900 bg-amber-500/30 px-2 py-0.5 rounded-md ml-1 font-mono"> ↗</span>
               </button>
             </form>
           )}

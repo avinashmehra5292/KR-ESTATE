@@ -22,36 +22,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ704730",
     "totalAcres": 11,
     "openGreensPercentage": 78,
-    "coverImage": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Urban Forest Tower Elevation"
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-1.jpg",
+        "caption": "Godrej Woods - Urban Forest Canopy Towers & Elevation"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Luxury Living Lounge with Forest Balcony Deck"
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-2.jpg",
+        "caption": "Godrej Woods - Heated Forest Infinity-Edge Swimming Pool"
       },
       {
-        "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Heated Infinity Swimming Pool"
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-3.jpg",
+        "caption": "Godrej Woods - Elevated Canopy Boardwalk & 1100 Dense Forest Trees"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Master Suite with Panoramic Vistas"
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-4.jpg",
+        "caption": "Godrej Woods - Luxury 4 BHK Living Room with Forest Balcony Deck"
       },
       {
-        "url": "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Bespoke Turkish Hammam Spa"
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-5.jpg",
+        "caption": "Godrej Woods - Forest View Master Suite Sanctuary"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-6.jpg",
+        "caption": "Godrej Woods - Bespoke Turkish Hammam & Thermal Spa Bath"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-7.jpg",
+        "caption": "Godrej Woods - Modern Open-Concept Chef Kitchen & Dining"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-8.jpg",
+        "caption": "Godrej Woods - Glass Facade Clubhouse & Executive Lounge"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-9.jpg",
+        "caption": "Godrej Woods - Nature Trails & Shaded Walking Boulevard"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-10.jpg",
+        "caption": "Godrej Woods - Italian Marble Spa Bathroom with Forest Glass View"
+      },
+      {
+        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-11.jpg",
+        "caption": "Godrej Woods - Twilight Illumination & Forest Pool Deck"
       }
     ],
-    "videoTour": {
-      "title": "Godrej Woods 4K Urban Forest Drone Tour",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-      "duration": "02:45",
-      "description": "Experience the 1,100 mature tree private forest, twin infinity pools, and clubhouse walkthrough."
-    },
     "shortDescription": "1,100 dense urban trees, 2 infinity edge swimming pools, elevated walking bridges, and bespoke Turkish hammam bath.",
     "fullDescription": "Godrej Woods in Sector 43, Noida brings nature right to your doorstep with an authentic private forest ecosystem of over 1,100 mature trees. Nestled right next to the prestigious Noida Golf Course and just 900m from Botanical Garden Metro Interchange, this landmark development merges international luxury specifications with sustainable green architecture.",
     "amenities": [
@@ -158,36 +175,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ3574",
     "totalAcres": 6.24,
     "openGreensPercentage": 82,
-    "coverImage": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Sky Mansions Architectural Presence"
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
+        "caption": "ATS Knightsbridge - Iconic 35-Storey Sky Mansion Towers"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80",
-        "caption": "6,000 Sq.Ft Aristocratic Living Salon"
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-2.jpg",
+        "caption": "ATS Knightsbridge - Triple-Height Grand Chandelier Lobby"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Grand Triple-Height Arrival Lobby"
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-3.jpg",
+        "caption": "ATS Knightsbridge - Olympic-Sized All-Weather Swimming Pool"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600607687644-c7171b42498f?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Private Floor Elevator Foyer"
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-4.jpg",
+        "caption": "ATS Knightsbridge - Palatial 6,000 Sq.Ft Sky Mansion Living Salon"
       },
       {
-        "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "35,000 Sq.Ft Clubhouse & Heated Pool"
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-5.jpg",
+        "caption": "ATS Knightsbridge - Presidential Master Suite with Walk-In Dressing Gallery"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-6.jpg",
+        "caption": "ATS Knightsbridge - Royal 35,000 Sq.Ft Clubhouse & Cigar Lounge"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-7.jpg",
+        "caption": "ATS Knightsbridge - Penthouse Private Plunge Pool & Yamuna Skyline Deck"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-8.jpg",
+        "caption": "ATS Knightsbridge - Italian Statuario Marble Spa Bathroom"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-9.jpg",
+        "caption": "ATS Knightsbridge - Formal Banquet Ballroom & Executive Meeting Suites"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-10.jpg",
+        "caption": "ATS Knightsbridge - Grand Porte-Cochere & Private Driveway"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-11.jpg",
+        "caption": "ATS Knightsbridge - Private Elevator Vestibule to Single Residence per Floor"
       }
     ],
-    "videoTour": {
-      "title": "ATS Knightsbridge 6 BHK Sky Villa 360° Tour",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-      "duration": "03:15",
-      "description": "Exclusive private elevator walkthrough of an entire residence floor overlooking the Yamuna riverfront."
-    },
     "shortDescription": "One majestic residence per floor with dedicated private high-speed elevator elevators and 35,000 sq.ft clubhouse.",
     "fullDescription": "ATS Knightsbridge is an aristocratic landmark situated at Sector 124, right on the cusp of South Delhi and Noida. Five statuesque 47-storey towers house only one residence per floor per elevator core, guaranteeing absolute exclusivity. Each 4 & 6 BHK sky mansion offers 360-degree unobstructed panoramas of the Yamuna riverfront and Delhi skyline.",
     "amenities": [
@@ -254,32 +288,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ2051",
     "totalAcres": 3.85,
     "openGreensPercentage": 75,
-    "coverImage": "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=1200&q=80",
-        "caption": "40-Storey Manorialle Architectural Silhouette"
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-1.jpg",
+        "caption": "Mahagun Manorialle - 40-Storey Golf-Facing Glass Landmark"
       },
       {
-        "url": "https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=1200&q=80",
-        "caption": "18-Hole Championship Golf Views"
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-2.jpg",
+        "caption": "Mahagun Manorialle - 180° Uninterrupted 18-Hole Jaypee Golf Course Panorama"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Italian Marble Designer Kitchen & Dining"
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-3.jpg",
+        "caption": "Mahagun Manorialle - 40th Floor Rooftop Sky Lounge & Heated Infinity Pool"
       },
       {
-        "url": "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80",
-        "caption": "40th-Floor Rooftop Infinity Pool Deck"
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-4.jpg",
+        "caption": "Mahagun Manorialle - Double-Height Palatial Living Salon with Golf Balcony"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-5.jpg",
+        "caption": "Mahagun Manorialle - Master Suite Overlooking Green Golf Fairways"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-6.jpg",
+        "caption": "Mahagun Manorialle - Lush Putting Greens & Championship Golf View"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-7.jpg",
+        "caption": "Mahagun Manorialle - Designer Gourmet Island Kitchen & Wine Cellar"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-8.jpg",
+        "caption": "Mahagun Manorialle - Luxury Marble Jacuzzi Bath with Golf Course Vista"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-9.jpg",
+        "caption": "Mahagun Manorialle - Private Squash Court & Wellness Gymnasium"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-10.jpg",
+        "caption": "Mahagun Manorialle - Sunset Terrace Overlooking Wish Town Golf Fairway"
+      },
+      {
+        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-11.jpg",
+        "caption": "Mahagun Manorialle - Duplex Penthouse Architectural Spiral Staircase"
       }
     ],
-    "videoTour": {
-      "title": "Mahagun Manorialle Golf Course Walkthrough",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1574362848149-11496d93a7c7?auto=format&fit=crop&w=1200&q=80",
-      "duration": "02:20",
-      "description": "Experience unbroken golf vistas and the 40th floor sky lounge."
-    },
     "shortDescription": "40-storey architectural triumph offering continuous golf course views, rooftop infinity deck, and insulated double-glazed facades.",
     "fullDescription": "Perched in the prestigious Wish Town township in Sector 128, Mahagun Manorialle offers an idyllic front-row seat to an 18-hole championship golf course designed by Graham Cooke. The residences feature Italian marble flooring, 11-foot clear ceiling heights, and energy-efficient low-E double-glazed glass walls framing majestic greens.",
     "amenities": [
@@ -352,32 +407,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ677297",
     "totalAcres": 6.79,
     "openGreensPercentage": 80,
-    "coverImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Glass-Curtain Architectural Towers"
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-1.jpg",
+        "caption": "ACE Starlit - Signature Glass Facade & Contemporary Architecture"
       },
       {
-        "url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Surrounding 80% Green Sports Park"
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-2.jpg",
+        "caption": "ACE Starlit - Sunken Green Amphitheater & Designer Water Cascades"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Double-Height Entrance Concourse"
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-3.jpg",
+        "caption": "ACE Starlit - Olympic-Grade Resort Swimming Pool & Deck"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Show Residence Living & Dining Area"
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-4.jpg",
+        "caption": "ACE Starlit - 3-Side Open Sunlit Living Lounge with Wraparound Balcony"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-5.jpg",
+        "caption": "ACE Starlit - Contemporary Master Bedroom with Sports City Green Vistas"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-6.jpg",
+        "caption": "ACE Starlit - Glass Clubhouse & State-of-the-Art Fitness Center"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-7.jpg",
+        "caption": "ACE Starlit - Stargazing Observatory Deck on Tower Terrace"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-8.jpg",
+        "caption": "ACE Starlit - Tennis Courts & Multi-Sport Arena"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-9.jpg",
+        "caption": "ACE Starlit - Minimalist Italian Kitchen & Breakfast Counter"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-10.jpg",
+        "caption": "ACE Starlit - Landscaped Central Park & Shaded Jogging Track"
+      },
+      {
+        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-11.jpg",
+        "caption": "ACE Starlit - Twilight LED Architectural Illumination"
       }
     ],
-    "videoTour": {
-      "title": "Sector 150 Sports City 4K Aerial Flythrough",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-      "duration": "03:40",
-      "description": "Discover Sector 150 low density masterplan, Shaheed Bhagat Singh park, and ACE Starlit towers."
-    },
     "shortDescription": "Signature glass-curtain residences overlooking 42-acre Shaheed Bhagat Singh Park in Noida’s premier green sector.",
     "fullDescription": "Sector 150 is celebrated as the green lung of NCR with 80% open recreational spaces and zero overhead electric wires. ACE Starlit stands out with its striking contemporary glass curtain wall architecture, grand double-height entrance lobbies, and direct signal-free access to both Noida Expressway and Yamuna Expressway.",
     "amenities": [
@@ -450,32 +526,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ240156",
     "totalAcres": 26.8,
     "openGreensPercentage": 65,
-    "coverImage": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Twin 50-Storey Commercial Towers"
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-1.jpg",
+        "caption": "Bhutani Cyberthum - 50-Storey Iconic Twin Towers Elevation"
       },
       {
-        "url": "https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Musical Fountain Lake & Retail Mall"
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-2.jpg",
+        "caption": "Bhutani Cyberthum - North India Largest Musical Dancing Water Fountain"
       },
       {
-        "url": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Grade-A Smart Corporate Office Floor"
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-3.jpg",
+        "caption": "Bhutani Cyberthum - Sky Bridge & Panoramic Observation Deck"
       },
       {
-        "url": "https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=80",
-        "caption": "High-Street Retail Boulevard Promenade"
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-4.jpg",
+        "caption": "Bhutani Cyberthum - High-Street Luxury Retail Shopping Boulevard"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-5.jpg",
+        "caption": "Bhutani Cyberthum - Grade-A Lockable Corporate Office Workspaces"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-6.jpg",
+        "caption": "Bhutani Cyberthum - Multi-Tier Central Shopping Atrium & Plaza"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-7.jpg",
+        "caption": "Bhutani Cyberthum - Gourmet Open-Air Terrace Dining & Fine Cafes"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-8.jpg",
+        "caption": "Bhutani Cyberthum - Triple-Height Corporate Reception & Security Turnstiles"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-9.jpg",
+        "caption": "Bhutani Cyberthum - Nighttime Spectacular LED Facade Light Show"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-10.jpg",
+        "caption": "Bhutani Cyberthum - Executive Conference Centre & Boardrooms"
+      },
+      {
+        "url": "/images/properties/bhutani-cyberthum-sec140a/bhutani-cyberthum-sec140a-11.jpg",
+        "caption": "Bhutani Cyberthum - Expressway Frontage Commercial Campus"
       }
     ],
-    "videoTour": {
-      "title": "Bhutani Cyberthum Commercial Mega Project Tour",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-      "duration": "02:50",
-      "description": "Full overview of Grade-A office spaces, pre-leased retail shops, and musical fountain."
-    },
     "shortDescription": "Twin 50-storey commercial skyscrapers with a central musical lake, high-street retail promenades, and Grade-A office spaces.",
     "fullDescription": "Bhutani Cyberthum is redefining commercial real estate in NCR. Spanning nearly 27 acres right on the Noida Expressway in Sector 140A, it features twin iconic 50-storey commercial office towers, North India’s largest musical fountain lake, and pre-leased retail shops offering assured lease assistance and high capital appreciation.",
     "amenities": [
@@ -547,32 +644,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ958873",
     "totalAcres": 5.8,
     "openGreensPercentage": 76,
-    "coverImage": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Platinum IGBC Eco-Residences"
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
+        "caption": "Gulshan Dynasty - Platinum Wellness Luxury Towers"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Hydroponic Organic Farm & Reflexology Paths"
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-2.jpg",
+        "caption": "Gulshan Dynasty - On-Campus Organic Hydroponic Farm"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Double-Height Living Room with Clean Air Tech"
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-3.jpg",
+        "caption": "Gulshan Dynasty - Temperature-Controlled Indoor Heated Pool"
       },
       {
-        "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Temperature-Controlled Magnesium Swimming Pool"
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-4.jpg",
+        "caption": "Gulshan Dynasty - Private Elevator Vestibule to Each Residence"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-5.jpg",
+        "caption": "Gulshan Dynasty - Opulent Living Salon with Italian Marble Accents"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-6.jpg",
+        "caption": "Gulshan Dynasty - Master Bedroom Sanctuary with Private Green Balcony"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-7.jpg",
+        "caption": "Gulshan Dynasty - Japanese Zen Garden & Meditation Pavilion"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-8.jpg",
+        "caption": "Gulshan Dynasty - Rooftop Helipad & Panoramic Sky Lounge"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-9.jpg",
+        "caption": "Gulshan Dynasty - Holistic Ayurvedic Wellness Spa & Salon"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-10.jpg",
+        "caption": "Gulshan Dynasty - Technogym Equipped High-Tech Gymnasium"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-11.jpg",
+        "caption": "Gulshan Dynasty - Designer Island Kitchen with Miele Appliances"
       }
     ],
-    "videoTour": {
-      "title": "Gulshan Dynasty Eco-Wellness Condominium Tour",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-      "duration": "02:30",
-      "description": "Tour of Noida’s first IGBC Platinum certified luxury residences with hydroponic farming."
-    },
     "shortDescription": "Platinum IGBC pre-certified eco-condominiums featuring dedicated hydroponic organic farming and contact-less elevators.",
     "fullDescription": "Gulshan Dynasty in Sector 144 elevates residential luxury through the lens of holistic wellness. Comprising only 204 exclusive families across 3 opulent towers, each home includes dedicated staff quarters, separate service entry, double-glazed acoustic windows, and access to on-site organic hydroponic vegetables grown for residents.",
     "amenities": [
@@ -637,32 +755,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ118940 / YEIDA Approved",
     "totalAcres": 50,
     "openGreensPercentage": 60,
-    "coverImage": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Planned Gated Plotted Township"
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-1.jpg",
+        "caption": "Jewar Aerocity Plots - Gated Freehold Enclave & Grand Entrance Gate"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Custom Villa Concept Architecture"
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-2.jpg",
+        "caption": "Jewar Aerocity Plots - 24-Meter Wide Landscaped Avenue Boulevards"
       },
       {
-        "url": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Wide 60-Meter Sectoral Infrastructure"
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-3.jpg",
+        "caption": "Jewar Aerocity Plots - Demarcated Freehold Residential Plots Ready for Registry"
       },
       {
-        "url": "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Township Community Clubhouse"
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-4.jpg",
+        "caption": "Jewar Aerocity Plots - Upcoming Noida International Airport (Jewar) Proximity"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-5.jpg",
+        "caption": "Jewar Aerocity Plots - Luxury Modern Villa Construction Architecture on Plot"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-6.jpg",
+        "caption": "Jewar Aerocity Plots - Built Luxury Duplex Villa with Landscaped Lawn"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-7.jpg",
+        "caption": "Jewar Aerocity Plots - Yamuna Expressway Multi-Lane Direct Link Corridor"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-8.jpg",
+        "caption": "Jewar Aerocity Plots - Gated Community Park & Green Walkways"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-9.jpg",
+        "caption": "Jewar Aerocity Plots - Residents Clubhouse & Gated Security Gateway"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-10.jpg",
+        "caption": "Jewar Aerocity Plots - Commercial High-Street Hub Fronting Sector 22D"
+      },
+      {
+        "url": "/images/properties/yeida-jewar-aerocity-plots/yeida-jewar-aerocity-plots-11.jpg",
+        "caption": "Jewar Aerocity Plots - Sunset Greenery & Freehold Villa Boundary"
       }
     ],
-    "videoTour": {
-      "title": "Yamuna Expressway & Jewar Airport Corridor 4K Flythrough",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackSeeTheWorld.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
-      "duration": "04:10",
-      "description": "Aerial inspection of Jewar International Airport terminal, Film City zone, and plotted developments."
-    },
     "shortDescription": "Gated plotted township just 12 mins from Noida International Airport (Jewar), Film City, and Buddh International F1 Circuit.",
     "fullDescription": "The Yamuna Expressway corridor is India’s fastest accelerating real estate growth corridor, anchored by the development of Noida International Airport at Jewar, the proposed 1,000-acre International Film City, and Olympic City. These freehold residential and commercial plots come with clear legal titles, registry eligibility, wide 60-meter sectoral roads, and water/power infrastructure.",
     "amenities": [
@@ -734,28 +873,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ5520",
     "totalAcres": 25,
     "openGreensPercentage": 80,
-    "coverImage": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
+    "coverImage": "/images/properties/cleo-county-sec121/cleo-county-sec121-1.jpg",
     "galleryImages": [
       {
-        "url": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Resort Architecture & Palm Boulevards"
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-1.jpg",
+        "caption": "Cleo County - Grand Egyptian-Themed Residential Towers"
       },
       {
-        "url": "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80",
-        "caption": "5-Acre Central Island Water Lagoon"
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-2.jpg",
+        "caption": "Cleo County - 5-Acre Central Cascading Waterfalls & Palm Court"
       },
       {
-        "url": "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
-        "caption": "Ready-to-Move 4 BHK Interiors"
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-3.jpg",
+        "caption": "Cleo County - All-Weather Temperature-Controlled Indoor Swimming Pool"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-4.jpg",
+        "caption": "Cleo County - Pyramid Amphitheater & Cultural Water Arena"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-5.jpg",
+        "caption": "Cleo County - Sphinx Themed Grand Entrance Gates & Resort Fountains"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-6.jpg",
+        "caption": "Cleo County - Palatial 4 BHK Living Room Overlooking Waterfalls"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-7.jpg",
+        "caption": "Cleo County - Master Suite with Panoramic Resort-Style Views"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-8.jpg",
+        "caption": "Cleo County - Royal Pharaoh Clubhouse & Grand Banquet Hall"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-9.jpg",
+        "caption": "Cleo County - Egyptian Palm Avenue Walking & Jogging Boulevard"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-10.jpg",
+        "caption": "Cleo County - Designer Contemporary Kitchen with Breakfast Island"
+      },
+      {
+        "url": "/images/properties/cleo-county-sec121/cleo-county-sec121-11.jpg",
+        "caption": "Cleo County - Floodlit Tennis & Squash Sport Courts"
       }
     ],
-    "videoTour": {
-      "title": "Cleo County Egyptian Resort Walkthrough",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      "thumbnailUrl": "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-      "duration": "02:15",
-      "description": "Walkthrough of the operational 5-acre central lagoon, sports courts, and family amenities."
-    },
     "shortDescription": "Signature resort-style residences with a 5-acre landscaped island, swimming lagoons, and Egyptian architectural motifs.",
     "fullDescription": "Cleo County in Sector 121 offers an enchanting resort lifestyle inspired by classical Egyptian aesthetics. Spread across 25 landscaped acres, the project features a five-acre central island water body, temperature-regulated indoor Olympic swimming pool, dedicated sports courts, and immediate proximity to Central Noida commercial markets and Fortis Hospital.",
     "amenities": [
@@ -820,48 +984,53 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ251912",
     "totalAcres": 4.94,
     "openGreensPercentage": 75,
-    "coverImage": "/uploads/upload-1791398897502-1.jpg",
+    "coverImage": "/images/properties/prop-1791396536248/prop-1791396536248-1.jpg",
     "galleryImages": [
       {
-        "url": "/uploads/upload-1791396569447.jpg",
-        "caption": "GYGY MENTIS - Main Facade"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-1.jpg",
+        "caption": "GYGY MENTIS - Iconic 3-Tower 23-Storey Architectural Facade"
       },
       {
-        "url": "/uploads/upload-1791398897502-1.jpg",
-        "caption": "GYGY MENTIS - Architectural Perspective"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-2.jpg",
+        "caption": "GYGY MENTIS - Architectural Perspective from Noida Expressway"
       },
       {
-        "url": "/uploads/upload-1791398897509-2.jpg",
-        "caption": "GYGY MENTIS - High Street Plaza"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-3.jpg",
+        "caption": "GYGY MENTIS - Double-Height High-Street Retail Shopping Plaza"
       },
       {
-        "url": "/uploads/upload-1791398897522-3.jpg",
-        "caption": "GYGY MENTIS - Grand Triple Height Lobby"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-4.jpg",
+        "caption": "GYGY MENTIS - Grand Triple-Height Entrance Lobby & Glass Atrium"
       },
       {
-        "url": "/uploads/upload-1791398897527-4.jpg",
-        "caption": "GYGY MENTIS - Skywalk & Retail Atrium"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-5.jpg",
+        "caption": "GYGY MENTIS - Pedestrian Skywalk Connecting Commercial Towers"
       },
       {
-        "url": "/uploads/upload-1791398897532-5.jpg",
-        "caption": "GYGY MENTIS - Night Illumination"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-6.jpg",
+        "caption": "GYGY MENTIS - Night Illumination & LED Facade"
       },
       {
-        "url": "/uploads/upload-1791398897566-6.jpg",
-        "caption": "GYGY MENTIS - Aerial Panorama"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-7.jpg",
+        "caption": "GYGY MENTIS - 360° Aerial Drone Panorama of Sector 140 Campus"
       },
       {
-        "url": "/uploads/upload-1791398897592-7.jpg",
-        "caption": "GYGY MENTIS - Boulevard Frontage"
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-8.jpg",
+        "caption": "GYGY MENTIS - 45-Meter Wide Expressway Boulevard Frontage"
+      },
+      {
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-9.jpg",
+        "caption": "GYGY MENTIS - Grade-A Corporate Office Floors & Meeting Suites"
+      },
+      {
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-10.jpg",
+        "caption": "GYGY MENTIS - Multi-Cuisine Gourmet Open Terrace Food Court"
+      },
+      {
+        "url": "/images/properties/prop-1791396536248/prop-1791396536248-11.jpg",
+        "caption": "GYGY MENTIS - High-Speed Elevator Banks & USGBC Gold Lobby"
       }
     ],
-    "videoTour": {
-      "title": "GYGY MENTIS 4K Architectural Walkthrough",
-      "videoUrl": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      "thumbnailUrl": "/uploads/upload-1791398897502-1.jpg",
-      "duration": "02:20",
-      "description": "Walkthrough of the 3 iconic 23-storey towers, skywalk deck, triple-height lobby, and high-street shopping boulevard."
-    },
     "shortDescription": "Iconic IT/ITES & High-Street Retail landmark featuring triple-height lobbies, 88 high-speed elevators, and panoramic skywalk.",
     "fullDescription": "GyGy Mentis is a landmark IT/ITES and luxury commercial-retail development situated in Sector 140, Noida along the prestigious expressway belt. Mentis spans across 4.94 lush acres and consists of 3 iconic towers soaring 23 floors high. Engineered with USGBC Gold Certification standards, it boasts grand triple-height entrance lobbies, 88 high-speed elevators with zero wait time, double-height ground floor retail boulevards, food courts, and premium grade-A lockable office spaces.",
     "amenities": [
@@ -929,23 +1098,51 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ211016",
     "totalAcres": 13.65,
     "openGreensPercentage": 72,
-    "coverImage": "/uploads/upload-1791397244933-1.jpg",
+    "coverImage": "/images/properties/prop-1791396945692/prop-1791396945692-1.jpg",
     "galleryImages": [
       {
-        "url": "/uploads/upload-1791397244933-1.jpg",
-        "caption": "EON Fairfox - 88m Grand Boulevard Frontage"
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-1.jpg",
+        "caption": "EON Fairfox - 88-Meter Grand Boulevard Frontage"
       },
       {
-        "url": "/uploads/upload-1791397244938-2.jpg",
-        "caption": "EON Fairfox - Central Plaza & Green Amphitheatre"
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-2.jpg",
+        "caption": "EON Fairfox - 13.65-Acre Central Landscaped Plaza & Amphitheater"
       },
       {
-        "url": "/uploads/upload-1791397244943-3.jpg",
-        "caption": "EON Fairfox - Multi-Level Retail Street"
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-3.jpg",
+        "caption": "EON Fairfox - Multi-Level High-Street Retail & Dining Street"
       },
       {
-        "url": "/uploads/upload-1791397244947-4.jpg",
-        "caption": "EON Fairfox - Grade A Corporate Towers"
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-4.jpg",
+        "caption": "EON Fairfox - Grade-A Corporate Towers with High-Performance Glass"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-5.jpg",
+        "caption": "EON Fairfox - Elevated Pedestrian Skywalk Network Between Phases"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-6.jpg",
+        "caption": "EON Fairfox - Double-Height Storefront Retail Promenade"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-7.jpg",
+        "caption": "EON Fairfox - Central Green Courtyard with Water Features"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-8.jpg",
+        "caption": "EON Fairfox - Triple-Height Corporate Reception & Business Lounge"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-9.jpg",
+        "caption": "EON Fairfox - Evening Night Lighting on 88m Expressway Corridor"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-10.jpg",
+        "caption": "EON Fairfox - Open-Air Cafe Terraces & Rooftop Dining"
+      },
+      {
+        "url": "/images/properties/prop-1791396945692/prop-1791396945692-11.jpg",
+        "caption": "EON Fairfox - Multi-Level EV Fast-Charging & Parking Infrastructure"
       }
     ],
     "videoTour": {

@@ -76,20 +76,14 @@ export default function App() {
     const handleKeyDown = async (e: KeyboardEvent) => {
       if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
         e.preventDefault();
-        const isAlreadyOnAdmin = window.location.pathname.startsWith('/admin') || window.location.search.includes('admin=true');
         const isValid = await verifyAdminAuthSession();
-        if (isAlreadyOnAdmin) {
-          if (isValid) {
-            setAdminFormOpen(true);
-          } else {
-            setAdminLoginOpen(true);
+        if (isValid) {
+          setAdminFormOpen(true);
+          if (!window.location.pathname.startsWith('/admin') && !window.location.search.includes('admin=true')) {
+            window.history.pushState({}, '', '/admin');
           }
         } else {
-          if (isValid) {
-            window.open('/admin', '_blank');
-          } else {
-            setAdminLoginOpen(true);
-          }
+          setAdminLoginOpen(true);
         }
       }
     };
@@ -134,22 +128,10 @@ export default function App() {
   };
 
   const handleAdminLoginSuccess = () => {
-    const isAlreadyOnAdminRoute =
-      window.location.pathname === '/admin' ||
-      window.location.pathname === '/admin/' ||
-      window.location.search.includes('admin=true') ||
-      window.location.hash === '#admin';
-
-    if (isAlreadyOnAdminRoute) {
-      setAdminFormOpen(true);
-    } else {
-      // Open Admin Panel in a new browser tab
-      const adminUrl = `${window.location.origin}/admin`;
-      const newTab = window.open(adminUrl, '_blank');
-      // If browser blocked popup window, open in current tab as fallback
-      if (!newTab || newTab.closed || typeof newTab.closed === 'undefined') {
-        setAdminFormOpen(true);
-      }
+    setAdminLoginOpen(false);
+    setAdminFormOpen(true);
+    if (!window.location.pathname.startsWith('/admin') && !window.location.search.includes('admin=true')) {
+      window.history.pushState({}, '', '/admin');
     }
   };
 

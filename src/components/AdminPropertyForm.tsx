@@ -669,20 +669,15 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
             }
           ];
 
-      // Video tour: prioritize user's entry, or create default 4K walkthrough so card shows Video Tour badge
-      const cleanVideoTour = (formData.videoTour?.videoUrl?.trim()) ? {
-        title: formData.videoTour.title?.trim() || `${title} 4K Drone Tour`,
-        videoUrl: formData.videoTour.videoUrl.trim(),
-        thumbnailUrl: formData.videoTour.thumbnailUrl?.trim() || resolvedCover || fallbackLuxuryImage,
-        duration: formData.videoTour.duration?.trim() || '02:30',
-        description: formData.videoTour.description?.trim() || `Experience the luxury specifications and panoramic views of ${title}.`
-      } : {
-        title: `${title} 4K Architectural Walkthrough`,
-        videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        thumbnailUrl: resolvedCover || fallbackLuxuryImage,
-        duration: '02:15',
-        description: `Architectural flythrough and interior walkthrough of ${title} located in ${sector}.`
-      };
+      // Video tour: prioritize user's entry, or omit cleanly if removed/empty
+      const hasVideoUrl = Boolean(formData.videoTour?.videoUrl?.trim());
+      const cleanVideoTour = hasVideoUrl ? {
+        title: formData.videoTour?.title?.trim() || `${title} 4K Drone Tour`,
+        videoUrl: formData.videoTour!.videoUrl.trim(),
+        thumbnailUrl: formData.videoTour?.thumbnailUrl?.trim() || resolvedCover || fallbackLuxuryImage,
+        duration: formData.videoTour?.duration?.trim() || '02:30',
+        description: formData.videoTour?.description?.trim() || `Experience the luxury specifications and panoramic views of ${title}.`
+      } : undefined;
 
       const finalData = {
         ...formData,
@@ -709,6 +704,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
           { url: resolvedCover, caption: title || 'Architectural Showcase' }
         ],
         videoTour: cleanVideoTour,
+        deleteVideoTour: !hasVideoUrl,
         ...(uploadFiles.length > 0 && {
           uploadedImages: uploadFiles.map(f => ({ name: f.name, base64: f.base64 }))
         })

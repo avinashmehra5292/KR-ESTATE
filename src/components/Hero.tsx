@@ -57,13 +57,13 @@ export const Hero: React.FC<HeroProps> = ({
       {/* Sunset Luxury Penthouse Balcony Skyline Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
-          src="/hero-sunset-balcony.png"
+          src="/hero-sunset-balcony.jpg"
           alt="Luxury Noida Sunset Penthouse Balcony View"
-          className="w-full h-full object-cover object-[center_28%] opacity-90 scale-100 filter brightness-95 contrast-105"
+          className="w-full h-full object-cover object-[center_28%] opacity-100 scale-100 filter brightness-100 contrast-105 transition-all duration-700"
         />
-        {/* Soft peach luxury gradient on left to guarantee text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#FFF3EB]/95 via-[#FFF3EB]/85 to-[#FFF3EB]/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#FFF3EB] via-transparent to-[#FFF3EB]/40" />
+        {/* Soft, light translucent gradient allowing the full sunset skyline & penthouse balcony image to remain crisp and clearly visible */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/15 to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8 w-full flex-1 flex flex-col justify-between">
@@ -75,27 +75,29 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="lg:col-span-7 space-y-5">
             
             {/* Eyebrow Label */}
-            <div className="text-[11px] sm:text-xs font-bold tracking-[0.22em] uppercase text-amber-800 font-mono">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/85 backdrop-blur-md border border-orange-200/70 shadow-xs text-[11px] sm:text-xs font-bold tracking-[0.22em] uppercase text-amber-900 font-mono">
               PREMIER REAL ESTATE ADVISORY
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-serif text-4xl sm:text-6xl lg:text-[68px] font-normal text-slate-900 leading-[1.12] tracking-tight">
+            <h1 className="font-serif text-4xl sm:text-6xl lg:text-[68px] font-bold text-slate-950 leading-[1.12] tracking-tight drop-shadow-xs">
               <span>Exceptional</span><br />
               <span>Residences &amp;</span><br />
-              <span className="font-serif font-normal text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700">
+              <span className="font-serif font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800">
                 High-Yield Assets
               </span>
             </h1>
 
             {/* Location Tag */}
-            <div className="flex items-center gap-2 text-amber-800 font-semibold text-xs sm:text-sm">
-              <MapPin className="w-4 h-4 fill-amber-700/20 text-amber-700 shrink-0" />
-              <span>Across Noida Corridor</span>
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-orange-200/70 shadow-xs text-amber-900 font-semibold text-xs sm:text-sm">
+                <MapPin className="w-4 h-4 fill-amber-700/20 text-amber-700 shrink-0" />
+                <span>Across Noida Corridor</span>
+              </div>
             </div>
 
             {/* Subtitle Paragraph */}
-            <p className="text-slate-700 text-xs sm:text-[13px] leading-relaxed max-w-xl font-normal">
+            <p className="text-slate-900 text-xs sm:text-[13px] leading-relaxed max-w-xl font-medium bg-white/70 backdrop-blur-md p-3.5 rounded-2xl border border-white/80 shadow-xs">
               Curated portfolios. Direct developer pricing. Zero brokerage.<br />
               Your trusted partner in Noida, Expressway &amp; Jewar.
             </p>
@@ -105,12 +107,12 @@ export const Hero: React.FC<HeroProps> = ({
               <button
                 type="button"
                 onClick={onWatchVideo}
-                className="inline-flex items-center gap-3.5 text-slate-900 hover:text-amber-700 transition-all cursor-pointer group"
+                className="inline-flex items-center gap-3.5 text-slate-950 hover:text-amber-700 bg-white/85 hover:bg-white backdrop-blur-md px-4.5 py-2.5 rounded-full border border-orange-200/80 shadow-md hover:shadow-lg transition-all cursor-pointer group"
               >
-                <span className="w-11 h-11 rounded-full border-2 border-amber-500 bg-amber-500/20 flex items-center justify-center group-hover:scale-105 group-hover:border-amber-600 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]">
-                  <Play className="w-4 h-4 fill-amber-600 text-amber-600 translate-x-0.5" />
+                <span className="w-9 h-9 rounded-full border-2 border-amber-500 bg-amber-500/20 flex items-center justify-center group-hover:scale-105 group-hover:border-amber-600 transition-all shadow-[0_0_15px_rgba(245,158,11,0.25)]">
+                  <Play className="w-3.5 h-3.5 fill-amber-600 text-amber-600 translate-x-0.5" />
                 </span>
-                <span className="text-xs sm:text-sm font-semibold tracking-wide">
+                <span className="text-xs sm:text-sm font-bold tracking-wide">
                   Watch 4K Drone Tour
                 </span>
               </button>
