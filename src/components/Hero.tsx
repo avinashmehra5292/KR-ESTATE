@@ -106,13 +106,13 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="absolute bottom-0 inset-x-0 z-2 h-20 sm:h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-3 sm:pt-6 lg:pt-8 pb-6 sm:pb-6 lg:pb-8 w-full flex-1 flex flex-col justify-center lg:justify-between gap-3 sm:gap-5 lg:gap-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-6 lg:pt-8 pb-2 sm:pb-5 lg:pb-8 w-full flex-1 flex flex-col justify-between">
         
         {/* Top Split: Left Editorial & Right Floating Info Badges */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-6 lg:gap-8 items-start pt-1 sm:pt-4 lg:pt-6">
           
           {/* Left Column: Heading, Advisory, Drone Tour */}
-          <div className="lg:col-span-7 space-y-2 sm:space-y-3 lg:space-y-5">
+          <div className="lg:col-span-7 space-y-2 sm:space-y-4 lg:space-y-5">
             
             {/* Eyebrow Label */}
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/85 backdrop-blur-md border border-orange-200/70 shadow-xs text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-amber-900 font-mono">
@@ -150,21 +150,10 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             {/* Subtitle Paragraph */}
-            <p className="text-slate-900 text-[11px] sm:text-[13px] leading-snug sm:leading-relaxed max-w-xl font-medium bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/85 shadow-xs inline-block">
-              Curated portfolios · Direct developer pricing · Zero brokerage.
+            <p className="text-slate-900 text-[11px] sm:text-[13px] leading-snug sm:leading-relaxed max-w-xl font-medium bg-white/70 backdrop-blur-md p-2 sm:p-3 rounded-xl sm:rounded-2xl border border-white/80 shadow-xs hidden xs:block">
+              Curated portfolios. Direct developer pricing. Zero brokerage.<br className="hidden sm:inline" />
+              Your trusted partner in Noida, Expressway &amp; Jewar.
             </p>
-
-            {/* Mobile Market Trend Indicators (bridges content & eliminates empty gap) */}
-            <div className="flex md:hidden items-center gap-2 overflow-x-auto no-scrollbar pt-0.5">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-orange-200/80 shadow-xs text-[10px] font-semibold text-slate-900 shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Noida Expressway: <strong className="text-emerald-700 font-bold">+14.2% YoY</strong></span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-orange-200/80 shadow-xs text-[10px] font-semibold text-slate-900 shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                <span>Jewar Aerocity: <strong className="text-amber-800 font-bold">Pre-Launch</strong></span>
-              </div>
-            </div>
 
           </div>
 
@@ -196,7 +185,7 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Bottom Floating Search Dock & 6 Quick Navigation Categories */}
-        <div className="mt-0 sm:mt-4 lg:mt-8 space-y-2 sm:space-y-4">
+        <div className="mt-2 sm:mt-6 lg:mt-8 space-y-2 sm:space-y-4">
           
           {/* Glass Search Bar */}
           <div className="w-full bg-white/95 backdrop-blur-xl border border-orange-200/80 rounded-xl sm:rounded-2xl p-2 sm:p-3.5 shadow-xl shadow-amber-950/5">
