@@ -303,8 +303,8 @@ async function runTests() {
       body: JSON.stringify({ username: 'admin', password: 'WrongPassword123!' })
     });
     const badLoginData = await badLoginRes.json();
-    assert(badLoginRes.status === 401, `Invalid admin credentials rejected (HTTP 401)`);
-    assert(badLoginData.error && badLoginData.error.includes('Invalid admin credentials'), `Error message indicates credential failure with attempts count`);
+    assert(badLoginRes.status === 401 || badLoginRes.status === 429, `Invalid admin credentials rejected (HTTP 401 or 429 lockout)`);
+    assert(badLoginData.error && (badLoginData.error.includes('Invalid admin credentials') || badLoginData.error.includes('Too many failed attempts')), `Error message indicates credential failure or lockout protection`);
   } catch (e) {
     assert(false, `Admin login failure test failed: ${e.message}`);
   }

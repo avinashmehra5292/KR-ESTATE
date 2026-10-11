@@ -255,24 +255,40 @@ async function runE2ETests() {
     }
 
     // =========================================================================
-    // SECTION 8: MOBILE RESPONSIVE AUDIT (375x812 - iPhone)
+    // SECTION 8: MULTI-VIEWPORT RESPONSIVE AUDIT (320px to 1920px)
     // =========================================================================
-    console.log('\n--- 8. Mobile Viewport & Responsive Audit (375x812) ---');
+    console.log('\n--- 8. Multi-Viewport Responsive Matrix Audit ---');
+    const viewports = [
+      { name: 'Mobile Compact', width: 320, height: 568 },
+      { name: 'Mobile Standard (iPhone)', width: 375, height: 812 },
+      { name: 'Mobile Max (Pro Max)', width: 430, height: 932 },
+      { name: 'Tablet (iPad)', width: 768, height: 1024 },
+      { name: 'Laptop', width: 1366, height: 768 },
+      { name: 'Desktop QHD', width: 1440, height: 900 },
+      { name: 'Desktop 1080p FHD', width: 1920, height: 1080 }
+    ];
+
+    for (const vp of viewports) {
+      await page.setViewportSize({ width: vp.width, height: vp.height });
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(200);
+
+      const hasHorizontalOverflow = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > window.innerWidth;
+      });
+
+      if (!hasHorizontalOverflow) {
+        reportPass(`Viewport ${vp.name} (${vp.width}x${vp.height}): Zero horizontal overflow`);
+      } else {
+        const sw = await page.evaluate(() => document.documentElement.scrollWidth);
+        reportFail(`Viewport ${vp.name} (${vp.width}px) horizontal overflow: scrollWidth is ${sw}px`);
+      }
+    }
+
+    // Mobile Hamburger Menu check at 375px
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(500);
-
-    // 8a. Check Horizontal Overflow (critical mobile defect check)
-    const hasHorizontalOverflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > window.innerWidth;
-    });
-
-    if (!hasHorizontalOverflow) {
-      reportPass('Mobile Viewport (375px): Zero horizontal overflow (scrollWidth <= 375px)');
-    } else {
-      const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-      reportFail(`Mobile horizontal overflow detected`, `scrollWidth is ${scrollWidth}px (expected <= 375px)`);
-    }
+    await page.waitForTimeout(300);
 
     // 8b. Mobile Navigation Hamburger Menu
     const mobileMenuBtn = page.locator('button[aria-label*="menu" i], button:has(svg.lucide-menu)').first();
