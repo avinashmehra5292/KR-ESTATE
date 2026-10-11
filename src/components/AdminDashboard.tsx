@@ -578,7 +578,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const activeLocality = localitiesList[selectedLocalityIdx] || localitiesList[0];
 
   return (
-    <div className="fixed inset-0 z-50 flex bg-slate-50 text-slate-900 admin-panel animate-in fade-in duration-300">
+    <div className="fixed inset-0 h-[100dvh] max-h-[100dvh] w-full z-50 flex bg-slate-50 text-slate-900 admin-panel animate-in fade-in duration-300 overflow-hidden">
 
       {/* Mobile Backdrop Overlay */}
       {mobileMenuOpen && (
@@ -590,10 +590,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-slate-900 text-slate-300 flex flex-col border-r border-slate-800 transition-transform duration-300 ease-in-out lg:static lg:w-64 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] h-[100dvh] max-h-[100dvh] bg-slate-900 text-slate-300 flex flex-col border-r border-slate-800 transition-transform duration-300 ease-in-out lg:static lg:w-64 lg:h-full lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
           }`}
       >
-        <div className="h-16 lg:h-20 flex items-center justify-between px-5 sm:px-6 border-b border-slate-800 shrink-0">
+        <div className="h-14 sm:h-16 lg:h-20 flex items-center justify-between px-4 sm:px-6 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-sm">
               KR
@@ -612,7 +612,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </button>
         </div>
 
-        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-3 px-2.5 sm:px-3 space-y-1 overflow-y-auto overscroll-contain">
           <button
             onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'overview' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
@@ -717,21 +717,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
+      <div className="flex-1 flex flex-col h-full max-h-[100dvh] overflow-hidden min-w-0">
 
         {/* Top Header */}
-        <header className="h-16 lg:h-20 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 lg:px-8 shrink-0">
+        <header className="h-14 sm:h-16 lg:h-20 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 lg:px-8 shrink-0">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Hamburger Button for Mobile */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer shrink-0"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer shrink-0"
               title="Open Navigation Menu"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-base lg:text-xl font-bold text-slate-900 truncate">
+              <h1 className="text-xs sm:text-base lg:text-xl font-bold text-slate-900 truncate">
                 {activeTab === 'overview' && 'Dashboard Overview & Metrics'}
                 {activeTab === 'properties' && 'Property Portfolio Manager'}
                 {activeTab === 'drone_tours' && '4K Drone Aerial Tours & Walkthroughs'}
@@ -762,7 +762,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-5 lg:p-8 overscroll-contain">
 
           {/* TAB: OVERVIEW */}
           {activeTab === 'overview' && (
@@ -1930,8 +1930,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             </td>
                             <td className="p-4">
                               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${lead.leadType === 'Site Visit' || lead.status === 'Visit Booked'
-                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                                  : 'bg-blue-100 text-blue-700 border border-blue-200'
+                                ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                : 'bg-blue-100 text-blue-700 border border-blue-200'
                                 }`}>
                                 {lead.status || (lead.leadType === 'Site Visit' ? 'Visit Booked' : 'New')}
                               </span>
