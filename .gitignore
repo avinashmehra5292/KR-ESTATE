@@ -6,5 +6,6 @@ coverage/
 *.log
 admin-auth.json
 admin-sessions.json
+totp.json
 .env*
 !.env.example

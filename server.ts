@@ -138,7 +138,12 @@ async function getOrInitAdminCredentials(): Promise<AdminCredentials> {
   const fs = await import('fs/promises');
   try {
     const raw = await fs.readFile(ADMIN_AUTH_FILE, 'utf8');
-    return JSON.parse(raw);
+    const creds: AdminCredentials = JSON.parse(raw);
+    if (process.env.ADMIN_TOTP_SECRET && !creds.totpSecret) {
+      creds.totpSecret = process.env.ADMIN_TOTP_SECRET;
+      creds.totpEnabled = true;
+    }
+    return creds;
   } catch {
     const initialPassword = process.env.ADMIN_PASSWORD || 'QWERTY';
     const salt = crypto.randomBytes(16).toString('hex');
@@ -147,9 +152,16 @@ async function getOrInitAdminCredentials(): Promise<AdminCredentials> {
       username: 'admin',
       salt,
       hash,
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
+      totpSecret: process.env.ADMIN_TOTP_SECRET || undefined,
+      totpEnabled: Boolean(process.env.ADMIN_TOTP_SECRET)
     };
-    await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8');
+    try {
+      await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8');
+    } catch (writeErr) {
+      // In read-only or ephemeral environments without write access, creds are kept in memory
+      console.warn('Could not persist admin-auth.json, using in-memory credentials');
+    }
     return creds;
   }
 }
@@ -568,7 +580,7 @@ Keep the tone authoritative, trustworthy, and actionable. Do not use generic buz
 
     if (process.env.GEMINI_API_KEY) {
       try {
-        const response = await ai.models.generateContent({
+        const geminiPromise = ai.models.generateContent({
           model: 'gemini-3.8-flash',
           contents: prompt,
           config: {
@@ -576,6 +588,12 @@ Keep the tone authoritative, trustworthy, and actionable. Do not use generic buz
               'You are the Chief Real Estate Strategy Director at KR Estate Noida (krestatenoida.com), an authorized RERA property consultancy in Noida, Greater Noida, and Yamuna Expressway. Speak with precise factual knowledge of Noida sectors, circle rates, and infrastructure milestones.',
           },
         });
+
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Gemini timeout')), 5000)
+        );
+
+        const response: any = await Promise.race([geminiPromise, timeoutPromise]);
         reportText = response.text || '';
       } catch (geminiError) {
         console.warn('Gemini call failed or key invalid, using expert fallback report:', geminiError);
@@ -583,7 +601,14 @@ Keep the tone authoritative, trustworthy, and actionable. Do not use generic buz
     }
 
     if (!reportText) {
-      reportText = `Based on your goal (${goal}) and budget (${budget}), KR Estate strongly recommends evaluating Sector 150 Sports City (ACE Starlit) and Sector 43 (Godrej Woods). 
+      const cleanGoal = typeof goal === 'string' 
+        ? goal.replace(/[<>{}`$]/g, '').replace(/SYSTEM_PROMPT|API_KEY|DROP\s+TABLE|--/gi, '').trim().slice(0, 100)
+        : 'wealth generation';
+      const cleanBudget = typeof budget === 'string'
+        ? budget.replace(/[<>{}`$]/g, '').replace(/SYSTEM_PROMPT|API_KEY|DROP\s+TABLE|--/gi, '').trim().slice(0, 50)
+        : 'selected budget';
+
+      reportText = `Based on your goal (${cleanGoal || 'strategic acquisition'}) and budget (${cleanBudget || 'stated range'}), KR Estate strongly recommends evaluating Sector 150 Sports City (ACE Starlit) and Sector 43 (Godrej Woods). 
 
 Sector 150 offers 80% open greens with signal-free transit to the upcoming Jewar International Airport (25 mins) and the Aqua Line metro. Current prices range between ₹12,500 – ₹17,000/sq.ft.
 
