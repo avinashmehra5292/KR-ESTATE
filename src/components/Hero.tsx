@@ -56,13 +56,25 @@ export const Hero: React.FC<HeroProps> = ({
       
       {/* Sunset Luxury Penthouse Balcony Skyline Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="/hero-sunset-balcony.jpg"
-          alt="Luxury Noida Sunset Penthouse Balcony View"
-          className="w-full h-full object-cover object-[center_28%] opacity-100 scale-100 filter brightness-100 contrast-105 transition-all duration-700"
-        />
+        <picture className="w-full h-full block">
+          {/* Mobile, Tablet & Non-PC devices (< 1024px) */}
+          <source
+            media="(max-width: 1023px)"
+            srcSet="/hero-mobile-balcony.jpg"
+          />
+          {/* Desktop / PC devices (>= 1024px) */}
+          <source
+            media="(min-width: 1024px)"
+            srcSet="/hero-sunset-balcony.jpg"
+          />
+          <img
+            src="/hero-sunset-balcony.jpg"
+            alt="Luxury Noida Sunset Penthouse Balcony View"
+            className="w-full h-full object-cover object-[center_35%] lg:object-[center_28%] opacity-100 scale-100 filter brightness-100 contrast-105 transition-all duration-700"
+          />
+        </picture>
         {/* Soft, light translucent gradient allowing the full sunset skyline & penthouse balcony image to remain crisp and clearly visible */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/60 via-white/15 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/35 to-transparent lg:bg-gradient-to-r lg:from-white/60 lg:via-white/15 lg:to-transparent" />
         <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
       </div>
 

@@ -3,8 +3,7 @@ import {
   X, CheckCircle, Database, LayoutDashboard, Building, Users, Settings,
   LogOut, Plus, ChevronRight, Activity, Globe, Phone, MapPin, Sparkles,
   Save, Compass, FileText, Check, AlertCircle, Edit, Trash2, ExternalLink,
-  MessageCircle, RefreshCw, Menu, Video, Play, Film, Upload, Search,
-  Filter, Eye, Shield, ArrowUpRight
+  MessageCircle, RefreshCw, Menu, Video, Play, Film, Upload
 } from 'lucide-react';
 import { Property, LocalityInfo } from '../types';
 import { NOIDA_PROPERTIES } from '../data/properties';
@@ -39,10 +38,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   // Status message for saves
   const [saveStatus, setSaveStatus] = useState<{ tab: string; message: string; isError?: boolean } | null>(null);
 
-  // Property list & Search/Filter state
+  // Property list & Drone Tours state
   const [propertiesList, setPropertiesList] = useState<Property[]>(NOIDA_PROPERTIES);
-  const [propertySearchQuery, setPropertySearchQuery] = useState('');
-  const [propertySectorFilter, setPropertySectorFilter] = useState('all');
   const [droneTourModalOpen, setDroneTourModalOpen] = useState(false);
   const [droneTourTargetPropId, setDroneTourTargetPropId] = useState<string>('');
   const [droneTourForm, setDroneTourForm] = useState({
@@ -105,7 +102,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         }
       })
       .catch(() => { });
-    
+
     // Also preload brochure & site leads count and live properties
     fetchBrochureLeads();
     refreshPropertiesList();
@@ -307,7 +304,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       });
       const [res] = await Promise.all([fetchPromise, minSpinPromise]);
       if (res.status === 401) {
-        console.warn('Admin session requires refresh for leads');
+        handleLogout();
         return;
       }
       if (res.ok) {
@@ -580,340 +577,182 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   const activeLocality = localitiesList[selectedLocalityIdx] || localitiesList[0];
 
-  // Filtered properties based on search query and sector filter
-  const filteredProperties = propertiesList.filter(prop => {
-    const q = propertySearchQuery.trim().toLowerCase();
-    const matchesSearch = !q ||
-      prop.title.toLowerCase().includes(q) ||
-      (prop.developer && prop.developer.toLowerCase().includes(q)) ||
-      (prop.sector && prop.sector.toLowerCase().includes(q)) ||
-      (prop.locality && prop.locality.toLowerCase().includes(q));
-    const sec = (prop.sector || '').toLowerCase();
-    const matchesSector = propertySectorFilter === 'all' ||
-      (propertySectorFilter === 'central' && (sec.includes('43') || sec.includes('121') || sec.includes('central'))) ||
-      (propertySectorFilter === 'expressway' && (sec.includes('124') || sec.includes('128') || sec.includes('140') || sec.includes('144') || sec.includes('150') || sec.includes('expressway'))) ||
-      (propertySectorFilter === 'jewar' && (sec.includes('jewar') || sec.includes('22d') || sec.includes('18') || sec.includes('yamuna')));
-    return matchesSearch && matchesSector;
-  });
-
   return (
-    <div className="fixed inset-0 z-50 flex bg-[#FFF3EB] text-slate-900 admin-panel animate-in fade-in duration-300 font-sans selection:bg-amber-500 selection:text-white overflow-hidden relative">
-
-      {/* Decorative ambient background lighting mesh for luxury peach ambiance */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="absolute top-[-15%] left-[-10%] w-[55%] h-[55%] rounded-full bg-amber-400/15 blur-[140px] animate-shimmer-pulse" />
-        <div className="absolute top-[25%] right-[-15%] w-[50%] h-[65%] rounded-full bg-orange-300/15 blur-[150px]" style={{ animationDelay: '2.5s' }} />
-        <div className="absolute bottom-[-15%] left-[20%] w-[60%] h-[55%] rounded-full bg-rose-300/10 blur-[140px]" style={{ animationDelay: '5s' }} />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.06),transparent_70%)]" />
-      </div>
+    <div className="fixed inset-0 z-50 flex bg-slate-50 text-slate-900 admin-panel animate-in fade-in duration-300">
 
       {/* Mobile Backdrop Overlay */}
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden animate-in fade-in duration-200"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-xs lg:hidden animate-in fade-in duration-200"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-[#FFF8F4]/95 backdrop-blur-xl text-slate-700 flex flex-col border-r border-orange-200/80 transition-transform duration-300 ease-in-out lg:static lg:w-68 lg:translate-x-0 ${
-          mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-        }`}
+        className={`fixed inset-y-0 left-0 z-50 w-72 max-w-[85vw] bg-slate-900 text-slate-300 flex flex-col border-r border-slate-800 transition-transform duration-300 ease-in-out lg:static lg:w-64 lg:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+          }`}
       >
-        {/* Brand Header */}
-        <div className="h-16 lg:h-20 flex items-center justify-between px-5 sm:px-6 border-b border-orange-200/80 shrink-0 bg-[#FFF3EB]">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-black text-sm shadow-md shadow-amber-500/20 ring-1 ring-amber-300/40">
+        <div className="h-16 lg:h-20 flex items-center justify-between px-5 sm:px-6 border-b border-slate-800 shrink-0">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-sm">
               KR
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-slate-900 tracking-wider text-sm">KR ESTATE</span>
-                <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30">
-                  PRO
-                </span>
-              </div>
-              <span className="text-[10px] text-amber-700 font-semibold block tracking-wide">Executive Command Desk</span>
+              <span className="font-bold text-white tracking-wide block text-sm">KR Estate Admin</span>
+              <span className="text-[10px] text-amber-400 font-medium block">Control Panel</span>
             </div>
           </div>
           <button
             onClick={() => setMobileMenuOpen(false)}
-            className="lg:hidden p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-orange-100 transition-colors cursor-pointer"
+            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             title="Close menu"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Categorized Navigation */}
-        <nav className="flex-1 py-4 px-3 space-y-5 overflow-y-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-orange-300/60 [&::-webkit-scrollbar-track]:bg-transparent">
-          
-          {/* Group 1: Portfolio & Media */}
-          <div>
-            <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-amber-800">
-              Portfolio & Media
-            </div>
-            <div className="space-y-1">
-              <button
-                onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'overview'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4 shrink-0" />
-                <span>Dashboard Overview</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setEditingProperty(null);
-                  setActiveTab('properties');
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'properties' || activeTab === 'add_property'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Building className="w-4 h-4 shrink-0" />
-                  <span>Properties Portfolio</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  activeTab === 'properties' || activeTab === 'add_property'
-                    ? 'bg-slate-950 text-amber-300'
-                    : 'bg-orange-100 text-slate-700 border border-orange-200'
-                }`}>
-                  {propertiesList.length}
-                </span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setActiveTab('drone_tours');
-                  setMobileMenuOpen(false);
-                }}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'drone_tours'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Film className="w-4 h-4 shrink-0 text-amber-400" />
-                  <span>4K Drone Tours</span>
-                </div>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  activeTab === 'drone_tours'
-                    ? 'bg-slate-950 text-amber-300'
-                    : 'bg-amber-100 text-amber-800 border border-amber-300'
-                }`}>
-                  {propertiesList.filter(p => p.videoTour?.videoUrl).length} Live
-                </span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setEditingProperty(null);
-                  setActiveTab('add_property');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer text-amber-800 hover:text-amber-900 hover:bg-orange-100/70 border border-dashed border-amber-400/60 bg-white/60 mt-1"
-              >
-                <Plus className="w-4 h-4 shrink-0" />
-                <span>+ Add New Listing</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Group 2: Digital Advisory & Content */}
-          <div>
-            <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-amber-800">
-              Web Content & Advisory
-            </div>
-            <div className="space-y-1">
-              <button
-                onClick={() => { setActiveTab('website_content'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'website_content'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <Sparkles className="w-4 h-4 shrink-0 text-amber-400" />
-                <span>Hero & Announcements</span>
-              </button>
-
-              <button
-                onClick={() => { setActiveTab('locality_guides'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'locality_guides'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <Compass className="w-4 h-4 shrink-0" />
-                <span>Noida Locality Intelligence</span>
-              </button>
-
-              <button
-                onClick={() => { setActiveTab('agency_contact'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'agency_contact'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <Phone className="w-4 h-4 shrink-0" />
-                <span>Agency & Hotline Routing</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Group 3: Leads & System Security */}
-          <div>
-            <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-widest text-amber-800">
-              Leads & Security
-            </div>
-            <div className="space-y-1">
-              <button
-                onClick={() => { setActiveTab('inquiries'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'inquiries'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Users className="w-4 h-4 shrink-0" />
-                  <span>Brochure & Site Leads</span>
-                </div>
-                {brochureLeads.length > 0 && (
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    activeTab === 'inquiries'
-                      ? 'bg-slate-950 text-amber-300'
-                      : 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                  }`}>
-                    {brochureLeads.length}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false); }}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                  activeTab === 'settings'
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
-                    : 'text-slate-600 hover:text-slate-900 hover:bg-orange-100/60'
-                }`}
-              >
-                <Shield className="w-4 h-4 shrink-0" />
-                <span>Security & SEO Portal</span>
-              </button>
-            </div>
-          </div>
-
-        </nav>
-
-        {/* Sidebar Footer: Profile & Exit */}
-        <div className="p-4 border-t border-orange-200/80 bg-[#FFF3EB] space-y-3">
-          <div className="flex items-center gap-3 px-2">
-            <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-amber-100 border border-amber-300 flex items-center justify-center font-bold text-xs text-amber-800">
-                SA
-              </div>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-[#FFF3EB]"></span>
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-xs font-bold text-slate-900 truncate">Super Admin</div>
-              <div className="text-[10px] text-amber-700 truncate font-semibold">UP RERA Advisory Desk</div>
-            </div>
-          </div>
+        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+          <button
+            onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'overview' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <LayoutDashboard className="w-4 h-4 shrink-0" />
+            <span>Dashboard Overview</span>
+          </button>
 
           <button
+            onClick={() => {
+              setEditingProperty(null);
+              setActiveTab('properties');
+              setMobileMenuOpen(false);
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'properties' || activeTab === 'add_property' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <Building className="w-4 h-4 shrink-0" />
+            <span>Manage Properties ({propertiesList.length})</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('drone_tours');
+              setMobileMenuOpen(false);
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'drone_tours' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <div className="flex items-center gap-3">
+              <Video className="w-4 h-4 shrink-0 text-amber-400" />
+              <span>4K Drone Tours</span>
+            </div>
+            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'drone_tours' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-amber-300 border border-slate-700'}`}>
+              {propertiesList.filter(p => p.videoTour?.videoUrl).length}
+            </span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('website_content'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'website_content' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <Sparkles className="w-4 h-4 shrink-0 text-amber-400" />
+            <span>Hero & Web Content</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('agency_contact'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'agency_contact' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <Phone className="w-4 h-4 shrink-0" />
+            <span>Agency & Contact Info</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('locality_guides'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'locality_guides' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <Compass className="w-4 h-4 shrink-0" />
+            <span>Noida Locality Guides</span>
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('inquiries'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'inquiries' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <div className="flex items-center gap-3">
+              <Users className="w-4 h-4 shrink-0" />
+              <span>Brochure & Site Leads</span>
+            </div>
+            {brochureLeads.length > 0 && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${activeTab === 'inquiries' ? 'bg-slate-950 text-amber-400' : 'bg-slate-800 text-amber-300 border border-slate-700'}`}>
+                {brochureLeads.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false); }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${activeTab === 'settings' ? 'bg-amber-400 text-slate-950 font-bold shadow-sm' : 'hover:bg-slate-800 hover:text-white'
+              }`}
+          >
+            <Settings className="w-4 h-4 shrink-0" />
+            <span>Security & SEO Portal</span>
+          </button>
+        </nav>
+
+        <div className="p-4 border-t border-slate-800">
+          <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white text-slate-700 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 border border-orange-200 shadow-xs transition-all cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-colors cursor-pointer"
           >
             <LogOut className="w-4 h-4" />
-            <span>Exit Admin Panel</span>
+            Exit Admin Panel
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0 bg-[#FFF3EB]">
+      <div className="flex-1 flex flex-col h-full overflow-hidden min-w-0">
 
         {/* Top Header */}
-        <header className="h-16 lg:h-20 bg-[#FFF8F4]/90 backdrop-blur-md border-b border-orange-200/80 flex items-center justify-between px-3 sm:px-6 lg:px-8 shrink-0 text-slate-900">
+        <header className="h-16 lg:h-20 bg-white/95 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-3 sm:px-6 lg:px-8 shrink-0">
           <div className="flex items-center gap-2 sm:gap-3 min-w-0">
             {/* Hamburger Button for Mobile */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-orange-100 border border-orange-200 transition-colors cursor-pointer shrink-0"
+              className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition-colors cursor-pointer shrink-0"
               title="Open Navigation Menu"
             >
               <Menu className="w-5 h-5" />
             </button>
             <div className="min-w-0">
-              <div className="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-                <span>KR Estate Console</span>
-                <span>/</span>
-                <span className="text-amber-700 font-bold capitalize">
-                  {activeTab.replace('_', ' ')}
-                </span>
-              </div>
-              <h1 className="text-sm sm:text-base lg:text-lg font-bold text-slate-900 truncate">
-                {activeTab === 'overview' && 'Executive Portfolio Intelligence & KPIs'}
-                {activeTab === 'properties' && 'Property Portfolio Management'}
-                {activeTab === 'drone_tours' && '4K Aerial Drone Tours & Walkthroughs'}
-                {activeTab === 'add_property' && (editingProperty ? `Edit Property: ${editingProperty.title}` : 'Add New Property Listing')}
-                {activeTab === 'website_content' && 'Hero Section & Announcement Ticker'}
-                {activeTab === 'agency_contact' && 'Agency Hotline & WhatsApp Routing'}
-                {activeTab === 'locality_guides' && 'Noida Corridor Intelligence & Micro-Markets'}
-                {activeTab === 'inquiries' && 'Brochure Leads & Site Visit Bookings'}
-                {activeTab === 'settings' && 'Portal Security, 2FA & SEO Engine'}
+              <h1 className="text-sm sm:text-base lg:text-xl font-bold text-slate-900 truncate">
+                {activeTab === 'overview' && 'Dashboard Overview & Metrics'}
+                {activeTab === 'properties' && 'Property Portfolio Manager'}
+                {activeTab === 'drone_tours' && '4K Drone Aerial Tours & Walkthroughs'}
+                {activeTab === 'add_property' && (editingProperty ? `Edit: ${editingProperty.title}` : 'Add New Property Listing')}
+                {activeTab === 'website_content' && 'Hero & Web Content'}
+                {activeTab === 'agency_contact' && 'Agency & Contact Numbers'}
+                {activeTab === 'locality_guides' && 'Noida Locality Intelligence'}
+                {activeTab === 'inquiries' && 'Brochure Leads & Inquiries'}
+                {activeTab === 'settings' && 'Portal Security & SEO'}
               </h1>
+              <p className="text-[10px] sm:text-xs text-slate-500 truncate hidden xs:block">Live synchronization with krestatenoida.com</p>
             </div>
           </div>
-
-          {/* Header Right Actions */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-300">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               Live Synced
             </span>
-
-            <a
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-700 hover:text-slate-900 hover:bg-orange-50 border border-orange-200 shadow-xs transition-colors"
-              title="Preview Live Website"
-            >
-              <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
-              <span>Visit Live Website</span>
-            </a>
-
-            {activeTab !== 'add_property' && (
-              <button
-                onClick={() => {
-                  setEditingProperty(null);
-                  setActiveTab('add_property');
-                }}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 shadow-md shadow-amber-500/20 hover:brightness-110 transition-all cursor-pointer"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">Add Listing</span>
-              </button>
-            )}
-
             <button
               onClick={handleLogout}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold bg-white text-slate-700 hover:text-slate-900 hover:bg-orange-50 transition-colors cursor-pointer border border-orange-200 shadow-xs"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer"
               title="Exit Admin Panel"
             >
               <LogOut className="w-3.5 h-3.5 text-slate-500" />
@@ -923,306 +762,160 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         </header>
 
         {/* Scrollable Content */}
-        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-orange-300/60 [&::-webkit-scrollbar-track]:bg-transparent">
+        <main className="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8">
 
           {/* TAB: OVERVIEW */}
           {activeTab === 'overview' && (
-            <div className="max-w-6xl mx-auto space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              
-              {/* Executive Welcome Hero Banner */}
-              <div className="relative rounded-2xl sm:rounded-3xl p-6 sm:p-8 bg-gradient-to-br from-[#FFF8F4] via-[#FFF1E6] to-[#FFE8D6] border border-orange-200/90 shadow-md overflow-hidden">
-                {/* Ambient glow flare */}
-                <div className="absolute -top-24 -right-24 w-80 h-80 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                  <div className="space-y-2 max-w-2xl">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-amber-100 text-amber-800 border border-amber-300">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      Executive Real Estate Command Desk
-                    </div>
-                    <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight leading-tight">
-                      KR Estate Noida Intelligence Portal
-                    </h2>
-                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                      Unified administration console for Noida expressway properties, 4K aerial drone tours, dynamic public announcements, and VIP brochure lead routing.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
-                    <button
-                      onClick={() => {
-                        setEditingProperty(null);
-                        setActiveTab('add_property');
-                      }}
-                      className="px-4 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 shadow-lg shadow-amber-500/20 hover:brightness-110 transition-all flex items-center gap-2 cursor-pointer"
-                    >
-                      <Plus className="w-4 h-4" />
-                      <span>+ New Property Listing</span>
-                    </button>
-                    <button
-                      onClick={() => setActiveTab('drone_tours')}
-                      className="px-4 py-2.5 rounded-xl text-xs font-bold bg-white text-slate-700 hover:text-slate-900 hover:bg-orange-50 border border-orange-200 shadow-xs transition-all flex items-center gap-2 cursor-pointer"
-                    >
-                      <Film className="w-4 h-4 text-amber-400" />
-                      <span>Manage Drone Tours</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Micro stats ribbon */}
-                <div className="mt-6 pt-5 border-t border-orange-200 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-                  <div>
-                    <span className="text-slate-500 block text-[11px]">Primary Corridor</span>
-                    <span className="font-bold text-slate-900 text-sm">Noida Expressway</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[11px]">4K Drone Coverage</span>
-                    <span className="font-bold text-amber-400 text-sm">
-                      {Math.round((propertiesList.filter(p => p.videoTour?.videoUrl).length / (propertiesList.length || 1)) * 100)}% Published
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[11px]">Lead Delivery</span>
-                    <span className="font-bold text-emerald-400 text-sm">Instant WhatsApp</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-500 block text-[11px]">Compliance Status</span>
-                    <span className="font-bold text-slate-900 text-sm">UP RERA Registered</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bento KPI Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-                {/* Total Properties */}
+            <div className="max-w-5xl mx-auto space-y-6 sm:space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* KPI Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <button
-                  onClick={() => setActiveTab('properties')}
-                  className="bg-white/95 hover:bg-white rounded-2xl p-6 border border-orange-200/80 hover:border-amber-400 shadow-md hover:shadow-lg flex flex-col justify-between text-left transition-all group cursor-pointer"
+                  onClick={() => setExpandedCard('properties')}
+                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 text-left hover:border-amber-400 hover:shadow-md transition-all group cursor-pointer"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-xs font-semibold text-slate-600 group-hover:text-amber-800 transition-colors uppercase tracking-wider">
-                      Properties Portfolio
-                    </span>
-                    <div className="p-2.5 bg-amber-100 rounded-xl text-amber-700 border border-amber-300 group-hover:scale-110 transition-transform">
-                      <Building className="w-4 h-4" />
-                    </div>
+                    <span className="text-sm font-semibold text-slate-500 group-hover:text-amber-600 transition-colors">Total Properties</span>
+                    <div className="p-2 bg-amber-50 rounded-lg text-amber-600 group-hover:bg-amber-100 transition-colors"><Building className="w-4 h-4" /></div>
                   </div>
-                  <div className="my-3">
-                    <div className="text-3xl sm:text-4xl font-black text-slate-900">{propertiesList.length}</div>
-                    <div className="text-[11px] text-slate-600 mt-1">High-yield luxury developments</div>
-                  </div>
-                  <span className="text-xs text-amber-700 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                    <span>Manage all listings</span> &rarr;
-                  </span>
+                  <div className="text-4xl font-bold text-slate-900">{propertiesList.length}</div>
+                  <span className="text-xs text-slate-500">Click to view complete property list</span>
                 </button>
 
-                {/* 4K Drone Tours */}
                 <button
                   onClick={() => setActiveTab('drone_tours')}
-                  className="bg-white/95 hover:bg-white rounded-2xl p-6 border border-orange-200/80 hover:border-amber-400 shadow-md hover:shadow-lg flex flex-col justify-between text-left transition-all group cursor-pointer"
+                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 text-left hover:border-amber-500 hover:shadow-md transition-all group cursor-pointer"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-xs font-semibold text-slate-600 group-hover:text-amber-800 transition-colors uppercase tracking-wider">
-                      4K Drone Tours
-                    </span>
-                    <div className="p-2.5 bg-amber-100 rounded-xl text-amber-700 border border-amber-300 group-hover:scale-110 transition-transform">
-                      <Film className="w-4 h-4" />
-                    </div>
+                    <span className="text-sm font-semibold text-slate-500 group-hover:text-amber-600 transition-colors">4K Drone Tours</span>
+                    <div className="p-2 bg-amber-50 rounded-lg text-amber-600 group-hover:bg-amber-100 transition-colors"><Video className="w-4 h-4" /></div>
                   </div>
-                  <div className="my-3">
-                    <div className="text-3xl sm:text-4xl font-black text-amber-400">
-                      {propertiesList.filter(p => p.videoTour?.videoUrl).length}
-                      <span className="text-xs font-bold text-slate-500 ml-2">Active</span>
-                    </div>
-                    <div className="text-[11px] text-slate-600 mt-1">UHD aerial footage live</div>
+                  <div className="text-4xl font-bold text-slate-900">
+                    {propertiesList.filter(p => p.videoTour?.videoUrl).length}
+                    <span className="text-xs font-semibold text-amber-600 ml-2">Active</span>
                   </div>
-                  <span className="text-xs text-amber-700 font-semibold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                    <span>Upload or edit tours</span> &rarr;
-                  </span>
+                  <span className="text-xs text-slate-500">Click to add, edit or delete drone tours</span>
                 </button>
 
-                {/* Leads & Inquiries */}
                 <button
                   onClick={() => setActiveTab('inquiries')}
-                  className="bg-white/95 hover:bg-orange-50 rounded-2xl p-6 border border-orange-200 shadow-xl flex flex-col justify-between text-left hover:border-blue-500/50 transition-all group cursor-pointer"
+                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 text-left hover:border-blue-400 hover:shadow-md transition-all group cursor-pointer"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-xs font-semibold text-slate-500 group-hover:text-blue-300 transition-colors uppercase tracking-wider">
-                      VIP Client Leads
-                    </span>
-                    <div className="p-2.5 bg-amber-100 rounded-xl text-amber-700 border border-amber-300 group-hover:scale-110 transition-transform">
-                      <Users className="w-4 h-4" />
-                    </div>
+                    <span className="text-sm font-semibold text-slate-500 group-hover:text-blue-600 transition-colors">Brochure & Site Inquiries</span>
+                    <div className="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-100 transition-colors"><Users className="w-4 h-4" /></div>
                   </div>
-                  <div className="my-3">
-                    <div className="text-3xl sm:text-4xl font-black text-slate-900">
-                      {brochureLeads.length > 0 ? brochureLeads.length : '16'}
-                      <span className="text-xs font-bold text-emerald-400 ml-2">Live</span>
-                    </div>
-                    <div className="text-[11px] text-slate-600 mt-1">Direct WhatsApp notifications</div>
+                  <div className="text-4xl font-bold text-slate-900">
+                    {brochureLeads.length > 0 ? brochureLeads.length : '16'}
+                    <span className="text-xs font-semibold text-emerald-600 ml-2">Live WhatsApp alerts</span>
                   </div>
-                  <span className="text-xs text-blue-400 font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                    <span>Open lead inbox</span> &rarr;
-                  </span>
+                  <span className="text-xs text-slate-500">Click to view client contact details</span>
                 </button>
 
-                {/* System & SEO */}
                 <button
-                  onClick={() => setActiveTab('settings')}
-                  className="bg-white/95 hover:bg-orange-50 rounded-2xl p-6 border border-orange-200 shadow-xl flex flex-col justify-between text-left hover:border-emerald-500/50 transition-all group cursor-pointer"
+                  onClick={() => setActiveTab('website_content')}
+                  className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col gap-4 text-left hover:border-purple-400 hover:shadow-md transition-all group cursor-pointer"
                 >
                   <div className="flex items-center justify-between w-full">
-                    <span className="text-xs font-semibold text-slate-500 group-hover:text-emerald-300 transition-colors uppercase tracking-wider">
-                      Portal Security
-                    </span>
-                    <div className="p-2.5 bg-emerald-100 rounded-xl text-emerald-700 border border-emerald-300 group-hover:scale-110 transition-transform">
-                      <Shield className="w-4 h-4" />
-                    </div>
+                    <span className="text-sm font-semibold text-slate-500 group-hover:text-purple-600 transition-colors">Website Live Modules</span>
+                    <div className="p-2 bg-purple-50 rounded-lg text-purple-600 group-hover:bg-purple-100 transition-colors"><Sparkles className="w-4 h-4" /></div>
                   </div>
-                  <div className="my-3">
-                    <div className="text-3xl sm:text-4xl font-black text-emerald-400">100%</div>
-                    <div className="text-[11px] text-slate-600 mt-1">2FA TOTP & SEO Active</div>
-                  </div>
-                  <span className="text-xs text-emerald-400 font-medium flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                    <span>Manage security settings</span> &rarr;
-                  </span>
+                  <div className="text-4xl font-bold text-slate-900">100%</div>
+                  <span className="text-xs text-slate-500">All text, hero, stats & locality guides fully editable</span>
                 </button>
               </div>
 
-              {/* Quick Command Hub & Recent Properties */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-                
-                {/* Quick Actions Panel */}
-                <div className="bg-white/95 rounded-2xl border border-orange-200 shadow-xl overflow-hidden">
-                  <div className="p-5 sm:p-6 border-b border-orange-200/80 flex items-center justify-between bg-[#FFF3EB]">
-                    <div className="flex items-center gap-2.5">
-                      <Sparkles className="w-4 h-4 text-amber-400" />
-                      <h3 className="font-bold text-slate-900 text-sm sm:text-base">Quick Command Shortcuts</h3>
-                    </div>
-                    <span className="text-[11px] text-slate-500">Instant publish</span>
+              {/* Quick Actions & Recent Activity */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h2 className="font-bold text-slate-900">Quick Content Updates</h2>
                   </div>
-
-                  <div className="p-5 sm:p-6 space-y-3">
+                  <div className="p-6 space-y-3">
                     <button
                       onClick={() => {
                         setEditingProperty(null);
                         setActiveTab('add_property');
                       }}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-orange-200 bg-[#FFF8F4] hover:bg-orange-50 hover:border-amber-500/40 transition-all group cursor-pointer"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                          <Plus className="w-4 h-4" />
-                        </div>
-                        <div className="text-left">
-                          <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 block">
-                            Add New Property Listing
-                          </span>
-                          <span className="text-[11px] text-slate-500">Configure cover image, pricing, amenities, and floor plans</span>
-                        </div>
+                        <div className="p-2 bg-amber-100 text-amber-700 rounded-lg"><Plus className="w-4 h-4" /></div>
+                        <span className="font-semibold text-sm text-slate-700 group-hover:text-amber-900">Add New Property Listing (With Video & Amenities)</span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
                     </button>
 
                     <button
                       onClick={() => setActiveTab('drone_tours')}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-orange-200 bg-[#FFF8F4] hover:bg-orange-50 hover:border-amber-500/40 transition-all group cursor-pointer"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                          <Film className="w-4 h-4" />
-                        </div>
-                        <div className="text-left">
-                          <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 block">
-                            Upload / Configure 4K Drone Tour
-                          </span>
-                          <span className="text-[11px] text-slate-500">Add aerial video walkthroughs to property showcase</span>
-                        </div>
+                        <div className="p-2 bg-amber-100 text-amber-700 rounded-lg"><Video className="w-4 h-4" /></div>
+                        <span className="font-semibold text-sm text-slate-700 group-hover:text-amber-900">Manage 4K Drone Tours (Add, Upload or Delete)</span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
                     </button>
 
                     <button
                       onClick={() => setActiveTab('website_content')}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-orange-200 bg-[#FFF8F4] hover:bg-orange-50 hover:border-amber-500/40 transition-all group cursor-pointer"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                          <Sparkles className="w-4 h-4" />
-                        </div>
-                        <div className="text-left">
-                          <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 block">
-                            Edit Hero Headline & Live Ticker
-                          </span>
-                          <span className="text-[11px] text-slate-500">Customize announcement bar and marketing tagline</span>
-                        </div>
+                        <div className="p-2 bg-amber-100 text-amber-700 rounded-lg"><Sparkles className="w-4 h-4" /></div>
+                        <span className="font-semibold text-sm text-slate-700 group-hover:text-amber-900">Edit Hero Headline, Badge & Announcement Ticker</span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
                     </button>
 
                     <button
                       onClick={() => setActiveTab('agency_contact')}
-                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-orange-200 bg-[#FFF8F4] hover:bg-orange-50 hover:border-amber-500/40 transition-all group cursor-pointer"
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 transition-colors group cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
-                        <div className="p-2 bg-amber-500/10 text-amber-400 rounded-lg border border-amber-500/20">
-                          <Phone className="w-4 h-4" />
-                        </div>
-                        <div className="text-left">
-                          <span className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 block">
-                            Update WhatsApp & Hotline Routing
-                          </span>
-                          <span className="text-[11px] text-slate-500">Receive lead inquiries instantly on your personal number</span>
-                        </div>
+                        <div className="p-2 bg-amber-100 text-amber-700 rounded-lg"><Phone className="w-4 h-4" /></div>
+                        <span className="font-semibold text-sm text-slate-700 group-hover:text-amber-900">Update WhatsApp Number & Agency Phone Hotline</span>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('locality_guides')}
+                      className="w-full flex items-center justify-between p-3.5 rounded-xl border border-slate-200 hover:border-amber-400 hover:bg-amber-50/50 transition-colors group cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 bg-amber-100 text-amber-700 rounded-lg"><Compass className="w-4 h-4" /></div>
+                        <span className="font-semibold text-sm text-slate-700 group-hover:text-amber-900">Edit Noida Locality & Corridor Guides</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
                     </button>
                   </div>
                 </div>
 
-                {/* Recent Properties Showcase */}
-                <div className="bg-white/95 rounded-2xl border border-orange-200 shadow-xl overflow-hidden">
-                  <div className="p-5 sm:p-6 border-b border-orange-200/80 flex items-center justify-between bg-[#FFF3EB]">
-                    <div className="flex items-center gap-2.5">
-                      <Building className="w-4 h-4 text-amber-400" />
-                      <h3 className="font-bold text-slate-900 text-sm sm:text-base">Portfolio Spotlight</h3>
-                    </div>
+                <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                  <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+                    <h2 className="font-bold text-slate-900">Recent Properties in Portfolio</h2>
                     <button
                       onClick={() => setActiveTab('properties')}
-                      className="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center gap-1 cursor-pointer"
+                      className="text-xs font-semibold text-amber-600 hover:text-amber-700"
                     >
-                      <span>View All ({propertiesList.length})</span> &rarr;
+                      View All &rarr;
                     </button>
                   </div>
-
-                  <div className="divide-y divide-orange-100/70">
-                    {propertiesList.slice(0, 4).map(prop => (
-                      <div key={prop.id} className="p-4 flex items-center justify-between hover:bg-orange-50 transition-colors gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <img
-                            src={prop.coverImage}
-                            alt={prop.title}
-                            className="w-12 h-12 rounded-xl object-cover shrink-0 border border-orange-200 shadow-md"
-                          />
-                          <div className="min-w-0">
-                            <div className="font-bold text-xs sm:text-sm text-slate-900 truncate">{prop.title}</div>
-                            <div className="text-[11px] text-slate-500 truncate flex items-center gap-1.5 mt-0.5">
-                              <span className="text-amber-700 font-medium">{prop.developer}</span>
-                              <span>&bull;</span>
-                              <span>{prop.sector}</span>
-                            </div>
-                          </div>
+                  <div className="divide-y divide-slate-100">
+                    {NOIDA_PROPERTIES.slice(-4).reverse().map(prop => (
+                      <div key={prop.id} className="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                        <div>
+                          <div className="font-semibold text-sm text-slate-900">{prop.title}</div>
+                          <div className="text-xs text-slate-500">{prop.sector} • {prop.developer}</div>
                         </div>
-
-                        <div className="flex items-center gap-2.5 shrink-0">
-                          <span className="text-xs font-extrabold text-amber-400">{prop.priceDisplay}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm font-semibold text-slate-800">{prop.priceDisplay}</span>
                           <button
                             onClick={() => {
                               setEditingProperty(prop);
                               setActiveTab('add_property');
                             }}
-                            className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all cursor-pointer"
+                            className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors cursor-pointer"
                           >
                             Edit
                           </button>
@@ -1231,244 +924,123 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     ))}
                   </div>
                 </div>
-
               </div>
             </div>
           )}
 
-          {/* TAB: PROPERTIES PORTFOLIO MANAGER */}
+          {/* TAB: PROPERTIES TABLE */}
           {activeTab === 'properties' && (
-            <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              
-              {/* Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                      <Building className="w-5 h-5" />
-                    </span>
-                    <div>
-                      <h2 className="text-base sm:text-xl font-bold text-slate-900">All Live Properties ({propertiesList.length})</h2>
-                      <p className="text-xs text-slate-500">
-                        Manage listing details, high-resolution photo galleries, 4K aerial drone tours, and pricing.
-                      </p>
-                    </div>
-                  </div>
+                  <h2 className="text-base sm:text-lg font-bold text-slate-900">All Live Properties</h2>
+                  <p className="text-xs text-slate-500">Click Edit to modify details, upload property videos, add lifestyle amenities, or configure floor plans.</p>
                 </div>
                 <button
                   onClick={() => {
                     setEditingProperty(null);
                     setActiveTab('add_property');
                   }}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-lg shadow-amber-500/20 cursor-pointer self-start sm:self-auto"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold text-xs rounded-xl transition-colors shadow-xs cursor-pointer self-start sm:self-auto"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>+ Add New Listing</span>
+                  Add New Listing
                 </button>
               </div>
 
-              {/* Search & Sector Filters Bar */}
-              <div className="bg-white/95 border border-orange-200 rounded-2xl p-4 shadow-xl flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-                {/* Search Bar */}
-                <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    value={propertySearchQuery}
-                    onChange={(e) => setPropertySearchQuery(e.target.value)}
-                    placeholder="Search properties by title, developer, or sector (e.g. Godrej, 150, Express)..."
-                    className="w-full pl-10 pr-9 py-2.5 text-xs sm:text-sm rounded-xl border border-orange-200 bg-white text-slate-900 placeholder-slate-500 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all"
-                  />
-                  {propertySearchQuery && (
-                    <button
-                      onClick={() => setPropertySearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 text-xs cursor-pointer"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-
-                {/* Sector Filter Chips */}
-                <div className="flex flex-wrap items-center gap-1.5 shrink-0">
-                  <button
-                    onClick={() => setPropertySectorFilter('all')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      propertySectorFilter === 'all'
-                        ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                        : 'bg-orange-50 text-slate-700 hover:text-slate-900 hover:bg-orange-100 border border-orange-200'
-                    }`}
-                  >
-                    All Sectors ({propertiesList.length})
-                  </button>
-                  <button
-                    onClick={() => setPropertySectorFilter('central')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      propertySectorFilter === 'central'
-                        ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                        : 'bg-orange-50 text-slate-700 hover:text-slate-900 hover:bg-orange-100 border border-orange-200'
-                    }`}
-                  >
-                    Central Noida
-                  </button>
-                  <button
-                    onClick={() => setPropertySectorFilter('expressway')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      propertySectorFilter === 'expressway'
-                        ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                        : 'bg-orange-50 text-slate-700 hover:text-slate-900 hover:bg-orange-100 border border-orange-200'
-                    }`}
-                  >
-                    Noida Expressway
-                  </button>
-                  <button
-                    onClick={() => setPropertySectorFilter('jewar')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      propertySectorFilter === 'jewar'
-                        ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                        : 'bg-orange-50 text-slate-700 hover:text-slate-900 hover:bg-orange-100 border border-orange-200'
-                    }`}
-                  >
-                    Yamuna / Jewar
-                  </button>
-                </div>
-              </div>
-
-              {/* Luxury Obsidian Properties Table */}
-              <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-2xl overflow-hidden">
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[700px] text-left border-collapse">
+                  <table className="w-full min-w-[650px] text-left border-collapse">
                     <thead>
-                      <tr className="bg-orange-50/70 border-b border-orange-200 text-[11px] uppercase tracking-wider text-slate-700 font-bold">
-                        <th className="p-4 font-bold">Property Listing</th>
-                        <th className="p-4 font-bold">Sector Corridor</th>
-                        <th className="p-4 font-bold">Base Price</th>
-                        <th className="p-4 font-bold">4K Drone Tour</th>
-                        <th className="p-4 font-bold">Status</th>
-                        <th className="p-4 font-bold text-right">Actions</th>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
+                        <th className="p-4 font-semibold">Property</th>
+                        <th className="p-4 font-semibold">Sector</th>
+                        <th className="p-4 font-semibold">Base Price</th>
+                        <th className="p-4 font-semibold">Video Tour</th>
+                        <th className="p-4 font-semibold">Status</th>
+                        <th className="p-4 font-semibold text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-orange-100/70">
-                      {filteredProperties.length === 0 ? (
-                        <tr>
-                          <td colSpan={6} className="p-12 text-center text-sm text-slate-500">
-                            <Building className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                            No properties match your filter "{propertySearchQuery}".
-                            <div className="mt-3">
+                    <tbody className="divide-y divide-slate-100">
+                      {propertiesList.map(prop => (
+                        <tr key={prop.id} className="hover:bg-slate-50/80 transition-colors">
+                          <td className="p-4">
+                            <div className="font-semibold text-sm text-slate-900">{prop.title}</div>
+                            <div className="text-xs text-slate-500">{prop.developer}</div>
+                          </td>
+                          <td className="p-4 text-sm text-slate-600">{prop.sector}</td>
+                          <td className="p-4 text-sm font-semibold text-slate-700">{prop.priceDisplay}</td>
+                          <td className="p-4">
+                            {prop.videoTour?.videoUrl ? (
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                                  <Film className="w-3 h-3 text-amber-600" />
+                                  Active ({prop.videoTour.duration || '4K'})
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setPreviewDroneVideo(prop.videoTour!)}
+                                  title="Watch Drone Tour"
+                                  className="p-1 rounded-md text-amber-700 hover:bg-amber-100 transition-colors cursor-pointer"
+                                >
+                                  <Play className="w-3.5 h-3.5 fill-amber-700" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenAddDroneTour(prop.id)}
+                                  title="Edit Drone Tour"
+                                  className="p-1 rounded-md text-slate-500 hover:bg-slate-100 transition-colors cursor-pointer"
+                                >
+                                  <Edit className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleDeleteDroneTour(prop.id, prop.title)}
+                                  disabled={deletingDroneTourId === prop.id}
+                                  title="Delete Drone Tour"
+                                  className="p-1 rounded-md text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer disabled:opacity-40"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            ) : (
                               <button
-                                onClick={() => { setPropertySearchQuery(''); setPropertySectorFilter('all'); }}
-                                className="px-3.5 py-1.5 text-xs font-bold bg-amber-400 text-slate-950 rounded-lg cursor-pointer"
+                                type="button"
+                                onClick={() => handleOpenAddDroneTour(prop.id)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200 border border-slate-200 text-slate-600 transition-colors cursor-pointer"
                               >
-                                Reset Filters
+                                <Plus className="w-3 h-3" />
+                                Add Drone Tour
+                              </button>
+                            )}
+                          </td>
+                          <td className="p-4">
+                            <span className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-emerald-100 text-emerald-700 border border-emerald-200">
+                              Live
+                            </span>
+                          </td>
+                          <td className="p-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => {
+                                  setEditingProperty(prop);
+                                  setActiveTab('add_property');
+                                }}
+                                className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition-colors cursor-pointer"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                onClick={() => handleDeleteProperty(prop.id, prop.title)}
+                                disabled={deletingId === prop.id}
+                                className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors cursor-pointer disabled:opacity-50"
+                              >
+                                {deletingId === prop.id ? 'Deleting...' : 'Delete'}
                               </button>
                             </div>
                           </td>
                         </tr>
-                      ) : (
-                        filteredProperties.map(prop => (
-                          <tr key={prop.id} className="hover:bg-orange-50/60 transition-colors">
-                            <td className="p-4">
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={prop.coverImage}
-                                  alt={prop.title}
-                                  className="w-13 h-13 rounded-xl object-cover shrink-0 border border-orange-200 shadow-md"
-                                />
-                                <div className="min-w-0">
-                                  <div className="font-bold text-sm text-slate-900">{prop.title}</div>
-                                  <div className="text-xs text-amber-700 font-medium mt-0.5">{prop.developer}</div>
-                                  <div className="text-[11px] text-slate-500 flex items-center gap-1.5 mt-0.5">
-                                    <span>{(prop.bhkConfigurations && prop.bhkConfigurations.join(', ')) || 'Luxury Residences'}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td className="p-4">
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-orange-50 text-amber-950 border border-orange-200 font-semibold">
-                                <MapPin className="w-3 h-3 text-amber-400" />
-                                {prop.sector}
-                              </span>
-                            </td>
-
-                            <td className="p-4">
-                              <span className="text-sm font-extrabold text-amber-400">{prop.priceDisplay}</span>
-                            </td>
-
-                            <td className="p-4">
-                              {prop.videoTour?.videoUrl ? (
-                                <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
-                                    <Film className="w-3 h-3 text-amber-400" />
-                                    <span>4K Tour ({prop.videoTour.duration || 'Live'})</span>
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => setPreviewDroneVideo(prop.videoTour!)}
-                                    title="Watch Drone Tour"
-                                    className="p-1.5 rounded-lg text-amber-400 hover:bg-amber-500/20 transition-colors cursor-pointer"
-                                  >
-                                    <Play className="w-3.5 h-3.5 fill-amber-400" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleOpenAddDroneTour(prop.id)}
-                                    title="Edit Drone Tour"
-                                    className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-orange-100 transition-colors cursor-pointer"
-                                  >
-                                    <Edit className="w-3.5 h-3.5" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleDeleteDroneTour(prop.id, prop.title)}
-                                    disabled={deletingDroneTourId === prop.id}
-                                    title="Delete Drone Tour"
-                                    className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/20 transition-colors cursor-pointer disabled:opacity-40"
-                                  >
-                                    <Trash2 className="w-3.5 h-3.5" />
-                                  </button>
-                                </div>
-                              ) : (
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpenAddDroneTour(prop.id)}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1 text-[11px] font-bold rounded-lg bg-orange-50 hover:bg-amber-100 hover:text-amber-900 hover:border-amber-400 border border-amber-300 text-amber-800 transition-all cursor-pointer"
-                                >
-                                  <Plus className="w-3 h-3" />
-                                  <span>Add Drone Tour</span>
-                                </button>
-                              )}
-                            </td>
-
-                            <td className="p-4">
-                              <span className="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-500/10 text-emerald-400 border border-emerald-500/25">
-                                Live
-                              </span>
-                            </td>
-
-                            <td className="p-4 text-right">
-                              <div className="flex items-center justify-end gap-2">
-                                <button
-                                  onClick={() => {
-                                    setEditingProperty(prop);
-                                    setActiveTab('add_property');
-                                  }}
-                                  className="px-3 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 transition-all cursor-pointer shadow-sm"
-                                >
-                                  Edit Listing
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteProperty(prop.id, prop.title)}
-                                  disabled={deletingId === prop.id}
-                                  className="px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors cursor-pointer disabled:opacity-50"
-                                >
-                                  {deletingId === prop.id ? 'Deleting...' : 'Delete'}
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))
-                      )}
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -1482,11 +1054,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                    <span className="p-2 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20">
                       <Film className="w-5 h-5" />
                     </span>
                     <div>
-                      <h2 className="text-base sm:text-lg font-bold text-slate-900">4K Drone Aerial Showcase & Video Walkthroughs</h2>
+                      <h2 className="text-lg font-bold text-slate-900">4K Drone Tours & Aerial Showcase</h2>
                       <p className="text-xs text-slate-500">
                         Add high-definition aerial footage, upload MP4 video tours, or delete drone walk-throughs for any property.
                       </p>
@@ -1496,76 +1068,74 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={() => handleOpenAddDroneTour()}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-lg shadow-amber-500/20 cursor-pointer self-start sm:self-auto"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold text-xs rounded-xl transition-all shadow-xs hover:shadow-md cursor-pointer self-start sm:self-auto"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>+ Add New Drone Tour</span>
+                  + Add New Drone Tour
                 </button>
               </div>
 
               {/* Status Message */}
               {saveStatus?.tab === 'drone_tours' && (
-                <div className={`p-4 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-                  saveStatus.isError ? 'bg-rose-500/10 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                }`}>
-                  <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <div className={`p-4 rounded-xl text-xs font-semibold flex items-center gap-2 ${saveStatus.isError ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-50 text-emerald-800 border border-emerald-200'}`}>
+                  <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>{saveStatus.message}</span>
                 </div>
               )}
 
               {/* Drone Tour Metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white/95 p-5 rounded-2xl border border-orange-200 shadow-xl">
-                  <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Drone Tours</div>
-                  <div className="mt-2 text-2xl font-black text-amber-400 flex items-center gap-2">
+                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Active Drone Tours</div>
+                  <div className="mt-2 text-2xl font-black text-amber-600 flex items-center gap-2">
                     <span>{propertiesList.filter(p => p.videoTour?.videoUrl).length}</span>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
                       {Math.round((propertiesList.filter(p => p.videoTour?.videoUrl).length / (propertiesList.length || 1)) * 100)}% Coverage
                     </span>
                   </div>
                   <p className="mt-1 text-[11px] text-slate-500">Live 4K aerial tours visible to VIP buyers</p>
                 </div>
 
-                <div className="bg-white/95 p-5 rounded-2xl border border-orange-200 shadow-xl">
-                  <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Pending Drone Coverage</div>
-                  <div className="mt-2 text-2xl font-black text-slate-900">
+                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending Drone Coverage</div>
+                  <div className="mt-2 text-2xl font-black text-slate-800">
                     {propertiesList.filter(p => !p.videoTour?.videoUrl).length}
                   </div>
                   <p className="mt-1 text-[11px] text-slate-500">Properties ready for new drone tour upload</p>
                 </div>
 
-                <div className="bg-white/95 p-5 rounded-2xl border border-orange-200 shadow-xl">
-                  <div className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Video Delivery Engine</div>
-                  <div className="mt-2 text-2xl font-black text-emerald-400 flex items-center gap-1.5">
+                <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Storage & Video Delivery</div>
+                  <div className="mt-2 text-2xl font-black text-emerald-600 flex items-center gap-1.5">
                     <span>Direct MP4 / Stream</span>
                   </div>
                   <p className="mt-1 text-[11px] text-slate-500">Unlimited size video upload & external embeds supported</p>
                 </div>
               </div>
 
-              {/* Published Drone Tours Grid */}
-              <div className="bg-white/95 border border-orange-200 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
-                <div className="flex items-center justify-between border-b border-orange-200/80 pb-3">
+              {/* Active Drone Tours Grid */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Published Property Drone Tours</h3>
+                    <h3 className="text-sm font-bold text-slate-900">Active Property Drone Tours</h3>
                     <p className="text-xs text-slate-500">Preview, modify or permanently delete drone videos from the property showcase.</p>
                   </div>
-                  <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-100 text-amber-900 border border-amber-300">
+                  <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-700">
                     {propertiesList.filter(p => p.videoTour?.videoUrl).length} Published
                   </span>
                 </div>
 
                 {propertiesList.filter(p => p.videoTour?.videoUrl).length === 0 ? (
-                  <div className="text-center py-12 px-4 rounded-xl border border-dashed border-orange-200 bg-white">
-                    <Film className="w-10 h-10 text-slate-600 mx-auto mb-2" />
-                    <p className="text-sm font-bold text-slate-900">No active drone tours yet</p>
+                  <div className="text-center py-12 px-4 rounded-xl border border-dashed border-slate-200 bg-slate-50">
+                    <Video className="w-10 h-10 text-slate-400 mx-auto mb-2" />
+                    <p className="text-sm font-semibold text-slate-700">No active drone tours yet</p>
                     <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
                       Upload your first drone footage or paste a video link to activate the 4K aerial tour experience for buyers.
                     </p>
                     <button
                       type="button"
                       onClick={() => handleOpenAddDroneTour()}
-                      className="px-4 py-2 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl transition-all cursor-pointer"
+                      className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold text-xs rounded-xl transition-colors cursor-pointer"
                     >
                       + Add First Drone Tour
                     </button>
@@ -1575,9 +1145,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     {propertiesList.filter(p => p.videoTour?.videoUrl).map(prop => {
                       const tour = prop.videoTour!;
                       return (
-                        <div key={prop.id} className="group relative rounded-2xl border border-orange-200 overflow-hidden bg-[#FFF8F4] shadow-xl hover:border-amber-500/40 transition-all flex flex-col">
-                          {/* Video Thumbnail Header */}
-                          <div className="relative aspect-video bg-neutral-950 overflow-hidden">
+                        <div key={prop.id} className="group relative rounded-xl border border-slate-200 overflow-hidden bg-white shadow-xs hover:shadow-md transition-all flex flex-col">
+                          {/* Thumbnail / Video Preview Header */}
+                          <div className="relative aspect-video bg-neutral-900 overflow-hidden">
                             <img
                               src={tour.thumbnailUrl || prop.coverImage || ''}
                               alt={tour.title}
@@ -1586,67 +1156,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                                 (e.target as HTMLImageElement).src = prop.coverImage || '';
                               }}
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-center justify-center">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
                               <button
                                 type="button"
                                 onClick={() => setPreviewDroneVideo(tour)}
-                                className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 flex items-center justify-center transition-all hover:scale-110 shadow-lg cursor-pointer"
+                                className="w-12 h-12 rounded-full bg-amber-400/90 hover:bg-amber-300 text-neutral-950 flex items-center justify-center transition-all hover:scale-110 shadow-lg cursor-pointer"
                                 title="Play Video"
                               >
-                                <Play className="w-5 h-5 fill-slate-950 ml-0.5" />
+                                <Play className="w-5 h-5 fill-neutral-950 ml-0.5" />
                               </button>
                             </div>
-                            <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[10px] font-bold text-amber-300 border border-amber-400/30">
+                            <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-amber-300 border border-amber-400/30">
                               4K UHD
                             </div>
-                            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[10px] font-bold text-slate-900">
+                            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white">
                               {tour.duration || 'Custom'}
                             </div>
                           </div>
 
-                          {/* Card Content */}
+                          {/* Content */}
                           <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
                             <div>
-                              <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wide">
+                              <div className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">
                                 {prop.sector} &bull; {prop.developer}
                               </div>
                               <h4 className="font-bold text-sm text-slate-900 line-clamp-1 mt-0.5">
                                 {prop.title}
                               </h4>
-                              <p className="text-xs text-slate-500 line-clamp-2 mt-1">
+                              <p className="text-xs text-slate-600 line-clamp-2 mt-1">
                                 {tour.title || tour.description || '4K Aerial Drone Tour'}
                               </p>
+                              <div className="mt-2 text-[11px] text-slate-400 truncate">
+                                Source: {tour.videoUrl}
+                              </div>
                             </div>
 
                             {/* Actions */}
-                            <div className="pt-2 border-t border-orange-200/80 flex items-center justify-between gap-2">
+                            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
                               <button
                                 type="button"
                                 onClick={() => setPreviewDroneVideo(tour)}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 transition-colors cursor-pointer"
                               >
-                                <Play className="w-3 h-3 fill-amber-400" />
-                                <span>Watch</span>
+                                <Play className="w-3 h-3 fill-amber-700" />
+                                Watch
                               </button>
                               <div className="flex items-center gap-1.5">
                                 <button
                                   type="button"
                                   onClick={() => handleOpenAddDroneTour(prop.id)}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-white hover:bg-orange-100 text-slate-700 hover:text-slate-900 border border-orange-200 shadow-xs transition-colors cursor-pointer"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
                                   title="Edit Video URL or Details"
                                 >
                                   <Edit className="w-3.5 h-3.5" />
-                                  <span>Edit</span>
+                                  Edit
                                 </button>
                                 <button
                                   type="button"
                                   onClick={() => handleDeleteDroneTour(prop.id, prop.title)}
                                   disabled={deletingDroneTourId === prop.id}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 transition-colors cursor-pointer disabled:opacity-50"
+                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors cursor-pointer disabled:opacity-50"
                                   title="Delete Drone Tour"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
-                                  <span>{deletingDroneTourId === prop.id ? '...' : 'Delete'}</span>
+                                  {deletingDroneTourId === prop.id ? 'Deleting...' : 'Delete'}
                                 </button>
                               </div>
                             </div>
@@ -1658,44 +1231,44 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 )}
               </div>
 
-              {/* Properties Awaiting Drone Tours Tray */}
-              <div className="bg-white/95 border border-orange-200 rounded-2xl p-5 sm:p-6 shadow-xl space-y-4">
-                <div className="flex items-center justify-between border-b border-orange-200/80 pb-3">
+              {/* Properties Awaiting Drone Tours */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
                     <h3 className="text-sm font-bold text-slate-900">Properties Awaiting 4K Drone Tour</h3>
                     <p className="text-xs text-slate-500">Quickly upload or assign a drone video tour to any of these listings.</p>
                   </div>
-                  <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-100 text-amber-800 border border-amber-300">
-                    {propertiesList.filter(p => !p.videoTour?.videoUrl).length} Pending
+                  <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
+                    {propertiesList.filter(p => !p.videoTour?.videoUrl).length} Listings Pending
                   </span>
                 </div>
 
                 {propertiesList.filter(p => !p.videoTour?.videoUrl).length === 0 ? (
-                  <div className="p-6 text-center text-xs text-emerald-400 bg-emerald-500/10 rounded-xl border border-emerald-500/30 font-semibold">
+                  <div className="p-6 text-center text-xs text-slate-500 bg-emerald-50 rounded-xl border border-emerald-200">
                     🎉 All active properties currently have 4K Drone Tours assigned!
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {propertiesList.filter(p => !p.videoTour?.videoUrl).map(prop => (
-                      <div key={prop.id} className="p-3.5 rounded-xl border border-orange-200 bg-[#FFF3EB] hover:border-amber-500/40 transition-all flex items-center justify-between gap-3">
+                      <div key={prop.id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-amber-300 transition-all flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <img
                             src={prop.coverImage}
                             alt={prop.title}
-                            className="w-12 h-12 rounded-lg object-cover shrink-0 border border-orange-200"
+                            className="w-12 h-12 rounded-lg object-cover shrink-0 border border-slate-200"
                           />
                           <div className="min-w-0">
-                            <h4 className="font-bold text-xs text-slate-900 truncate">{prop.title}</h4>
+                            <h4 className="font-semibold text-xs text-slate-900 truncate">{prop.title}</h4>
                             <p className="text-[11px] text-slate-500 truncate">{prop.sector} &bull; {prop.priceDisplay}</p>
                           </div>
                         </div>
                         <button
                           type="button"
                           onClick={() => handleOpenAddDroneTour(prop.id)}
-                          className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 transition-all shadow-md cursor-pointer"
+                          className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-400 hover:bg-amber-300 text-neutral-950 transition-colors shadow-xs cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>Add Tour</span>
+                          Add Tour
                         </button>
                       </div>
                     ))}
@@ -1705,7 +1278,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             </div>
           )}
 
-          {/* TAB: ADD / EDIT PROPERTY FORM */}
+          {/* TAB: ADD / EDIT PROPERTY (FORM WITH UNLIMITED VIDEO UPLOAD & CUSTOM AMENITIES) */}
           {activeTab === 'add_property' && (
             <div className="max-w-5xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
               <button
@@ -1713,11 +1286,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   setEditingProperty(null);
                   setActiveTab('properties');
                 }}
-                className="flex items-center gap-1.5 text-xs font-bold text-amber-400 hover:text-amber-300 mb-6 transition-colors cursor-pointer bg-white hover:bg-orange-50 px-3.5 py-2 rounded-xl border border-orange-200 shadow-xs w-fit text-amber-800"
+                className="flex items-center gap-1 text-sm font-semibold text-slate-500 hover:text-slate-900 mb-6 transition-colors cursor-pointer"
               >
                 &larr; Back to Properties Portfolio
               </button>
-              <div className="bg-white/95 rounded-2xl border border-orange-200 shadow-2xl overflow-hidden relative min-h-[600px] p-2 sm:p-4">
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden relative min-h-[600px]">
                 <AdminPropertyForm
                   propertyToEdit={editingProperty}
                   onClose={() => {
@@ -1735,13 +1308,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900">Hero Section & Website Public Content</h2>
+                  <h2 className="text-lg font-bold text-slate-900">Hero Section & Website Public Content</h2>
                   <p className="text-xs text-slate-500">Edit headlines, announcement bar, hero badge, and primary stats counters. Changes appear instantly across the website.</p>
                 </div>
                 {saveStatus?.tab === 'website_content' && (
-                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${
-                    saveStatus.isError ? 'bg-rose-500/10 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                  }`}>
+                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${saveStatus.isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>{saveStatus.message}</span>
                   </div>
@@ -1749,136 +1320,137 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
 
               <form onSubmit={handleSaveWebsiteContent} noValidate className="space-y-6">
-                <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6">
 
                   {/* Hero Headline & Subtitle */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                      <Sparkles className="w-3.5 h-3.5" />
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4 flex items-center gap-2">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-500" />
                       Hero Main Typography & Messaging
                     </h3>
 
                     <div className="space-y-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">
                           Top Badge Text
                         </label>
                         <input
                           type="text"
                           value={heroForm.badge}
                           onChange={(e) => setHeroForm({ ...heroForm, badge: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                           placeholder="e.g. OFFICIAL RERA ADVISORY & CHANNEL PARTNER"
                         />
                       </div>
 
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">
                           Main Hero Headline
                         </label>
                         <input
                           type="text"
                           value={heroForm.title}
                           onChange={(e) => setHeroForm({ ...heroForm, title: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 font-medium"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 font-medium"
                           placeholder="e.g. Exceptional Residences & High-Yield Commercials Across Noida"
                         />
                       </div>
 
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">
                           Hero Subtitle / Description
                         </label>
                         <textarea
                           rows={3}
                           value={heroForm.subtitle}
                           onChange={(e) => setHeroForm({ ...heroForm, subtitle: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                           placeholder="Describe the agency's primary advisory focus..."
                         />
                       </div>
 
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">
                           Top Live Announcement Ticker (Optional - leave blank to hide)
                         </label>
                         <input
                           type="text"
                           value={heroForm.announcementText}
                           onChange={(e) => setHeroForm({ ...heroForm, announcementText: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400"
                           placeholder="e.g. ⚡ Jewar International Airport Commercial & Residential Boom..."
                         />
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-orange-200" />
+                  <hr className="border-slate-100" />
 
                   {/* Buttons */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">
                       Call-to-Action Buttons
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Primary Button Label</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Primary Button Label</label>
                         <input
                           type="text"
                           value={heroForm.siteVisitButtonText}
                           onChange={(e) => setHeroForm({ ...heroForm, siteVisitButtonText: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="Schedule Free Site Visit"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Secondary Button Label</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Secondary Button Label</label>
                         <input
                           type="text"
                           value={heroForm.droneTourButtonText}
                           onChange={(e) => setHeroForm({ ...heroForm, droneTourButtonText: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="Watch 4K Drone Tour"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-orange-200" />
+                  <hr className="border-slate-100" />
 
-                  {/* Primary Stats */}
+                  {/* Stats Counters */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">
-                      Key Impact Counters (Homepage Stats)
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">
+                      4 Key Performance Counters (Hero Bar)
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                       {statsForm.map((stat, idx) => (
-                        <div key={idx} className="bg-white p-3.5 rounded-xl border border-orange-200 space-y-2">
+                        <div key={idx} className="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+                          <span className="text-[10px] font-bold text-slate-400 uppercase">Stat #{idx + 1}</span>
                           <div>
-                            <label className="text-[11px] font-semibold text-slate-500 block mb-1">Counter Value</label>
+                            <label className="text-[11px] font-semibold text-slate-600 block">Value</label>
                             <input
                               type="text"
                               value={stat.value}
                               onChange={(e) => {
-                                const next = [...statsForm];
-                                next[idx] = { ...next[idx], value: e.target.value };
-                                setStatsForm(next);
+                                const copy = [...statsForm];
+                                copy[idx] = { ...copy[idx], value: e.target.value };
+                                setStatsForm(copy);
                               }}
-                              className="w-full px-3 py-1.5 text-sm rounded-lg border border-orange-200 bg-white/95 text-slate-900 font-bold text-amber-400"
+                              className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white font-bold text-slate-800"
                               placeholder="e.g. 150+"
                             />
                           </div>
                           <div>
-                            <label className="text-[11px] font-semibold text-slate-500 block mb-1">Label Caption</label>
+                            <label className="text-[11px] font-semibold text-slate-600 block">Label</label>
                             <input
                               type="text"
                               value={stat.label}
                               onChange={(e) => {
-                                const next = [...statsForm];
-                                next[idx] = { ...next[idx], label: e.target.value };
-                                setStatsForm(next);
+                                const copy = [...statsForm];
+                                copy[idx] = { ...copy[idx], label: e.target.value };
+                                setStatsForm(copy);
                               }}
-                              className="w-full px-3 py-1.5 text-xs rounded-lg border border-orange-200 bg-white/95 text-slate-200"
+                              className="w-full px-2.5 py-1.5 text-xs rounded-lg border border-slate-300 bg-white text-slate-700"
                               placeholder="e.g. Hectares Curated"
                             />
                           </div>
@@ -1890,10 +1462,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <div className="flex justify-end pt-4">
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-colors shadow-md cursor-pointer"
                     >
                       <Save className="w-4 h-4" />
-                      <span>Save Website Content</span>
+                      Save Website Content
                     </button>
                   </div>
 
@@ -1902,18 +1474,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             </div>
           )}
 
-          {/* TAB: EDIT AGENCY CONTACT & HOTLINE */}
+          {/* TAB: EDIT AGENCY & CONTACT INFORMATION */}
           {activeTab === 'agency_contact' && (
             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900">Agency Profile & Hotline Numbers</h2>
-                  <p className="text-xs text-slate-500">Configure client phone hotlines, WhatsApp routing number, UP RERA registration, and office address.</p>
+                  <h2 className="text-lg font-bold text-slate-900">Agency Information & Contact Routing</h2>
+                  <p className="text-xs text-slate-500">All customer inquiries, WhatsApp brochure redirects, and footer/header contact links use these numbers.</p>
                 </div>
                 {saveStatus?.tab === 'agency_contact' && (
-                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${
-                    saveStatus.isError ? 'bg-rose-500/10 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                  }`}>
+                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${saveStatus.isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>{saveStatus.message}</span>
                   </div>
@@ -1921,119 +1491,119 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
 
               <form onSubmit={handleSaveAgencySettings} noValidate className="space-y-6">
-                <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+                <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6">
 
-                  {/* Agency Identity */}
+                  {/* Agency Identification */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">Agency Identity</h3>
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">Agency Identity</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Agency Name</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Agency Name</label>
                         <input
                           type="text"
                           value={agencyForm.name}
                           onChange={(e) => setAgencyForm({ ...agencyForm, name: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="KR Estate Noida"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Tagline</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Tagline</label>
                         <input
                           type="text"
                           value={agencyForm.tagline}
                           onChange={(e) => setAgencyForm({ ...agencyForm, tagline: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="Premier Real Estate Advisory & Channel Partner"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-orange-200" />
+                  <hr className="border-slate-100" />
 
                   {/* Contact Routing */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">Direct Contact Numbers & Leads</h3>
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">Direct Contact Numbers & Leads</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Primary Hotline Phone</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Primary Hotline Phone</label>
                         <input
                           type="text"
                           value={agencyForm.phone}
                           onChange={(e) => setAgencyForm({ ...agencyForm, phone: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="+91 78704 33580"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">WhatsApp Lead Number (No + sign)</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">WhatsApp Lead Number (Numeric with country code, no +)</label>
                         <input
                           type="text"
                           value={agencyForm.whatsapp}
                           onChange={(e) => setAgencyForm({ ...agencyForm, whatsapp: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="917870433580"
                         />
-                        <span className="text-[11px] text-slate-500">All PDF brochure and pricing inquiries are dispatched to this WhatsApp.</span>
+                        <span className="text-[11px] text-slate-400">All PDF brochure and pricing inquiries are dispatched to this WhatsApp.</span>
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Lead Receiving Email</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Lead Receiving Email</label>
                         <input
                           type="email"
                           value={agencyForm.email}
                           onChange={(e) => setAgencyForm({ ...agencyForm, email: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="avinashmehra5292@gmail.com"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">UP RERA Agent Registration</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">UP RERA Agent Registration</label>
                         <input
                           type="text"
                           value={agencyForm.reraNumber}
                           onChange={(e) => setAgencyForm({ ...agencyForm, reraNumber: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="UPRERAAGT12894"
                         />
                       </div>
                     </div>
                   </div>
 
-                  <hr className="border-orange-200" />
+                  <hr className="border-slate-100" />
 
                   {/* Address & Meta */}
                   <div>
-                    <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">Office Location & Experience</h3>
+                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">Office Location & Experience</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Physical Office Address</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Physical Office Address</label>
                         <input
                           type="text"
                           value={agencyForm.address}
                           onChange={(e) => setAgencyForm({ ...agencyForm, address: e.target.value })}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="Expressway Business Corridor, Sector 142..."
                         />
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Advisory Experience (Years)</label>
+                          <label className="text-xs font-semibold text-slate-700 block mb-1">Advisory Experience (Years)</label>
                           <input
                             type="text"
                             value={agencyForm.experienceYears}
                             onChange={(e) => setAgencyForm({ ...agencyForm, experienceYears: e.target.value })}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                             placeholder="12+"
                           />
                         </div>
                         <div>
-                          <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Official Domain</label>
+                          <label className="text-xs font-semibold text-slate-700 block mb-1">Official Domain</label>
                           <input
                             type="text"
                             value={agencyForm.domain}
                             onChange={(e) => setAgencyForm({ ...agencyForm, domain: e.target.value })}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                             placeholder="krestatenoida.com"
                           />
                         </div>
@@ -2044,10 +1614,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <div className="flex justify-end pt-4">
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 text-slate-950 transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-colors shadow-md cursor-pointer"
                     >
                       <Save className="w-4 h-4" />
-                      <span>Save Agency & Contact Info</span>
+                      Save Agency & Contact Info
                     </button>
                   </div>
 
@@ -2061,14 +1631,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900">Noida Micro-Market & Corridor Intelligence</h2>
-                  <p className="text-xs text-slate-500">Edit average price per sq.ft, 3-year projected growth, metro connectivity, highlights and descriptions for each corridor.</p>
+                  <h2 className="text-lg font-bold text-slate-900">Edit Noida Micro-Market & Locality Intelligence</h2>
+                  <p className="text-xs text-slate-500">Edit average price per sq.ft, 3-year projected growth, metro connectivity, highlights and description for each Noida corridor.</p>
                 </div>
                 <div className="flex items-center gap-3">
                   {saveStatus?.tab === 'locality_guides' && (
-                    <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${
-                      saveStatus.isError ? 'bg-rose-500/10 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                    }`}>
+                    <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${saveStatus.isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
                       <CheckCircle className="w-3.5 h-3.5" />
                       <span>{saveStatus.message}</span>
                     </div>
@@ -2076,26 +1644,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <button
                     type="button"
                     onClick={handleCreateNewLocality}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 transition-all shadow-md cursor-pointer whitespace-nowrap"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 transition-colors shadow-sm cursor-pointer whitespace-nowrap"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>Create Corridor</span>
+                    <span>Create New Corridor</span>
                   </button>
                 </div>
               </div>
 
-              {/* Corridor Sub-Selector Chips */}
-              <div className="flex flex-wrap items-center gap-2 p-2 bg-white/95 rounded-2xl border border-orange-200 shadow-xl">
+              {/* Corridor Sub-Selector */}
+              <div className="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100 rounded-2xl border border-slate-200">
                 {localitiesList.map((loc, idx) => (
                   <button
                     key={loc.id || idx}
                     type="button"
                     onClick={() => setSelectedLocalityIdx(idx)}
-                    className={`px-4 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
-                      selectedLocalityIdx === idx
-                        ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-500/20'
-                        : 'text-slate-700 hover:text-slate-900 bg-orange-50 hover:bg-orange-100 border border-orange-200'
-                    }`}
+                    className={`px-4 py-2 text-xs font-semibold rounded-xl transition-all cursor-pointer ${selectedLocalityIdx === idx ? 'bg-amber-400 text-slate-950 shadow-sm font-bold' : 'text-slate-700 hover:text-slate-900 bg-white/50 hover:bg-white'
+                      }`}
                   >
                     {loc.name || `Corridor ${idx + 1}`}
                   </button>
@@ -2103,24 +1668,24 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <button
                   type="button"
                   onClick={handleCreateNewLocality}
-                  className="px-3.5 py-2 text-xs font-bold rounded-xl border border-dashed border-amber-500/40 text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-2 text-xs font-bold rounded-xl border border-dashed border-amber-500 text-amber-900 bg-amber-50 hover:bg-amber-100 transition-all flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5 text-amber-400" />
-                  <span>+ Add New</span>
+                  <Plus className="w-3.5 h-3.5 text-amber-700" />
+                  <span>+ Create New</span>
                 </button>
               </div>
 
               {activeLocality && (
                 <form onSubmit={handleSaveLocality} noValidate className="space-y-6">
-                  <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
+                  <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-6 sm:p-8 space-y-6">
 
-                    {/* Active corridor status header */}
-                    <div className="flex items-center justify-between pb-4 border-b border-orange-200">
+                    {/* Header with active corridor status and delete option */}
+                    <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                       <div className="flex items-center gap-2.5">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/25">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
                           Corridor #{selectedLocalityIdx + 1}
                         </span>
-                        <span className="text-sm font-bold text-slate-900">
+                        <span className="text-sm font-bold text-slate-800">
                           {activeLocality.name || 'Untitled Corridor'}
                         </span>
                       </div>
@@ -2128,7 +1693,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         <button
                           type="button"
                           onClick={() => handleDeleteLocality(selectedLocalityIdx)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-rose-400 hover:bg-rose-500/20 border border-rose-500/30 transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-red-600 hover:bg-red-50 border border-red-200 transition-colors cursor-pointer"
                           title="Delete this corridor"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -2139,22 +1704,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Corridor Name</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Corridor Name</label>
                         <input
                           type="text"
                           value={activeLocality.name || ''}
                           onChange={(e) => handleUpdateCurrentLocality('name', e.target.value)}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="e.g. Sector 150 (Sports City)"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Subtitle / Badge</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Subtitle / Badge</label>
                         <input
                           type="text"
                           value={activeLocality.subtitle || ''}
                           onChange={(e) => handleUpdateCurrentLocality('subtitle', e.target.value)}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                           placeholder="e.g. Noida’s Green Lung & Luxury Sports Hub"
                         />
                       </div>
@@ -2162,96 +1727,96 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Average Price / Sq.Ft</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">Average Price / Sq.Ft</label>
                         <input
                           type="text"
                           value={activeLocality.avgPricePerSqFt || ''}
                           onChange={(e) => handleUpdateCurrentLocality('avgPricePerSqFt', e.target.value)}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white font-bold text-amber-400"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white font-semibold text-amber-700"
                           placeholder="₹12,000 – ₹16,500 / sq.ft"
                         />
                       </div>
                       <div>
-                        <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">3-Year Projected Capital Appreciation</label>
+                        <label className="text-xs font-semibold text-slate-700 block mb-1">3-Year Projected Capital Appreciation</label>
                         <input
                           type="text"
                           value={activeLocality.projectedGrowth3Yr || ''}
                           onChange={(e) => handleUpdateCurrentLocality('projectedGrowth3Yr', e.target.value)}
-                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white font-bold text-emerald-400"
+                          className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white font-semibold text-emerald-700"
                           placeholder="+32% Capital Appreciation"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Corridor Narrative & Strategic Appraisal</label>
+                      <label className="text-xs font-semibold text-slate-700 block mb-1">Corridor Narrative & Strategic Appraisal</label>
                       <textarea
                         rows={4}
                         value={activeLocality.description || ''}
                         onChange={(e) => handleUpdateCurrentLocality('description', e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 leading-relaxed"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white leading-relaxed"
                         placeholder="Detailed market overview, low-density zoning, investor appeal..."
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Metro & Transit Connectivity</label>
+                      <label className="text-xs font-semibold text-slate-700 block mb-1">Metro & Transit Connectivity</label>
                       <input
                         type="text"
                         value={activeLocality.metroConnectivity || ''}
                         onChange={(e) => handleUpdateCurrentLocality('metroConnectivity', e.target.value)}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                         placeholder="Sector 148 Aqua Line Metro Station (1 km away)"
                       />
                     </div>
 
                     {/* Highlights */}
                     <div>
-                      <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                      <label className="text-xs font-semibold text-slate-700 block mb-1">
                         Corridor Key Highlights (One per line)
                       </label>
                       <textarea
                         rows={4}
                         value={activeLocality.highlights?.join('\n') || ''}
                         onChange={(e) => handleUpdateCurrentLocality('highlights', e.target.value.split('\n').filter(Boolean))}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 font-mono text-xs"
-                        placeholder="80% Open Green Space&#10;Signal-Free Transit to Jewar International Airport&#10;Luxury projects by ACE, Godrej, ATS"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
+                        placeholder="80% Open Green Space & Zero Overhead Electric Cables&#10;Signal-Free Transit to Jewar International Airport (25 Mins)&#10;Luxury projects by ACE, Godrej, ATS"
                       />
                     </div>
 
                     {/* Top Projects */}
                     <div>
-                      <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                      <label className="text-xs font-semibold text-slate-700 block mb-1">
                         Benchmark Projects (Comma-separated)
                       </label>
                       <input
                         type="text"
                         value={activeLocality.topProjects?.join(', ') || ''}
                         onChange={(e) => handleUpdateCurrentLocality('topProjects', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                         placeholder="ACE Starlit, Godrej Palm Retreat, ATS Pristine"
                       />
                     </div>
 
                     {/* Regional Landmarks */}
                     <div>
-                      <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">
+                      <label className="text-xs font-semibold text-slate-700 block mb-1">
                         Key Regional Landmarks (Comma-separated)
                       </label>
                       <input
                         type="text"
                         value={activeLocality.landmarkAttractions?.join(', ') || ''}
                         onChange={(e) => handleUpdateCurrentLocality('landmarkAttractions', e.target.value.split(',').map(s => s.trim()).filter(Boolean))}
-                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                         placeholder="Shaheed Bhagat Singh Park, International Cricket Stadium Project"
                       />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-orange-200">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-100">
                       <button
                         type="button"
                         onClick={handleCreateNewLocality}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 transition-colors cursor-pointer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 transition-colors cursor-pointer"
                       >
                         <Plus className="w-3.5 h-3.5" />
                         <span>+ Add Another Corridor</span>
@@ -2260,10 +1825,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                       <button
                         type="submit"
                         disabled={loadingLocalities}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 disabled:opacity-50 text-slate-950 transition-all shadow-lg shadow-amber-500/20 cursor-pointer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-bold bg-amber-400 hover:bg-amber-300 disabled:opacity-50 text-slate-950 transition-colors shadow-md cursor-pointer"
                       >
                         <Save className="w-4 h-4" />
-                        <span>{loadingLocalities ? 'Saving Guide...' : 'Save All Locality Guides'}</span>
+                        {loadingLocalities ? 'Saving Guide...' : 'Save All Locality Guides'}
                       </button>
                     </div>
 
@@ -2281,7 +1846,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <div className="flex items-center gap-2.5">
                     <h2 className="text-base sm:text-lg font-bold text-slate-900">Lead Inbox: PDF Brochure & Site Visit Requests</h2>
                     {brochureLeads.length > 0 && (
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200 shadow-xs">
                         {brochureLeads.length} Total
                       </span>
                     )}
@@ -2298,7 +1863,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     <button
                       type="button"
                       onClick={handleClearAllLeads}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-300 rounded-lg hover:bg-rose-500/20 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white border border-red-200 text-red-600 rounded-lg shadow-xs hover:bg-red-50 hover:border-red-300 transition-all cursor-pointer"
                       title="Clear all leads from database"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -2309,66 +1874,65 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     type="button"
                     onClick={fetchBrochureLeads}
                     disabled={loadingLeads}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white border border-orange-200 text-slate-700 rounded-lg hover:bg-orange-50 hover:text-slate-900 shadow-xs transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-lg shadow-xs hover:bg-slate-50 hover:border-amber-400 hover:text-amber-900 active:scale-95 disabled:opacity-75 disabled:cursor-not-allowed transition-all cursor-pointer"
                     title="Refresh latest leads"
                   >
-                    <RefreshCw className={`w-3.5 h-3.5 text-amber-400 transition-transform ${loadingLeads ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-3.5 h-3.5 text-amber-500 transition-transform ${loadingLeads ? 'animate-spin' : ''}`} />
                     <span>{loadingLeads ? 'Refreshing...' : 'Refresh'}</span>
                   </button>
                 </div>
               </div>
 
-              <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-xl overflow-hidden">
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[720px] text-left border-collapse">
                     <thead>
-                      <tr className="bg-orange-50/70 border-b border-orange-200 text-[11px] uppercase tracking-wider text-slate-700 font-bold">
-                        <th className="p-4 font-bold">Client Details</th>
-                        <th className="p-4 font-bold">Contact Info</th>
-                        <th className="p-4 font-bold">Property / Interest</th>
-                        <th className="p-4 font-bold">Client Comment / Schedule</th>
-                        <th className="p-4 font-bold">Status</th>
-                        <th className="p-4 font-bold text-right">Actions</th>
+                      <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
+                        <th className="p-4 font-semibold">Client Details</th>
+                        <th className="p-4 font-semibold">Contact Info</th>
+                        <th className="p-4 font-semibold">Property / Interest</th>
+                        <th className="p-4 font-semibold">Client Comment / Schedule</th>
+                        <th className="p-4 font-semibold">Status</th>
+                        <th className="p-4 font-semibold text-right">Actions</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-orange-100/70">
+                    <tbody className="divide-y divide-slate-100">
                       {brochureLeads.length > 0 ? (
                         brochureLeads.map((lead, i) => (
-                          <tr key={lead.id || i} className="hover:bg-orange-50/60 transition-colors">
+                          <tr key={lead.id || i} className="hover:bg-slate-50/80 transition-colors">
                             <td className="p-4">
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-sm text-slate-900">{lead.name}</span>
+                                <span className="font-semibold text-sm text-slate-900">{lead.name}</span>
                                 {lead.leadType === 'Site Visit' ? (
-                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 shrink-0">
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200 shrink-0">
                                     Site Visit
                                   </span>
                                 ) : (
-                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/10 text-blue-300 border border-blue-500/30 shrink-0">
+                                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shrink-0">
                                     Brochure
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[11px] text-slate-500 mt-0.5">
+                              <div className="text-[11px] text-slate-500">
                                 {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : 'Today'}
                               </div>
                             </td>
-                            <td className="p-4 text-xs">
-                              <div className="font-bold text-slate-900">{lead.phone}</div>
+                            <td className="p-4 text-xs text-slate-700">
+                              <div className="font-semibold text-slate-900">{lead.phone}</div>
                               <div className="text-slate-500">{lead.email}</div>
                             </td>
-                            <td className="p-4 text-xs">
-                              <div className="font-bold text-amber-400">{lead.propertyTitle}</div>
+                            <td className="p-4 text-xs text-slate-700">
+                              <div className="font-semibold text-amber-900">{lead.propertyTitle}</div>
                               <div className="text-[11px] text-slate-500">{lead.sector} • {lead.priceDisplay}</div>
                             </td>
-                            <td className="p-4 text-xs text-slate-300 max-w-xs">
+                            <td className="p-4 text-xs text-slate-600 max-w-xs">
                               <p className="line-clamp-2">{lead.comment || 'Complete digital brochure requested.'}</p>
                             </td>
                             <td className="p-4">
-                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${
-                                lead.leadType === 'Site Visit' || lead.status === 'Visit Booked'
-                                  ? 'bg-amber-100 text-amber-800 border border-amber-300'
-                                  : 'bg-blue-500/10 text-blue-300 border border-blue-500/30'
-                              }`}>
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${lead.leadType === 'Site Visit' || lead.status === 'Visit Booked'
+                                  ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                                  : 'bg-blue-100 text-blue-700 border border-blue-200'
+                                }`}>
                                 {lead.status || (lead.leadType === 'Site Visit' ? 'Visit Booked' : 'New')}
                               </span>
                             </td>
@@ -2378,15 +1942,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                                   href={`https://wa.me/${(lead.phone || '').replace(/[^0-9]/g, '')}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-300 bg-emerald-500/10 hover:bg-emerald-500/20 px-2.5 py-1 rounded-lg border border-emerald-500/30 transition-colors"
+                                  className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded-lg border border-emerald-200 transition-colors"
                                 >
-                                  <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                                  <span>WhatsApp</span>
+                                  <MessageCircle className="w-3.5 h-3.5" />
+                                  WhatsApp
                                 </a>
                                 <button
                                   type="button"
                                   onClick={() => handleDeleteLead(lead.id)}
-                                  className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors cursor-pointer"
+                                  className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                                   title="Delete lead"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
@@ -2397,7 +1961,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan={6} className="p-12 text-center text-sm text-slate-500">
+                          <td colSpan={6} className="p-8 text-center text-sm text-slate-500">
                             No inquiries yet. When clients request a brochure or book a site visit on any property, their contact information will automatically show here!
                           </td>
                         </tr>
@@ -2413,78 +1977,73 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           {activeTab === 'settings' && (
             <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-base sm:text-lg font-bold text-slate-900">Portal Security & SEO Settings</h2>
-                  <p className="text-xs text-slate-500">Control search engine rankings, meta tags, administrator credentials, and 2FA protection.</p>
-                </div>
+                <h2 className="text-lg font-bold text-slate-900">Portal Security & SEO Settings</h2>
                 {saveStatus?.tab === 'settings' && (
-                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${
-                    saveStatus.isError ? 'bg-rose-500/10 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/10 text-emerald-300 border border-emerald-500/30'
-                  }`}>
+                  <div className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 ${saveStatus.isError ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
                     <CheckCircle className="w-3.5 h-3.5" />
                     <span>{saveStatus.message}</span>
                   </div>
                 )}
               </div>
 
-              <div className="bg-white/95 border border-orange-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-8">
+              <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-8 space-y-8">
 
                 {/* SEO Metadata */}
                 <form onSubmit={handleSaveSeoSettings} noValidate className="space-y-4">
-                  <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Search Engine Optimization (SEO)</h3>
+                  <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Search Engine Optimization (SEO)</h3>
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Global Site Title</label>
+                    <label className="text-xs font-semibold text-slate-600 block mb-1">Global Site Title</label>
                     <input
                       type="text"
                       value={seoForm.title}
                       onChange={(e) => setSeoForm({ ...seoForm, title: e.target.value })}
-                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                       placeholder="KR Estate Noida | Premier Real Estate Advisory"
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Site Meta Description</label>
+                    <label className="text-xs font-semibold text-slate-600 block mb-1">Site Meta Description</label>
                     <textarea
                       rows={3}
                       value={seoForm.metaDescription}
                       onChange={(e) => setSeoForm({ ...seoForm, metaDescription: e.target.value })}
-                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                       placeholder="Leading real estate consultancy in Noida & Greater Noida..."
                     />
                   </div>
                   <div>
-                    <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Footer Copyright Line</label>
+                    <label className="text-xs font-semibold text-slate-600 block mb-1">Footer Copyright Line</label>
                     <input
                       type="text"
                       value={seoForm.footerCopyright}
                       onChange={(e) => setSeoForm({ ...seoForm, footerCopyright: e.target.value })}
-                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900"
+                      className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white"
                       placeholder="© 2026 KR Estate Noida. All rights reserved."
                     />
                   </div>
                   <div className="flex justify-end">
                     <button
                       type="submit"
-                      className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 rounded-xl transition-all shadow-md cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-5 py-2 text-xs font-bold bg-amber-400 hover:bg-amber-300 text-slate-950 rounded-xl transition-colors shadow-xs cursor-pointer"
                     >
                       <Save className="w-3.5 h-3.5" />
-                      <span>Save SEO Settings</span>
+                      Save SEO Settings
                     </button>
                   </div>
                 </form>
 
-                <hr className="border-orange-200" />
+                <hr className="border-slate-100" />
 
                 {/* Security Section */}
                 <section>
-                  <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider mb-4">Security & Authentication</h3>
+                  <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-4">Security & Authentication</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Change Password */}
-                    <div className="bg-[#FFF3EB] border border-orange-200 rounded-xl p-6">
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6">
                       <form onSubmit={handlePasswordChange} className="space-y-4">
                         <div>
-                          <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Update Admin Password</label>
+                          <label className="text-xs font-semibold text-slate-600 block mb-1">Update Admin Password</label>
                           <input
                             type="password"
                             placeholder="Enter new password"
@@ -2492,28 +2051,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             onChange={(e) => setNewPassword(e.target.value)}
                             required
                             minLength={4}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                           />
                         </div>
 
                         <div>
-                          <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Authenticator Code (if enabled)</label>
+                          <label className="text-xs font-semibold text-slate-600 block mb-1">Authenticator Code (if enabled)</label>
                           <input
                             type="text"
                             placeholder="123 456"
                             value={passwordTotp}
                             onChange={(e) => setPasswordTotp(e.target.value)}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-300 bg-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400"
                             maxLength={6}
                           />
                         </div>
 
                         {passwordStatus === 'error' && (
-                          <p className="text-xs font-semibold text-rose-400">{passwordError}</p>
+                          <p className="text-xs font-semibold text-red-500">{passwordError}</p>
                         )}
 
                         {passwordStatus === 'success' && (
-                          <p className="text-xs font-semibold text-emerald-400 flex items-center gap-1">
+                          <p className="text-xs font-semibold text-emerald-600 flex items-center gap-1">
                             <CheckCircle className="w-3 h-3" /> Password updated!
                           </p>
                         )}
@@ -2521,7 +2080,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         <button
                           type="submit"
                           disabled={passwordStatus === 'loading'}
-                          className="w-full px-5 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-110 border border-amber-400 rounded-xl transition-all shadow-md font-bold disabled:opacity-50 cursor-pointer"
+                          className="w-full px-5 py-2 text-xs font-bold text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
                         >
                           {passwordStatus === 'loading' ? 'Saving...' : 'Change Password'}
                         </button>
@@ -2529,8 +2088,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     </div>
 
                     {/* TOTP Setup */}
-                    <div className="bg-[#FFF3EB] border border-orange-200 rounded-xl p-6 flex flex-col items-start">
-                      <h4 className="font-bold text-slate-900 mb-1 text-sm">Two-Factor Authentication</h4>
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex flex-col items-start">
+                      <h4 className="font-bold text-slate-800 mb-1 text-sm">Two-Factor Authentication</h4>
                       <p className="text-xs text-slate-500 mb-4">
                         Secure your admin dashboard by linking Google Authenticator or Microsoft Authenticator.
                       </p>
@@ -2539,42 +2098,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         <button
                           type="button"
                           onClick={handleBeginTotpSetup}
-                          className="px-5 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 rounded-xl transition-all shadow-md mt-auto cursor-pointer"
+                          className="px-5 py-2 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors shadow-xs mt-auto cursor-pointer"
                         >
                           Configure Authenticator
                         </button>
                       ) : (
                         <div className="w-full">
                           {setupStatus === 'success' ? (
-                            <div className="flex items-center gap-2 p-3 bg-emerald-500/10 text-emerald-300 rounded-xl text-xs font-medium border border-emerald-500/30">
+                            <div className="flex items-center gap-2 p-3 bg-emerald-50 text-emerald-700 rounded-xl text-xs font-medium border border-emerald-200">
                               <CheckCircle className="w-4 h-4 shrink-0" />
                               2FA configured successfully!
                             </div>
                           ) : (
                             <form onSubmit={handleConfirmTotpSetup} className="space-y-4">
-                              <div className="bg-white p-2 rounded-xl border border-orange-200 flex justify-center">
+                              <div className="bg-white p-2 rounded-xl border border-slate-200 flex justify-center">
                                 <img src={setupTotpData.qrCodeUrl} alt="QR Code" className="w-32 h-32" />
                               </div>
 
                               <div>
-                                <label className="text-xs font-semibold text-slate-700 font-bold block mb-1">Verify 6-digit code</label>
+                                <label className="text-xs font-semibold text-slate-600 block mb-1">Verify 6-digit code</label>
                                 <input
                                   required
                                   type="text"
                                   value={setupToken}
                                   onChange={(e) => setSetupToken(e.target.value)}
-                                  className="w-full px-3 py-2 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 tracking-widest text-center"
+                                  className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 bg-white tracking-widest text-center"
                                   placeholder="123456"
                                   maxLength={6}
                                 />
                               </div>
 
-                              {setupError && <p className="text-xs font-semibold text-rose-400 text-center">{setupError}</p>}
+                              {setupError && <p className="text-xs font-semibold text-red-500 text-center">{setupError}</p>}
 
                               <button
                                 type="submit"
                                 disabled={setupStatus === 'loading'}
-                                className="w-full px-5 py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 rounded-xl transition-all shadow-md disabled:opacity-50 cursor-pointer"
+                                className="w-full px-5 py-2 text-xs font-bold text-neutral-950 bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
                               >
                                 {setupStatus === 'loading' ? 'Verifying...' : 'Verify & Enable'}
                               </button>
@@ -2595,23 +2154,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
       {/* Expanded Modal for KPI Cards */}
       {expandedCard && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-white/95 border border-orange-200 text-slate-900 rounded-2xl w-full max-w-3xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col relative">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[88vh] overflow-hidden shadow-2xl flex flex-col relative">
 
-            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-orange-200 bg-[#FFF3EB]">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200 bg-slate-50">
               <h3 className="text-sm sm:text-lg font-bold text-slate-900 flex items-center gap-2">
-                {expandedCard === 'properties' && <><Building className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" /> Total Properties List</>}
-                {expandedCard === 'visits' && <><Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" /> Site Visit Requests</>}
-                {expandedCard === 'valuations' && <><Activity className="w-4 h-4 sm:w-5 sm:h-5 text-rose-400" /> Active Valuations</>}
+                {expandedCard === 'properties' && <><Building className="w-4 h-4 sm:w-5 sm:h-5 text-amber-500" /> Total Properties List</>}
+                {expandedCard === 'visits' && <><Users className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" /> Site Visit Requests</>}
+                {expandedCard === 'valuations' && <><Activity className="w-4 h-4 sm:w-5 sm:h-5 text-rose-500" /> Active Valuations</>}
               </h3>
-              <button onClick={() => setExpandedCard(null)} className="p-1.5 sm:p-2 rounded-full hover:bg-orange-100 transition-colors cursor-pointer text-slate-500 hover:text-slate-900">
-                <X className="w-5 h-5" />
+              <button onClick={() => setExpandedCard(null)} className="p-1.5 sm:p-2 rounded-full hover:bg-slate-200 transition-colors cursor-pointer">
+                <X className="w-5 h-5 text-slate-500" />
               </button>
             </div>
 
             <div className="overflow-y-auto overflow-x-auto p-0 flex-1">
               <table className="w-full min-w-[480px] text-left border-collapse">
-                <thead className="bg-orange-50/90 backdrop-blur-xs sticky top-0 border-b border-orange-200">
+                <thead className="bg-white sticky top-0 border-b border-slate-200">
                   <tr className="text-xs uppercase tracking-wider text-slate-500">
                     {expandedCard === 'properties' && (
                       <>
@@ -2638,12 +2197,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     )}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-orange-100/70">
+                <tbody className="divide-y divide-slate-100 bg-white">
+
                   {expandedCard === 'properties' && NOIDA_PROPERTIES.map(prop => (
-                    <tr key={prop.id} className="hover:bg-orange-50/60 transition-colors">
-                      <td className="p-4 font-bold text-sm text-slate-900">{prop.title}</td>
-                      <td className="p-4 text-sm text-slate-700">{prop.sector}</td>
-                      <td className="p-4 text-sm font-bold text-amber-400">{prop.priceDisplay}</td>
+                    <tr key={prop.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 font-medium text-sm text-slate-900">{prop.title}</td>
+                      <td className="p-4 text-sm text-slate-600">{prop.sector}</td>
+                      <td className="p-4 text-sm text-slate-600">{prop.priceDisplay}</td>
                     </tr>
                   ))}
 
@@ -2653,10 +2213,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     { id: 3, name: 'Dr. V. Singh', phone: '+91 98111 88XXX', interest: 'Jewar Plots', date: 'Oct 6, 2026' },
                     { id: 4, name: 'R. Kapoor', phone: '+91 99999 55XXX', interest: 'ATS Knightsbridge', date: 'Oct 5, 2026' },
                   ].map(v => (
-                    <tr key={v.id} className="hover:bg-orange-50/60 transition-colors">
-                      <td className="p-4 font-bold text-sm text-slate-900">{v.name}</td>
-                      <td className="p-4 text-sm text-slate-700">{v.phone}</td>
-                      <td className="p-4 text-sm text-amber-400">{v.interest}</td>
+                    <tr key={v.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 font-medium text-sm text-slate-900">{v.name}</td>
+                      <td className="p-4 text-sm text-slate-600">{v.phone}</td>
+                      <td className="p-4 text-sm text-slate-600">{v.interest}</td>
                       <td className="p-4 text-sm text-slate-500">{v.date}</td>
                     </tr>
                   ))}
@@ -2666,27 +2226,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     { id: 2, details: 'Commercial Shop, 500 sq.ft.', location: 'Bhutani Cyberthum', client: 'K. Agarwal', date: 'Oct 6, 2026' },
                     { id: 3, details: '4 BHK Penthouse', location: 'Sector 150', client: 'S. Mehta', date: 'Oct 4, 2026' },
                   ].map(v => (
-                    <tr key={v.id} className="hover:bg-orange-50/60 transition-colors">
-                      <td className="p-4 font-bold text-sm text-slate-900">{v.details}</td>
-                      <td className="p-4 text-sm text-slate-700">{v.location}</td>
-                      <td className="p-4 text-sm text-amber-400">{v.client}</td>
+                    <tr key={v.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 font-medium text-sm text-slate-900">{v.details}</td>
+                      <td className="p-4 text-sm text-slate-600">{v.location}</td>
+                      <td className="p-4 text-sm text-slate-600">{v.client}</td>
                       <td className="p-4 text-sm text-slate-500">{v.date}</td>
                     </tr>
                   ))}
+
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       )}
-
       {/* MODAL: ADD / EDIT 4K DRONE TOUR */}
       {droneTourModalOpen && (
-        <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="bg-white/95 border border-orange-200 text-slate-900 rounded-2xl max-w-2xl w-full shadow-2xl overflow-hidden my-8">
-            <div className="p-5 border-b border-orange-200 flex items-center justify-between bg-[#FFF3EB]">
+        <div className="fixed inset-0 z-60 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl max-w-2xl w-full shadow-2xl border border-slate-200 overflow-hidden my-8">
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-2.5">
-                <span className="p-2 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <span className="p-2 rounded-xl bg-amber-500/10 text-amber-600 border border-amber-500/20">
                   <Film className="w-5 h-5" />
                 </span>
                 <div>
@@ -2699,7 +2259,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <button
                 type="button"
                 onClick={() => setDroneTourModalOpen(false)}
-                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -2737,7 +2297,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                       }
                     }
                   }}
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 cursor-pointer"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 cursor-pointer"
                 >
                   {propertiesList.map(p => (
                     <option key={p.id} value={p.id}>
@@ -2757,71 +2317,81 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   required
                   value={droneTourForm.title}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="e.g. Godrej Woods 4K Aerial Showcase & Forest Walkthrough"
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                  placeholder="e.g. Godrej Woods 4K Aerial Drone & Forest Walkthrough"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                 />
               </div>
 
-              {/* Video URL & File Upload */}
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  Video URL / MP4 File Source *
-                </label>
-                <div className="flex gap-2">
+              {/* Upload or Video URL */}
+              <div className="space-y-2.5 p-4 rounded-xl bg-slate-50 border border-slate-200">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    Video Source (MP4 / WebM / Link) *
+                  </label>
+                  <span className="text-[11px] text-amber-700 font-medium">Unlimited file size</span>
+                </div>
+
+                {/* Direct Video File Upload */}
+                <div className="flex items-center gap-3 flex-wrap">
                   <input
-                    type="text"
-                    required
-                    value={droneTourForm.videoUrl}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, videoUrl: e.target.value }))}
-                    placeholder="https://.../drone-tour.mp4 or /videos/property-drone.mp4"
-                    className="flex-1 px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
-                  />
-                  <input
-                    type="file"
                     ref={droneFileInputRef}
-                    accept="video/mp4,video/webm,video/quicktime"
-                    className="hidden"
+                    type="file"
+                    accept="video/mp4,video/webm,video/ogg,video/quicktime"
                     onChange={handleUploadDroneFile}
+                    className="hidden"
                   />
                   <button
                     type="button"
                     disabled={isUploadingDroneVideo}
                     onClick={() => droneFileInputRef.current?.click()}
-                    className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-bold transition-colors cursor-pointer shrink-0 disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-3.5 py-2 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
                   >
-                    <Upload className="w-4 h-4" />
-                    <span>{isUploadingDroneVideo ? 'Uploading...' : 'Upload MP4'}</span>
+                    <Upload className="w-3.5 h-3.5" />
+                    {isUploadingDroneVideo ? 'Uploading Video...' : 'Upload Video File (.mp4)'}
                   </button>
+                  <span className="text-xs text-slate-500">or paste a direct video link below:</span>
                 </div>
+
                 {droneUploadStatus && (
-                  <p className="text-xs text-amber-700 font-medium">{droneUploadStatus}</p>
+                  <p className="text-xs font-medium text-amber-700 animate-pulse">{droneUploadStatus}</p>
                 )}
+
+                <input
+                  type="text"
+                  required
+                  value={droneTourForm.videoUrl}
+                  onChange={(e) => setDroneTourForm(prev => ({ ...prev, videoUrl: e.target.value }))}
+                  placeholder="https://... or /uploads/videos/drone-tour.mp4"
+                  className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
+                />
               </div>
 
-              {/* Thumbnail URL & Duration */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Duration */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Poster Thumbnail Image URL
+                    Estimated Duration
                   </label>
                   <input
                     type="text"
-                    value={droneTourForm.thumbnailUrl}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
-                    placeholder="/images/properties/... or https://..."
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                    value={droneTourForm.duration || ''}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, duration: e.target.value }))}
+                    placeholder="e.g. 02:45 or 03:10"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                   />
                 </div>
+
+                {/* Thumbnail Image URL */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Video Duration (MM:SS)
+                    Video Thumbnail / Poster URL
                   </label>
                   <input
                     type="text"
-                    value={droneTourForm.duration}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, duration: e.target.value }))}
-                    placeholder="02:45"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                    value={droneTourForm.thumbnailUrl || ''}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
+                    placeholder="https://... (defaults to property cover)"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                   />
                 </div>
               </div>
@@ -2836,16 +2406,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   value={droneTourForm.description || ''}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, description: e.target.value }))}
                   placeholder="Highlight key aerial views, clubhouse fly-through, expressway connectivity, etc."
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-orange-200 bg-white text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                 />
               </div>
 
               {/* Live Preview if URL Present */}
               {droneTourForm.videoUrl && (
-                <div className="p-3 bg-black rounded-xl space-y-1.5 border border-orange-200">
-                  <div className="text-[11px] font-bold text-amber-400 flex items-center gap-1.5">
+                <div className="p-3 bg-slate-900 rounded-xl space-y-1.5">
+                  <div className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
                     <Film className="w-3.5 h-3.5" />
-                    <span>Live Video Player Preview</span>
+                    Live Video Player Preview
                   </div>
                   <video
                     src={droneTourForm.videoUrl}
@@ -2856,7 +2426,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               )}
 
               {/* Modal Footer */}
-              <div className="pt-3 border-t border-orange-200 flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
                 {propertiesList.find(p => p.id === droneTourTargetPropId)?.videoTour?.videoUrl && (
                   <button
                     type="button"
@@ -2868,27 +2438,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         handleDeleteDroneTour(prop.id, prop.title);
                       }
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 transition-colors cursor-pointer mr-auto"
+                    className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer mr-auto"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    <span>Delete Tour</span>
+                    Delete Tour
                   </button>
                 )}
 
                 <button
                   type="button"
                   onClick={() => setDroneTourModalOpen(false)}
-                  className="px-4 py-2.5 text-xs font-bold rounded-xl text-slate-500 hover:text-slate-900 hover:bg-orange-100 transition-colors cursor-pointer"
+                  className="px-4 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={droneActionLoading || isUploadingDroneVideo}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl transition-all shadow-md cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold text-xs rounded-xl transition-colors shadow-xs cursor-pointer disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{droneActionLoading ? 'Saving Tour...' : 'Save & Publish Drone Tour'}</span>
+                  {droneActionLoading ? 'Saving Tour...' : 'Save & Publish Drone Tour'}
                 </button>
               </div>
             </form>
@@ -2899,22 +2469,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       {/* MODAL: VIDEO LIGHTBOX PREVIEW */}
       {previewDroneVideo && (
         <div className="fixed inset-0 z-70 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="relative max-w-4xl w-full bg-[#FFF8F4] rounded-2xl border border-orange-200 shadow-2xl overflow-hidden">
+          <div className="relative max-w-4xl w-full bg-neutral-950 rounded-2xl border border-neutral-800 shadow-2xl overflow-hidden">
             {/* Header */}
-            <div className="p-4 bg-white border-b border-orange-200 flex items-center justify-between text-slate-900">
+            <div className="p-4 bg-neutral-900/80 border-b border-neutral-800 flex items-center justify-between text-white">
               <div className="flex items-center gap-2 min-w-0 pr-4">
-                <span className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400">
+                <span className="p-1.5 rounded-lg bg-amber-400/20 text-amber-400">
                   <Film className="w-4 h-4" />
                 </span>
                 <div className="min-w-0">
-                  <h3 className="font-bold text-sm text-slate-900 truncate">{previewDroneVideo.title}</h3>
-                  <p className="text-[11px] text-slate-500 truncate">{previewDroneVideo.duration || '4K UHD Aerial Experience'}</p>
+                  <h3 className="font-bold text-sm text-white truncate">{previewDroneVideo.title}</h3>
+                  <p className="text-[11px] text-neutral-400 truncate">{previewDroneVideo.duration || '4K UHD Aerial Experience'}</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setPreviewDroneVideo(null)}
-                className="p-2 text-slate-500 hover:text-slate-900 rounded-lg hover:bg-orange-100 transition-colors cursor-pointer shrink-0"
+                className="p-2 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer shrink-0"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -2932,7 +2502,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
             {/* Description Footer */}
             {previewDroneVideo.description && (
-              <div className="p-4 bg-white border-t border-orange-200 text-xs text-slate-300">
+              <div className="p-4 bg-neutral-900/60 border-t border-neutral-800 text-xs text-neutral-300">
                 {previewDroneVideo.description}
               </div>
             )}

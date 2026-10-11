@@ -37,7 +37,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
   const blockedPatterns = [
     /^\/admin-auth\.json/i,
-    /^\/admin-sessions\.json/i,
     /^\/totp\.json/i,
     /^\/\.env/i,
     /^\/server\.ts/i,
@@ -117,37 +116,8 @@ interface AdminCredentials {
 }
 
 const ADMIN_AUTH_FILE = path.resolve(__dirname, 'admin-auth.json');
-const ADMIN_SESSIONS_FILE = path.resolve(__dirname, 'admin-sessions.json');
 const activeAdminSessions = new Map<string, { username: string; expiresAt: number }>();
 const loginRateLimiter = new Map<string, { count: number; lockUntil: number }>();
-
-async function loadPersistedSessions() {
-  try {
-    const fs = await import('fs/promises');
-    const raw = await fs.readFile(ADMIN_SESSIONS_FILE, 'utf8');
-    const data = JSON.parse(raw);
-    if (typeof data === 'object' && data !== null) {
-      for (const [token, s] of Object.entries(data)) {
-        if ((s as any).expiresAt > Date.now()) {
-          activeAdminSessions.set(token, s as any);
-        }
-      }
-    }
-  } catch { }
-}
-loadPersistedSessions();
-
-async function saveSession(token: string, session: { username: string; expiresAt: number }) {
-  activeAdminSessions.set(token, session);
-  try {
-    const fs = await import('fs/promises');
-    const obj: Record<string, any> = {};
-    for (const [k, v] of activeAdminSessions.entries()) {
-      if (v.expiresAt > Date.now()) obj[k] = v;
-    }
-    await fs.writeFile(ADMIN_SESSIONS_FILE, JSON.stringify(obj, null, 2), 'utf8');
-  } catch { }
-}
 
 function hashPassword(password: string, salt: string): string {
   return crypto.pbkdf2Sync(password, salt, 100000, 64, 'sha512').toString('hex');
@@ -235,6 +205,15 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
   const clientIp = getClientIp(req);
   const now = Date.now();
 
+  // Rate Limiting Check (5 attempts / 15 min lock)
+  const rateLimit = loginRateLimiter.get(clientIp);
+  if (rateLimit && rateLimit.lockUntil > now) {
+    const waitMins = Math.ceil((rateLimit.lockUntil - now) / 60000);
+    return res.status(429).json({
+      error: `Too many failed attempts. Security lock active. Please wait ${waitMins} minute(s).`
+    });
+  }
+
   const { username, password } = req.body;
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required.' });
@@ -242,36 +221,19 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
 
   try {
     const creds = await getOrInitAdminCredentials();
-    const adminEmail = (process.env.ADMIN_EMAIL || 'avinashmehra5292@gmail.com').trim().toLowerCase();
-    const inputUser = String(username).trim().toLowerCase();
-    const isUserMatch = inputUser === creds.username.toLowerCase() || inputUser === adminEmail;
-
-    let isPassMatch = false;
+    const isUserMatch = String(username).trim().toLowerCase() === creds.username.toLowerCase();
     const testHash = hashPassword(String(password), creds.salt);
-    try {
-      isPassMatch = crypto.timingSafeEqual(Buffer.from(testHash, 'hex'), Buffer.from(creds.hash, 'hex'));
-    } catch {
-      isPassMatch = false;
-    }
-
-    // Default password case-insensitive fallback (QWERTY / qwerty)
-    if (!isPassMatch) {
-      const defaultPass = (process.env.ADMIN_PASSWORD || 'QWERTY').trim().toLowerCase();
-      if (String(password).trim().toLowerCase() === defaultPass) {
-        isPassMatch = true;
-      }
-    }
+    const isPassMatch = crypto.timingSafeEqual(Buffer.from(testHash, 'hex'), Buffer.from(creds.hash, 'hex'));
 
     if (!isUserMatch || !isPassMatch) {
-      const rateLimit = loginRateLimiter.get(clientIp);
       const attempts = (rateLimit ? rateLimit.count : 0) + 1;
-      const lockUntil = attempts >= 8 ? now + 10 * 60 * 1000 : 0;
+      const lockUntil = attempts >= 5 ? now + 15 * 60 * 1000 : 0;
       loginRateLimiter.set(clientIp, { count: attempts, lockUntil });
 
-      const remaining = Math.max(0, 8 - attempts);
+      const remaining = Math.max(0, 5 - attempts);
       return res.status(401).json({
-        error: attempts >= 8
-          ? 'Too many failed login attempts. Security lock active for 10 minutes.'
+        error: attempts >= 5
+          ? 'Too many failed login attempts. Security lock active for 15 minutes.'
           : `Invalid admin credentials. ${remaining} attempt(s) remaining.`
       });
     }
@@ -281,7 +243,7 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
 
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = now + 24 * 60 * 60 * 1000;
-    await saveSession(token, { username: creds.username, expiresAt });
+    activeAdminSessions.set(token, { username: creds.username, expiresAt });
 
     res.setHeader('Set-Cookie', `kr_admin_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
 
