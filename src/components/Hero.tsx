@@ -21,6 +21,9 @@ interface HeroProps {
   onOpenClientVideoModal?: () => void;
 }
 
+const DESKTOP_BLUR = 'data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAABwAwCdASoYAA4APxFysFAsJqSisAgBgCIJZACdMoABjBPgMaAA+4c1RNdMZDC6n+gOhmx701koc81CNwAYCPTp49RHvodDu0n0T2E8q/UiVKpt+mtRr2Hcb0lNki4KkE9Bn16TIh6Je37E1LBWE8McR5ld7IROp3/xs90MwCZhc4quSgrEWxvYizTT3SoPMOdER8Q2k7H/QoGWkAA=';
+const MOBILE_BLUR = 'data:image/webp;base64,UklGRoAAAABXRUJQVlA4IHQAAACwAwCdASoOABkAPxFysVAsJqSisAgBgCIJZACdABqjDs15a2SwAAD9l/0wih0l/pEdd10jHZIlBcv+siBBNZ1DpsfHjaseqZxM9YKtVODW9pU53fqFPXmTjoEy0LeM1xyTrc76iuzljE/HM4LDckpSc6+wAA==';
+
 export const Hero: React.FC<HeroProps> = ({
   onSearch,
   onOpenScheduleModal,
@@ -56,26 +59,51 @@ export const Hero: React.FC<HeroProps> = ({
       
       {/* Sunset Luxury Penthouse Balcony Skyline Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <picture className="w-full h-full block">
-          {/* Mobile, Tablet & Non-PC devices (< 1024px) */}
+        {/* Instant 0ms Base64 Warm Blur Placeholder */}
+        <div
+          className="absolute inset-0 bg-cover bg-center filter blur-xl scale-110 block lg:hidden"
+          style={{ backgroundImage: `url("${MOBILE_BLUR}")` }}
+        />
+        <div
+          className="absolute inset-0 bg-cover bg-[center_28%] filter blur-xl scale-110 hidden lg:block"
+          style={{ backgroundImage: `url("${DESKTOP_BLUR}")` }}
+        />
+
+        <picture className="w-full h-full block relative z-1">
+          {/* Mobile, Tablet & Non-PC devices (< 1024px) - WebP primary */}
           <source
             media="(max-width: 1023px)"
+            type="image/webp"
+            srcSet="/hero-mobile-balcony.webp"
+          />
+          <source
+            media="(max-width: 1023px)"
+            type="image/jpeg"
             srcSet="/hero-mobile-balcony.jpg"
           />
-          {/* Desktop / PC devices (>= 1024px) */}
+          {/* Desktop / PC devices (>= 1024px) - WebP primary */}
           <source
             media="(min-width: 1024px)"
+            type="image/webp"
+            srcSet="/hero-sunset-balcony.webp"
+          />
+          <source
+            media="(min-width: 1024px)"
+            type="image/jpeg"
             srcSet="/hero-sunset-balcony.jpg"
           />
           <img
-            src="/hero-sunset-balcony.jpg"
+            src="/hero-sunset-balcony.webp"
             alt="Luxury Noida Sunset Penthouse Balcony View"
-            className="w-full h-full object-cover object-[center_35%] lg:object-[center_28%] opacity-100 scale-100 filter brightness-100 contrast-105 transition-all duration-700"
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+            className="w-full h-full object-cover object-[center_35%] lg:object-[center_28%] opacity-100 scale-100 filter brightness-100 contrast-105 transition-opacity duration-500"
           />
         </picture>
         {/* Soft, light translucent gradient allowing the full sunset skyline & penthouse balcony image to remain crisp and clearly visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/35 to-transparent lg:bg-gradient-to-r lg:from-white/60 lg:via-white/15 lg:to-transparent" />
-        <div className="absolute bottom-0 inset-x-0 h-20 sm:h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
+        <div className="absolute inset-0 z-2 bg-gradient-to-b from-white/70 via-white/35 to-transparent lg:bg-gradient-to-r lg:from-white/60 lg:via-white/15 lg:to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 z-2 h-20 sm:h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-6 lg:pt-8 pb-2 sm:pb-5 lg:pb-8 w-full flex-1 flex flex-col justify-between">

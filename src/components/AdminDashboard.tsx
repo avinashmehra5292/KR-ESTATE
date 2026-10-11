@@ -2507,7 +2507,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
             )}
           </div>
-        </div>
+        </div> 
       )}
     </div>
   );

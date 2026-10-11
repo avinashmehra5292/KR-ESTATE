@@ -57,8 +57,19 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 // 3. Safe Body Parser Limits (25mb max to prevent heap-exhaustion DoS while supporting base64 uploads)
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
-app.use('/uploads', express.static(path.resolve(__dirname, 'public', 'uploads')));
-app.use('/images', express.static(path.resolve(__dirname, 'public', 'images')));
+const staticCacheOptions = {
+  maxAge: '7d',
+  etag: true,
+  lastModified: true,
+  setHeaders: (res: Response, filePath: string) => {
+    if (/\.(webp|jpg|jpeg|png|svg|ico)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    }
+  }
+};
+app.use(express.static(path.resolve(__dirname, 'public'), staticCacheOptions));
+app.use('/uploads', express.static(path.resolve(__dirname, 'public', 'uploads'), staticCacheOptions));
+app.use('/images', express.static(path.resolve(__dirname, 'public', 'images'), staticCacheOptions));
 
 // 4. HTML Entity Sanitizer (Prevents HTML & Email Injection)
 function escapeHtml(str: any): string {
@@ -1354,7 +1365,7 @@ async function setupServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, 'dist')));
+    app.use(express.static(path.resolve(__dirname, 'dist'), staticCacheOptions));
     app.get('*', (req: Request, res: Response) => {
       res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
     });
