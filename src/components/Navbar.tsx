@@ -37,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <img 
             src="/kr-logo.png" 
             alt="KR Estate Logo" 
-            className="h-10 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.3)]"
+            className="h-10 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.3)] group-hover:drop-shadow-[0_0_18px_rgba(245,158,11,0.6)] group-hover:scale-105 transition-all duration-300"
           />
           <div className="flex flex-col">
             <span className="font-serif text-xl font-bold tracking-tight text-slate-900 group-hover:text-amber-700 transition-colors leading-tight">
@@ -83,10 +83,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>UP RERA Verified</span>
           </div>
 
-          {/* Book Visit */}
+          {/* Book Visit with Shimmer Sweep */}
           <button
             onClick={() => onOpenScheduleModal()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap shine-sweep hover:shadow-lg"
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>Book Visit</span>
@@ -115,7 +115,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={() => onOpenScheduleModal()}
-            className="px-3.5 py-1.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-lg shadow-sm"
+            className="px-3.5 py-1.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-lg shadow-sm shine-sweep hover:brightness-105 active:scale-95 transition-all"
           >
             Book Visit
           </button>

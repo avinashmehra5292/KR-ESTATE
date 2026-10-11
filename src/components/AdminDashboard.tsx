@@ -42,6 +42,58 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [performanceRange, setPerformanceRange] = useState<'7d' | '30d' | '90d'>('7d');
   const [performanceDropdownOpen, setPerformanceDropdownOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [readNotifIds, setReadNotifIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('kr_admin_read_notif_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const adminNotifications: { id: string; title: string; subtitle: string; tab: AdminTab }[] = [
+    {
+      id: 'lead-whatsapp-eon',
+      title: 'New lead from WhatsApp',
+      subtitle: 'Inquiry on EON Fairfox • 2 min ago',
+      tab: 'inquiries',
+    },
+    {
+      id: 'tour-4k-active',
+      title: '4K Drone Tour Active',
+      subtitle: 'Vertical 4K walkthrough uploaded • 25 min ago',
+      tab: 'drone_tours',
+    },
+    {
+      id: 'seo-audit-done',
+      title: 'SEO Audit Complete',
+      subtitle: 'Score 98/100 • 1 hour ago',
+      tab: 'settings',
+    },
+  ];
+
+  const unreadNotifsCount = adminNotifications.filter(n => !readNotifIds.includes(n.id)).length;
+
+  const handleMarkAllNotificationsRead = () => {
+    const allIds = adminNotifications.map(n => n.id);
+    setReadNotifIds(allIds);
+    try {
+      localStorage.setItem('kr_admin_read_notif_ids', JSON.stringify(allIds));
+    } catch { }
+  };
+
+  const handleNotificationClick = (notif: { id: string; tab: AdminTab }) => {
+    if (!readNotifIds.includes(notif.id)) {
+      const updated = [...readNotifIds, notif.id];
+      setReadNotifIds(updated);
+      try {
+        localStorage.setItem('kr_admin_read_notif_ids', JSON.stringify(updated));
+      } catch { }
+    }
+    setActiveTab(notif.tab);
+    setNotificationsOpen(false);
+  };
+
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [hoveredBarIndex, setHoveredBarIndex] = useState<number | null>(null);
 
@@ -871,33 +923,76 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 title="Notifications"
               >
                 <Bell className="w-4 h-4" />
-                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white">
-                  3
-                </span>
+                {unreadNotifsCount > 0 && (
+                  <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white animate-in zoom-in-50 duration-200">
+                    {unreadNotifsCount}
+                  </span>
+                )}
               </button>
 
               {/* Notification Popover */}
               {notificationsOpen && (
-                <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-xl p-3 z-50 text-xs animate-in fade-in duration-150">
-                  <div className="flex items-center justify-between pb-2 border-b border-slate-100 font-bold text-slate-900">
-                    <span>Notifications</span>
-                    <span className="text-[10px] text-emerald-600 font-semibold cursor-pointer" onClick={() => setNotificationsOpen(false)}>Mark read</span>
+                <>
+                  <div
+                    className="fixed inset-0 z-40 bg-black/20 sm:bg-transparent backdrop-blur-[1px] sm:backdrop-blur-none"
+                    onClick={() => setNotificationsOpen(false)}
+                  />
+                  <div className="fixed left-3 right-3 top-[68px] sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-80 max-w-sm mx-auto sm:max-w-none bg-white rounded-2xl border border-slate-200/90 shadow-2xl p-3.5 z-50 text-xs animate-in fade-in duration-150">
+                    <div className="flex items-center justify-between pb-2.5 border-b border-slate-100 font-bold text-slate-900">
+                      <div className="flex items-center gap-1.5">
+                        <span>Notifications</span>
+                        {unreadNotifsCount > 0 ? (
+                          <span className="px-1.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-[10px] font-bold transition-all">
+                            {unreadNotifsCount} new
+                          </span>
+                        ) : (
+                          <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold flex items-center gap-1 transition-all">
+                            <Check className="w-2.5 h-2.5" />
+                            All caught up
+                          </span>
+                        )}
+                      </div>
+                      {unreadNotifsCount > 0 ? (
+                        <button
+                          type="button"
+                          className="text-[11px] text-emerald-600 hover:text-emerald-700 font-semibold cursor-pointer hover:underline transition-colors"
+                          onClick={handleMarkAllNotificationsRead}
+                        >
+                          Mark read
+                        </button>
+                      ) : (
+                        <span className="text-[11px] text-slate-400 font-medium">All read</span>
+                      )}
+                    </div>
+
+                    <div className="divide-y divide-slate-100 pt-1">
+                      {adminNotifications.map((notif) => {
+                        const isUnread = !readNotifIds.includes(notif.id);
+                        return (
+                          <div
+                            key={notif.id}
+                            onClick={() => handleNotificationClick(notif)}
+                            className={`py-2.5 px-2 rounded-xl transition-all cursor-pointer group ${
+                              isUnread ? 'bg-emerald-50/40 hover:bg-emerald-50/70' : 'hover:bg-slate-50 opacity-80'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className={`text-xs font-semibold ${isUnread ? 'text-slate-900 font-bold' : 'text-slate-600'}`}>
+                                {notif.title}
+                              </span>
+                              {isUnread ? (
+                                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                              ) : (
+                                <Check className="w-3 h-3 text-emerald-600" />
+                              )}
+                            </div>
+                            <div className="text-[11px] text-slate-500 mt-0.5">{notif.subtitle}</div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <div className="divide-y divide-slate-100 pt-1">
-                    <div className="py-2">
-                      <div className="font-semibold text-slate-800">New lead from WhatsApp</div>
-                      <div className="text-[11px] text-slate-500">Inquiry on EON Fairfox &bull; 2 min ago</div>
-                    </div>
-                    <div className="py-2">
-                      <div className="font-semibold text-slate-800">4K Drone Tour Active</div>
-                      <div className="text-[11px] text-slate-500">Vertical 4K walkthrough uploaded &bull; 25 min ago</div>
-                    </div>
-                    <div className="py-2">
-                      <div className="font-semibold text-slate-800">SEO Audit Complete</div>
-                      <div className="text-[11px] text-slate-500">Score 98/100 &bull; 1 hour ago</div>
-                    </div>
-                  </div>
-                </div>
+                </>
               )}
             </div>
 
@@ -915,30 +1010,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </button>
 
               {userDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-slate-200 shadow-xl p-1.5 z-50 text-xs animate-in fade-in duration-150">
-                  <button
-                    onClick={() => { setActiveTab('settings'); setUserDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 font-medium flex items-center gap-2"
-                  >
-                    <Settings className="w-3.5 h-3.5" />
-                    Portal Settings
-                  </button>
-                  <button
-                    onClick={() => { window.open('/', '_blank'); setUserDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 font-medium flex items-center gap-2"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    View Live Site
-                  </button>
-                  <div className="my-1 border-t border-slate-100" />
-                  <button
-                    onClick={() => { handleLogout(); setUserDropdownOpen(false); }}
-                    className="w-full text-left px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50 font-semibold flex items-center gap-2"
-                  >
-                    <LogOut className="w-3.5 h-3.5" />
-                    Log Out
-                  </button>
-                </div>
+                <>
+                  <div
+                    className="fixed inset-0 z-40 bg-black/10 sm:bg-transparent"
+                    onClick={() => setUserDropdownOpen(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl border border-slate-200 shadow-xl p-1.5 z-50 text-xs animate-in fade-in duration-150">
+                    <button
+                      onClick={() => { setActiveTab('settings'); setUserDropdownOpen(false); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 font-medium flex items-center gap-2"
+                    >
+                      <Settings className="w-3.5 h-3.5" />
+                      Portal Settings
+                    </button>
+                    <button
+                      onClick={() => { window.open('/', '_blank'); setUserDropdownOpen(false); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 font-medium flex items-center gap-2"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      View Live Site
+                    </button>
+                    <div className="my-1 border-t border-slate-100" />
+                    <button
+                      onClick={() => { handleLogout(); setUserDropdownOpen(false); }}
+                      className="w-full text-left px-3 py-2 rounded-lg text-rose-600 hover:bg-rose-50 font-semibold flex items-center gap-2"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      Log Out
+                    </button>
+                  </div>
+                </>
               )}
             </div>
 

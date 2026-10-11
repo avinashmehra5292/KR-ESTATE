@@ -40,7 +40,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <article 
       onClick={() => onSelectProperty(property)}
-      className="group flex flex-col rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1.5 cursor-pointer"
+      className="group interactive-card flex flex-col rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer relative"
     >
       {/* ================= TOP PHOTO BANNER ================= */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
@@ -51,7 +51,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           fallbackGradient={property.architecturalTheme?.gradient}
           iconType={property.architecturalTheme?.iconType}
           title={property.title}
-          className="group-hover:scale-105 transition-transform duration-700 ease-out object-cover w-full h-full"
+          className="group-hover:scale-108 transition-transform duration-700 ease-out object-cover w-full h-full"
         />
 
         {/* Contrast Scrim Gradients */}
@@ -81,9 +81,9 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               <button
                 type="button"
                 onClick={handleVideoClick}
-                className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3 py-1 rounded-full transition-all shadow-md cursor-pointer"
+                className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3 py-1 rounded-full transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95 group/btn"
               >
-                <Play className="h-3 w-3 fill-current" />
+                <Play className="h-3 w-3 fill-current group-hover/btn:scale-115 transition-transform" />
                 <span>Video Tour</span>
               </button>
             )}
@@ -92,10 +92,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           <button
             type="button"
             onClick={handleSpecsClick}
-            className="text-xs text-amber-300 font-semibold flex items-center gap-1 hover:text-amber-200 transition-colors cursor-pointer drop-shadow"
+            className="text-xs text-amber-300 font-semibold flex items-center gap-1 hover:text-amber-200 transition-colors cursor-pointer drop-shadow group/gallery"
           >
             <span>Gallery</span>
-            <ArrowUpRight className="h-3.5 w-3.5" />
+            <ArrowUpRight className="h-3.5 w-3.5 group-hover/gallery:translate-x-0.5 group-hover/gallery:-translate-y-0.5 transition-transform" />
           </button>
         </div>
       </div>
@@ -164,14 +164,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             <button
               type="button"
               onClick={handleVisitClick}
-              className="px-4 py-2 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95"
+              className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-105 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95 shine-sweep"
             >
               Book Visit
             </button>
             <button
               type="button"
               onClick={handleSpecsClick}
-              className="px-4 py-2 rounded-full bg-orange-50 hover:bg-orange-100 text-slate-800 font-semibold text-xs border border-orange-200/80 transition-all cursor-pointer whitespace-nowrap shadow-sm"
+              className="px-4 py-2 rounded-full bg-orange-50 hover:bg-orange-100 text-slate-800 font-semibold text-xs border border-orange-200/80 transition-all cursor-pointer whitespace-nowrap shadow-xs hover:scale-102"
             >
               Specs
             </button>

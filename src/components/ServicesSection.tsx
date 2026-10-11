@@ -74,10 +74,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             <div className="pt-2">
               <a
                 href="#properties"
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer hover:brightness-105 active:scale-95"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer hover:brightness-105 active:scale-95 shine-sweep group"
               >
                 <span>Explore Our Services</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </a>
             </div>
           </div>
@@ -88,11 +88,11 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               <div
                 key={idx}
                 onClick={srv.onClick}
-                className="bg-white/95 rounded-2xl p-5 border border-orange-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:-translate-y-1 min-h-[220px]"
+                className="interactive-card bg-white/95 rounded-2xl p-5 border border-orange-200/80 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:-translate-y-1.5 min-h-[220px]"
               >
                 <div className="space-y-3">
                   {/* Pale Orange Icon Circle */}
-                  <div className="w-10 h-10 rounded-full bg-orange-100/60 border border-orange-200 flex items-center justify-center text-amber-700 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
+                  <div className="w-10 h-10 rounded-full bg-orange-100/60 border border-orange-200 flex items-center justify-center text-amber-700 group-hover:scale-110 group-hover:rotate-6 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
                     <srv.icon className="w-4 h-4" />
                   </div>
 
@@ -106,7 +106,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                 </div>
 
                 <div className="pt-3">
-                  <span className="text-slate-400 group-hover:text-amber-600 transition-colors text-sm font-semibold inline-flex items-center">
+                  <span className="text-slate-400 group-hover:text-amber-600 group-hover:translate-x-1.5 transition-all text-sm font-semibold inline-flex items-center">
                     &rarr;
                   </span>
                 </div>

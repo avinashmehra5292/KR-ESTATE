@@ -248,14 +248,17 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                 </p>
               </div>
 
-              {/* Watch Drone Tour Button */}
+              {/* Watch Drone Tour Button with Radar Halo */}
               <button
                 type="button"
                 onClick={handlePlayTour}
-                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/40 hover:bg-black/65 backdrop-blur-md border border-[#C5A059]/65 hover:border-[#C5A059] text-white text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-lg group/btn"
+                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md border border-[#C5A059]/75 hover:border-[#C5A059] text-white text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-lg group/btn shine-sweep"
               >
-                <div className="w-6 h-6 rounded-full bg-black/50 border border-[#C5A059]/50 flex items-center justify-center text-white shrink-0 group-hover/btn:bg-[#C5A059] group-hover/btn:text-black group-hover/btn:border-[#C5A059] transition-all">
-                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+                <div className="relative flex items-center justify-center">
+                  <span className="absolute inset-0 rounded-full bg-[#C5A059]/40 animate-radar-halo" />
+                  <div className="w-6 h-6 rounded-full bg-black/60 border border-[#C5A059]/60 flex items-center justify-center text-white shrink-0 group-hover/btn:bg-[#C5A059] group-hover/btn:text-black group-hover/btn:border-[#C5A059] transition-all relative z-10">
+                    <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+                  </div>
                 </div>
                 <span>Watch Drone Tour</span>
               </button>

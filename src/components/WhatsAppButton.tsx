@@ -13,20 +13,20 @@ export const WhatsAppButton: React.FC = () => {
   return (
     <aside
       aria-label="Direct communication channels"
-      className="fixed bottom-6 right-6 z-40 flex items-center"
+      className="fixed bottom-6 right-6 z-40 flex items-center animate-float"
     >
       <a
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex items-center gap-2.5 rounded-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold px-4.5 py-3.5 shadow-[0_0_30px_rgba(16,185,129,0.55)] hover:shadow-[0_0_40px_rgba(16,185,129,0.75)] border border-emerald-300/50 hover:scale-105 transition-all duration-300 cursor-pointer"
+        className="group shine-sweep flex items-center gap-2.5 rounded-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:from-emerald-400 hover:to-emerald-500 text-white font-bold px-4.5 py-3.5 shadow-[0_0_30px_rgba(16,185,129,0.55)] hover:shadow-[0_0_40px_rgba(16,185,129,0.75)] border border-emerald-300/50 hover:scale-108 active:scale-95 transition-all duration-300 cursor-pointer"
         title="Chat with KR Estate Advisory on WhatsApp"
       >
         <span className="relative flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-200 opacity-80" />
           <span className="relative inline-flex rounded-full h-3 w-3 bg-white" />
         </span>
-        <MessageSquareText className="h-4.5 w-4.5 text-white" />
+        <MessageSquareText className="h-4.5 w-4.5 text-white group-hover:rotate-12 transition-transform duration-300" />
         <span className="text-xs font-bold tracking-wide hidden sm:inline whitespace-nowrap drop-shadow-sm">
           WhatsApp Advisor
         </span>

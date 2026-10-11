@@ -114,9 +114,13 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Left Column: Heading, Advisory, Drone Tour */}
           <div className="lg:col-span-7 space-y-2 sm:space-y-4 lg:space-y-5">
             
-            {/* Eyebrow Label */}
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/85 backdrop-blur-md border border-orange-200/70 shadow-xs text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-amber-900 font-mono">
-              PREMIER REAL ESTATE ADVISORY
+            {/* Eyebrow Label with Beacon */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md border border-orange-200/80 shadow-xs text-[10px] sm:text-xs font-bold tracking-[0.2em] uppercase text-amber-900 font-mono shine-sweep">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+              </span>
+              <span>PREMIER REAL ESTATE ADVISORY</span>
             </div>
 
             {/* Main Headline */}
@@ -134,14 +138,17 @@ export const Hero: React.FC<HeroProps> = ({
                 <span>Across Noida Corridor</span>
               </div>
 
-              {/* Watch 4K Drone Tour Button */}
+              {/* Watch 4K Drone Tour Button with Animated Radar Halo */}
               <button
                 type="button"
                 onClick={onWatchVideo}
-                className="inline-flex items-center gap-2 sm:gap-3 text-slate-950 hover:text-amber-700 bg-white/85 hover:bg-white backdrop-blur-md px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-orange-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+                className="inline-flex items-center gap-2 sm:gap-3 text-slate-950 hover:text-amber-800 bg-white/90 hover:bg-white backdrop-blur-md px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-orange-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer group shine-sweep"
               >
-                <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-amber-500 bg-amber-500/20 flex items-center justify-center group-hover:scale-105 group-hover:border-amber-600 transition-all shadow-xs">
-                  <Play className="w-2.5 h-2.5 fill-amber-600 text-amber-600 translate-x-0.5" />
+                <span className="relative flex items-center justify-center">
+                  <span className="absolute inset-0 rounded-full bg-amber-400/40 animate-radar-halo" />
+                  <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-amber-500 bg-amber-500/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xs relative z-10">
+                    <Play className="w-2.5 h-2.5 fill-amber-600 group-hover:fill-slate-950 text-amber-600 group-hover:text-slate-950 translate-x-0.5 transition-colors" />
+                  </span>
                 </span>
                 <span className="text-[11px] sm:text-xs font-bold tracking-wide">
                   Watch 4K Tour
@@ -160,20 +167,32 @@ export const Hero: React.FC<HeroProps> = ({
           {/* Right Column: Floating Badges over Sunset Skyline (shown on tablet & desktop) */}
           <div className="hidden md:flex lg:col-span-5 flex-col items-start lg:items-end justify-start gap-3 sm:gap-4 pt-2 lg:pt-16">
             
-            {/* Badge 1: Noida Expressway */}
-            <div className="bg-white/95 backdrop-blur-md border border-orange-200/80 rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 shadow-lg min-w-[220px] sm:min-w-[240px] hover:border-amber-400 transition-all">
-              <div className="text-xs sm:text-sm font-bold text-slate-900 tracking-wide">
-                Noida Expressway
+            {/* Badge 1: Noida Expressway - Gentle Float */}
+            <div className="animate-float bg-white/95 backdrop-blur-md border border-orange-200/80 rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 shadow-lg min-w-[220px] sm:min-w-[240px] hover:border-amber-400 hover:shadow-amber-500/10 transition-all cursor-default">
+              <div className="flex items-center justify-between">
+                <span className="text-xs sm:text-sm font-bold text-slate-900 tracking-wide">
+                  Noida Expressway
+                </span>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
               </div>
               <div className="text-[11px] sm:text-xs font-bold text-emerald-700 mt-0.5">
                 +14.2% YoY Appreciation
               </div>
             </div>
 
-            {/* Badge 2: Jewar Airport Aerocity */}
-            <div className="bg-white/95 backdrop-blur-md border border-orange-200/80 rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 shadow-lg min-w-[220px] sm:min-w-[240px] hover:border-amber-400 transition-all">
-              <div className="text-xs sm:text-sm font-bold text-slate-900 tracking-wide">
-                Jewar Airport Aerocity
+            {/* Badge 2: Jewar Airport Aerocity - Delayed Float */}
+            <div className="animate-float-delayed bg-white/95 backdrop-blur-md border border-orange-200/80 rounded-xl px-4 sm:px-5 py-2.5 sm:py-3 shadow-lg min-w-[220px] sm:min-w-[240px] hover:border-amber-400 hover:shadow-amber-500/10 transition-all cursor-default">
+              <div className="flex items-center justify-between">
+                <span className="text-xs sm:text-sm font-bold text-slate-900 tracking-wide">
+                  Jewar Airport Aerocity
+                </span>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+                </span>
               </div>
               <div className="text-[11px] sm:text-xs font-semibold text-amber-800 mt-0.5">
                 Pre-Launch Allotments Open
@@ -257,13 +276,13 @@ export const Hero: React.FC<HeroProps> = ({
                 <ChevronDown className="w-3 h-3 text-slate-500 absolute right-2 pointer-events-none" />
               </div>
 
-              {/* CTA Button: Find Properties */}
+              {/* CTA Button: Find Properties with Light Beam Shimmer */}
               <button
                 type="submit"
-                className="w-full min-h-[40px] sm:min-h-[46px] rounded-lg sm:rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+                className="w-full min-h-[40px] sm:min-h-[46px] rounded-lg sm:rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 sm:gap-2 shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap shine-sweep group"
               >
                 <span>Find Properties</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-200" />
               </button>
 
             </form>
@@ -307,10 +326,10 @@ export const Hero: React.FC<HeroProps> = ({
                 key={idx}
                 type="button"
                 onClick={item.action}
-                className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl bg-white/90 hover:bg-white border border-orange-200/80 hover:border-amber-400 transition-all text-left cursor-pointer group shadow-xs shrink-0 whitespace-nowrap"
+                className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg sm:rounded-xl bg-white/90 hover:bg-white border border-orange-200/80 hover:border-amber-400 transition-all text-left cursor-pointer group shadow-xs shrink-0 whitespace-nowrap hover:-translate-y-0.5 hover:shadow-md"
               >
-                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-amber-500/40 bg-amber-500/10 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all">
-                  <item.icon className="w-3 h-3" />
+                <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-amber-500/40 bg-amber-500/10 flex items-center justify-center text-amber-700 shrink-0 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all duration-300">
+                  <item.icon className="w-3 h-3 group-hover:rotate-6 transition-transform" />
                 </div>
                 <span className="text-[10px] sm:text-[11px] font-semibold text-slate-700 group-hover:text-amber-800 transition-colors leading-tight">
                   {item.label}

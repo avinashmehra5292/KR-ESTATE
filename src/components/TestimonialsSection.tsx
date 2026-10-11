@@ -87,7 +87,7 @@ export const TestimonialsSection: React.FC = () => {
           {testimonials.map((t, idx) => (
             <div
               key={idx}
-              className="bg-white/95 text-slate-900 rounded-2xl p-6 border border-orange-200/80 shadow-md flex flex-col justify-between hover:-translate-y-1 transition-all duration-300"
+              className="interactive-card group bg-white/95 text-slate-900 rounded-2xl p-6 border border-orange-200/80 shadow-md flex flex-col justify-between hover:-translate-y-1.5 transition-all duration-300"
             >
               <div className="space-y-4">
                 {/* User Avatar */}
@@ -95,10 +95,10 @@ export const TestimonialsSection: React.FC = () => {
                   <img
                     src={t.avatar}
                     alt={t.author}
-                    className="w-11 h-11 rounded-full object-cover border-2 border-amber-400/40 shadow-sm"
+                    className="w-11 h-11 rounded-full object-cover border-2 border-amber-400/40 shadow-sm group-hover:scale-108 group-hover:border-amber-500 transition-all duration-300"
                   />
                   <div>
-                    <h3 className="font-bold text-sm text-slate-900 leading-tight">
+                    <h3 className="font-bold text-sm text-slate-900 leading-tight group-hover:text-amber-800 transition-colors">
                       {t.author}
                     </h3>
                     <p className="text-[11px] text-slate-500 font-medium">
@@ -114,7 +114,7 @@ export const TestimonialsSection: React.FC = () => {
               </div>
 
               {/* 5 Gold Stars */}
-              <div className="pt-4 mt-2 border-t border-slate-100 flex items-center gap-1">
+              <div className="pt-4 mt-2 border-t border-slate-100 flex items-center gap-1 group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.5)] transition-all">
                 {[...Array(t.rating)].map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}

@@ -159,9 +159,9 @@ export default function App() {
 
         {/* Decorative ambient background lighting mesh for luxury peach ambiance */}
         <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none">
-          <div className="absolute top-[-15%] left-[-10%] w-[55%] h-[55%] rounded-full bg-amber-400/15 blur-[140px] animate-shimmer-pulse" />
-          <div className="absolute top-[25%] right-[-15%] w-[50%] h-[65%] rounded-full bg-orange-300/15 blur-[150px]" style={{ animationDelay: '2.5s' }} />
-          <div className="absolute bottom-[-15%] left-[20%] w-[60%] h-[55%] rounded-full bg-rose-300/10 blur-[140px]" style={{ animationDelay: '5s' }} />
+          <div className="absolute top-[-15%] left-[-10%] w-[55%] h-[55%] rounded-full bg-amber-400/15 blur-[140px] animate-ambient-1" />
+          <div className="absolute top-[25%] right-[-15%] w-[50%] h-[65%] rounded-full bg-orange-300/15 blur-[150px] animate-ambient-2" />
+          <div className="absolute bottom-[-15%] left-[20%] w-[60%] h-[55%] rounded-full bg-rose-300/10 blur-[140px] animate-ambient-1" style={{ animationDelay: '5s' }} />
           {/* Subtle radial architectural spotlight */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.06),transparent_70%)]" />
         </div>
