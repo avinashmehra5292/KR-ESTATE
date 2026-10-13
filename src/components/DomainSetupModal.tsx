@@ -11,6 +11,17 @@ export const DomainSetupModal: React.FC<DomainSetupModalProps> = ({ isOpen, onCl
 
   const [copied, setCopied] = React.useState<string | null>(null);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   const copyToClipboard = (text: string, key: string) => {
     navigator.clipboard.writeText(text);
     setCopied(key);
@@ -25,6 +36,7 @@ export const DomainSetupModal: React.FC<DomainSetupModalProps> = ({ isOpen, onCl
       >
         <button
           onClick={onClose}
+          aria-label="Close"
           className="absolute top-6 right-6 p-2 rounded-full bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer"
         >
           <X className="h-5 w-5" />

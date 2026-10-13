@@ -88,6 +88,7 @@ export const EmiCalculator: React.FC = () => {
                 min="10"
                 max="1000"
                 step="5"
+                aria-label="Loan Amount in Lakhs"
                 value={loanAmountLakhs}
                 onChange={(e) => setLoanAmountLakhs(Number(e.target.value))}
                 className="w-full luxury-range cursor-pointer"
@@ -133,6 +134,7 @@ export const EmiCalculator: React.FC = () => {
                 min="6.5"
                 max="12.0"
                 step="0.05"
+                aria-label="Annual Interest Rate Percentage"
                 value={interestRate}
                 onChange={(e) => setInterestRate(Number(e.target.value))}
                 className="w-full luxury-range cursor-pointer"
@@ -165,6 +167,7 @@ export const EmiCalculator: React.FC = () => {
                 min="5"
                 max="30"
                 step="1"
+                aria-label="Loan Tenure in Years"
                 value={tenureYears}
                 onChange={(e) => setTenureYears(Number(e.target.value))}
                 className="w-full luxury-range cursor-pointer"
@@ -187,7 +190,7 @@ export const EmiCalculator: React.FC = () => {
               </div>
               
               <div className="flex items-baseline gap-2 mb-7">
-                <span className="font-serif-luxury text-3xl sm:text-[38px] lg:text-[42px] font-bold text-[#F5A623] tabular-nums tracking-tight leading-none">
+                <span data-testid="emi-monthly-amount" className="font-serif-luxury font-mono text-3xl sm:text-[38px] lg:text-[42px] font-bold text-[#F5A623] tabular-nums tracking-tight leading-none">
                   ₹{calculation.monthlyEmi.toLocaleString('en-IN')}
                 </span>
                 <span className="text-xs text-[#9CA3AF] font-normal font-sans">/month</span>

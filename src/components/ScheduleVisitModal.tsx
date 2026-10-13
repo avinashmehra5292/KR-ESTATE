@@ -27,6 +27,17 @@ export const ScheduleVisitModal: React.FC<ScheduleVisitModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -81,6 +92,7 @@ Pickup Required: ${pickupRequired ? `Yes (${pickupCity === 'Others' ? customPick
         {/* Close Button */}
         <button
           onClick={onClose}
+          aria-label="Close"
           className="absolute top-4 right-4 sm:top-6 sm:right-6 p-1.5 sm:p-2 rounded-full bg-white hover:bg-orange-100 text-slate-500 hover:text-slate-900 border border-orange-200 transition-colors cursor-pointer"
         >
           <X className="h-4 w-4 sm:h-5 sm:w-5" />

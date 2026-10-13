@@ -381,7 +381,7 @@ function parseCookies(req: Request): Record<string, string> {
 
 // Authentication Middleware for all /api/admin/* endpoints
 function requireAdminAuth(req: Request, res: Response, next: NextFunction) {
-  if (req.path === '/api/admin/login' || req.path === '/api/admin/totp-verify' || req.path === '/api/admin/auth-check') {
+  if (req.path === '/api/admin/login' || req.path === '/api/admin/totp-verify' || req.path === '/api/admin/auth-check' || req.path === '/api/admin/logout') {
     return next();
   }
 
@@ -579,6 +579,7 @@ app.post('/api/admin/totp-setup', async (req: Request, res: Response) => {
 
 // API Route: Secure Password Change
 app.post('/api/admin/change-password', async (req: Request, res: Response) => {
+  if (!checkPublicRateLimit(req, res, 5, 15 * 60 * 1000)) return;
   try {
     const { newPassword, token } = req.body;
     if (!newPassword || typeof newPassword !== 'string' || newPassword.length < 6) {
@@ -598,6 +599,8 @@ app.post('/api/admin/change-password', async (req: Request, res: Response) => {
         if (!isTotpValid) {
           return res.status(401).json({ error: 'Invalid or expired 2FA verification code.' });
         }
+      } else {
+        return res.status(403).json({ error: 'Unauthorized: Password change requires an active admin session or configured 2FA verification.' });
       }
     } else if (creds.totpEnabled && creds.totpSecret && token) {
       const isTotpValid = authenticator.verify({ token: String(token).trim(), secret: creds.totpSecret });

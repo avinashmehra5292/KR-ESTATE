@@ -107,6 +107,17 @@ export const NoidaExpresswayClientVideoModal: React.FC<NoidaExpresswayClientVide
   // Active view tab
   const [activeTab, setActiveTab] = useState<'video' | 'customize' | 'share'>('video');
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   // Client customization fields
   const [clientName, setClientName] = useState(initialClientName);
   const [clientFocus, setClientFocus] = useState('Luxury Living & High Capital Growth');

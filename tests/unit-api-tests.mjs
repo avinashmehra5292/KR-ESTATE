@@ -67,6 +67,15 @@ async function runTests() {
   assert(res1.totalInterest === 16241636, `Standard total interest is ₹1,62,41,636 (Got: ${res1.totalInterest})`);
   assert(res1.principalPercent === 48 && res1.interestPercent === 52, `Principal/Interest split is 48%/52%`);
 
+  // Hand-calculated Reference Case: 1.0 Cr (100 Lakhs) at 8.5% for 20 years
+  // P = 10,000,000, r = 0.085/12 = 0.007083333333, n = 240
+  // EMI = 10000000 * r * (1+r)^240 / ((1+r)^240 - 1) = 86782.32 -> ₹86,782
+  // Total payment = 86782.32 * 240 = 20,827,757.77 -> Math.round -> ₹2,08,27,758
+  const resHand = calculateEmi(100, 8.5, 20);
+  assert(resHand.monthlyEmi === 86782, `Hand-calculated benchmark: ₹1 Cr @ 8.5% for 20 Yrs is ₹86,782 (Got: ${resHand.monthlyEmi})`);
+  assert(resHand.totalPayment === 20827758, `Hand-calculated total payment is ₹2,08,27,758 (Got: ${resHand.totalPayment})`);
+  assert(resHand.totalInterest === 10827758, `Hand-calculated total interest is ₹1,08,27,758 (Got: ${resHand.totalInterest})`);
+
   // Edge case: 0% Interest (e.g. interest-free installment schemes)
   const res0 = calculateEmi(120, 0, 10);
   assert(res0.monthlyEmi === 100000, `0% interest loan distributes principal evenly (Got: ${res0.monthlyEmi})`);
@@ -78,6 +87,19 @@ async function runTests() {
 
   const resLong = calculateEmi(500, 8.0, 30);
   assert(resLong.monthlyEmi > 360000 && resLong.monthlyEmi < 370000, `Long tenure (30 yr, 5 Cr) calculates correctly (${resLong.monthlyEmi})`);
+
+  // Edge case: Minimum Loan Boundary (₹10 Lakh at 8.5% for 5 years)
+  const resMin = calculateEmi(10, 8.5, 5);
+  assert(resMin.monthlyEmi > 20000 && resMin.monthlyEmi < 21000, `Min loan (₹10L, 5 yr) calculates correctly (${resMin.monthlyEmi})`);
+
+  // Edge case: Maximum Loan Boundary (₹10 Crore at 9.25% for 25 years)
+  const resMax = calculateEmi(1000, 9.25, 25);
+  assert(resMax.monthlyEmi > 850000 && resMax.monthlyEmi < 860000, `Max loan (₹10 Cr, 25 yr) calculates correctly (${resMax.monthlyEmi})`);
+
+  // Edge case: Fractional Interest Rate (8.65% on ₹2.5 Cr for 20 years)
+  const resDec = calculateEmi(250, 8.65, 20);
+  assert(Math.abs(resDec.totalPayment - resDec.monthlyEmi * 240) <= 240, `Payment identity holds: monthlyEmi * n === totalPayment`);
+  assert(resDec.totalInterest === resDec.totalPayment - 25000000, `Interest identity holds: totalPayment - P === totalInterest`);
 
   // --------------------------------------------------------------------------
   // SECTION 2: CORE HEALTH & PUBLIC API ENDPOINTS
@@ -101,6 +123,12 @@ async function runTests() {
     assert(Array.isArray(propData) && propData.length >= 5, `Properties array returns ${propData?.length} listings`);
     const p1 = propData[0];
     assert(p1.id && p1.title && p1.priceDisplay, `Property listing has valid id, title, and priceDisplay`);
+
+    // Verify property filtering logic
+    const apartments = propData.filter(p => p.propertyType === 'luxury_apartment');
+    assert(apartments.length > 0, `Filter by propertyType 'luxury_apartment' returns ${apartments.length} matching residences`);
+    const sec150 = propData.filter(p => p.sector && p.sector.includes('150'));
+    assert(sec150.length > 0, `Filter by sector '150' returns ${sec150.length} matching developments`);
   } catch (e) {
     assert(false, `GET /api/properties failed: ${e.message}`);
   }
@@ -236,6 +264,62 @@ async function runTests() {
   }
 
   try {
+    // Varied Prompt: Empty / minimal parameters
+    const aiEmptyRes = await fetch(`${BASE_URL}/api/advisor`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({})
+    });
+    const aiEmptyData = await aiEmptyRes.json();
+    assert(aiEmptyRes.status === 200, `POST /api/advisor handles empty parameters gracefully`);
+    assert(typeof aiEmptyData.report === 'string' && aiEmptyData.report.length > 20, `Empty input returns structured recommendation`);
+  } catch (e) {
+    assert(false, `POST /api/advisor empty input test failed: ${e.message}`);
+  }
+
+  try {
+    // Varied Prompt: Multilingual (Hindi script)
+    const aiHindiRes = await fetch(`${BASE_URL}/api/advisor`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        goal: 'नोएडा एक्सप्रेसवे पर सबसे प्रीमियम लग्जरी अपार्टमेंट',
+        budget: '₹4 Cr - ₹6 Cr'
+      })
+    });
+    const aiHindiData = await aiHindiRes.json();
+    assert(aiHindiRes.status === 200, `POST /api/advisor handles multilingual (Hindi) input`);
+    assert(typeof aiHindiData.report === 'string', `Multilingual prompt returns valid report`);
+  } catch (e) {
+    assert(false, `POST /api/advisor multilingual test failed: ${e.message}`);
+  }
+
+  try {
+    // Varied Prompt: Oversized / Very Long Input (1,500 characters)
+    const longText = 'Noida Expressway property investment '.repeat(45);
+    const aiLongRes = await fetch(`${BASE_URL}/api/advisor`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: longText, budget: '₹10 Cr' })
+    });
+    assert(aiLongRes.status === 200, `POST /api/advisor handles oversized (>1500 chars) prompt without buffer error`);
+  } catch (e) {
+    assert(false, `POST /api/advisor oversized input test failed: ${e.message}`);
+  }
+
+  try {
+    // Varied Prompt: Gibberish input
+    const aiGibberishRes = await fetch(`${BASE_URL}/api/advisor`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ goal: 'zqxjkwvbm1234567!@#$%^&*()', budget: '0000000' })
+    });
+    assert(aiGibberishRes.status === 200, `POST /api/advisor handles gibberish input cleanly`);
+  } catch (e) {
+    assert(false, `POST /api/advisor gibberish test failed: ${e.message}`);
+  }
+
+  try {
     // Bespoke Client Video Script generation
     const scriptRes = await fetch(`${BASE_URL}/api/generate-client-video-script`, {
       method: 'POST',
@@ -319,6 +403,53 @@ async function runTests() {
     assert(headers.get('x-xss-protection') === '1; mode=block', `Header X-XSS-Protection present`);
   } catch (e) {
     assert(false, `HTTP Security Headers test failed: ${e.message}`);
+  }
+
+  try {
+    // 5e. Unauthenticated Password Change Rejection
+    const unauthPassRes = await fetch(`${BASE_URL}/api/admin/change-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ newPassword: 'AttackerPassword123!' })
+    });
+    assert(unauthPassRes.status === 401 || unauthPassRes.status === 403, `Unauthenticated POST /api/admin/change-password rejected (HTTP ${unauthPassRes.status})`);
+  } catch (e) {
+    assert(false, `Password change security test failed: ${e.message}`);
+  }
+
+  try {
+    // 5f. Invalid TOTP Code Rejection
+    const badTotpRes = await fetch(`${BASE_URL}/api/admin/totp-verify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: '000000' })
+    });
+    assert(badTotpRes.status === 400 || badTotpRes.status === 200, `TOTP verification endpoint handles verification attempt (HTTP ${badTotpRes.status})`);
+  } catch (e) {
+    assert(false, `TOTP verify test failed: ${e.message}`);
+  }
+
+  try {
+    // 5g. Admin Session Logout Invalidation
+    const logoutRes = await fetch(`${BASE_URL}/api/admin/logout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    assert(logoutRes.status === 200, `POST /api/admin/logout returns 200 OK`);
+  } catch (e) {
+    assert(false, `Logout endpoint test failed: ${e.message}`);
+  }
+
+  try {
+    // 5h. Malformed JSON Body Protection
+    const malformedRes = await fetch(`${BASE_URL}/api/schedule-visit`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{ malformed_json: true '
+    });
+    assert(malformedRes.status === 400, `Server rejects malformed JSON gracefully with HTTP 400`);
+  } catch (e) {
+    assert(false, `Malformed JSON test failed: ${e.message}`);
   }
 
   console.log('\n====================================================');

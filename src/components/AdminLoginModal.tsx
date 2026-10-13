@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Lock, ShieldAlert, KeyRound, Mail, ArrowRight, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import { setAdminToken } from '../utils/adminAuth';
 
@@ -22,6 +22,16 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ onClose, onSuc
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -136,7 +146,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ onClose, onSuc
 
         {/* Header */}
         <div className="p-6 border-b border-slate-800 bg-[#111728]/80 text-center relative">
-          <button onClick={onClose} className="absolute right-4 top-4 p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer">
+          <button onClick={onClose} aria-label="Close" className="absolute right-4 top-4 p-2 rounded-full hover:bg-slate-800 text-slate-400 hover:text-white transition-colors cursor-pointer">
             <X className="w-4 h-4" />
           </button>
 

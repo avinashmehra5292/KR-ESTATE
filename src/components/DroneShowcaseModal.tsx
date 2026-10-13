@@ -62,6 +62,17 @@ export const DroneShowcaseModal: React.FC<DroneShowcaseModalProps> = ({
     }
   }, [isOpen, initialTourId, droneTours]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const togglePlay = () => {
@@ -136,6 +147,7 @@ export const DroneShowcaseModal: React.FC<DroneShowcaseModalProps> = ({
               onClick={onClose}
               className="p-1.5 rounded-full bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors cursor-pointer"
               title="Close modal"
+              aria-label="Close modal"
             >
               <X className="h-5 w-5" />
             </button>

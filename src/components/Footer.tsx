@@ -99,11 +99,11 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdminLogin }) => {
             
             {/* Social Icons */}
             <div className="flex items-center gap-3 text-slate-700">
-              <a href="#" className="hover:text-emerald-700 transition-colors"><MessageSquare className="w-4 h-4" /></a>
-              <a href="#" className="hover:text-amber-800 transition-colors"><Facebook className="w-4 h-4" /></a>
-              <a href="#" className="hover:text-amber-800 transition-colors"><Instagram className="w-4 h-4" /></a>
-              <a href="#" className="hover:text-amber-800 transition-colors"><Linkedin className="w-4 h-4" /></a>
-              <a href="#" className="hover:text-rose-700 transition-colors"><Youtube className="w-4 h-4" /></a>
+              <a href="#" aria-label="WhatsApp Channel" className="hover:text-emerald-700 transition-colors"><MessageSquare className="w-4 h-4" /></a>
+              <a href="#" aria-label="Facebook Profile" className="hover:text-amber-800 transition-colors"><Facebook className="w-4 h-4" /></a>
+              <a href="#" aria-label="Instagram Profile" className="hover:text-amber-800 transition-colors"><Instagram className="w-4 h-4" /></a>
+              <a href="#" aria-label="LinkedIn Profile" className="hover:text-amber-800 transition-colors"><Linkedin className="w-4 h-4" /></a>
+              <a href="#" aria-label="YouTube Channel" className="hover:text-rose-700 transition-colors"><Youtube className="w-4 h-4" /></a>
             </div>
 
             {/* Chat on WhatsApp Button */}

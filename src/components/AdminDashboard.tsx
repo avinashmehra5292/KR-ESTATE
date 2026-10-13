@@ -53,6 +53,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     }
   });
 
+  // Handle Escape key closure for Admin Panel
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   const adminNotifications: { id: string; title: string; subtitle: string; tab: AdminTab }[] = [
     {
       id: 'lead-whatsapp-eon',
@@ -1155,6 +1166,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               onClick={onClose}
               className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
               title="Close Admin Panel"
+              aria-label="Close Admin Panel"
             >
               <X className="w-5 h-5" />
             </button>
