@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 
 export const TestimonialsSection: React.FC = () => {
-  const [activeSlide, setActiveSlide] = useState(1);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   const testimonials = [
     {
@@ -35,6 +37,35 @@ export const TestimonialsSection: React.FC = () => {
     },
   ];
 
+  const handlePrev = () => {
+    setActiveSlide((prev) => (prev > 0 ? prev - 1 : testimonials.length - 1));
+  };
+
+  const handleNext = () => {
+    setActiveSlide((prev) => (prev < testimonials.length - 1 ? prev + 1 : 0));
+  };
+
+  const minSwipeDistance = 45;
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance) {
+      handleNext();
+    } else if (distance < -minSwipeDistance) {
+      handlePrev();
+    }
+  };
+
   return (
     <section className="relative py-12 sm:py-20 lg:py-24 bg-[#FFF3EB] text-slate-900 overflow-hidden border-b border-orange-200/60 w-full max-w-full">
       
@@ -65,11 +96,7 @@ export const TestimonialsSection: React.FC = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               type="button"
-              onClick={() => {
-                setActiveSlide((prev) => (prev > 0 ? prev - 1 : testimonials.length - 1));
-                const container = document.getElementById('testimonials-scroll');
-                if (container) container.scrollBy({ left: -300, behavior: 'smooth' });
-              }}
+              onClick={handlePrev}
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-orange-200 bg-white hover:bg-orange-50 flex items-center justify-center text-slate-800 transition-all cursor-pointer shadow-xs active:scale-95"
               aria-label="Previous testimonials"
             >
@@ -77,11 +104,7 @@ export const TestimonialsSection: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setActiveSlide((prev) => (prev < testimonials.length - 1 ? prev + 1 : 0));
-                const container = document.getElementById('testimonials-scroll');
-                if (container) container.scrollBy({ left: 300, behavior: 'smooth' });
-              }}
+              onClick={handleNext}
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-orange-200 bg-white hover:bg-orange-50 flex items-center justify-center text-slate-800 transition-all cursor-pointer shadow-xs active:scale-95"
               aria-label="Next testimonials"
             >
@@ -90,42 +113,89 @@ export const TestimonialsSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Responsive Cards: Horizontal touch snap on mobile, Grid on tablet & desktop */}
-        <div
-          id="testimonials-scroll"
-          className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar gap-3 sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6 pb-2 w-full max-w-full"
+        {/* Mobile View: Full-Width Box Card matching reference design with swipe */}
+        <div 
+          className="block sm:hidden w-full overflow-hidden"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
+          <div 
+            className="flex transition-transform duration-300 ease-out"
+            style={{ transform: `translateX(-${activeSlide * 100}%)` }}
+          >
+            {testimonials.map((t, idx) => (
+              <div key={idx} className="w-full min-w-full px-0.5">
+                <div className="bg-white rounded-3xl p-5 border border-orange-200/80 shadow-md flex flex-col justify-between">
+                  <div>
+                    {/* User Avatar & Info */}
+                    <div className="flex items-center gap-3.5 mb-3.5">
+                      <img
+                        src={t.avatar}
+                        alt={t.author}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-amber-400 shadow-xs shrink-0"
+                      />
+                      <div>
+                        <h3 className="font-bold text-base text-slate-900 leading-tight">
+                          {t.author}
+                        </h3>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">
+                          {t.role}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Full Quote */}
+                    <p className="text-sm text-slate-700 leading-relaxed italic font-normal">
+                      {t.quote}
+                    </p>
+                  </div>
+
+                  {/* Divider and Stars */}
+                  <div className="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center gap-1.5">
+                    {[...Array(t.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tablet & Desktop Grid: All 4 Cards displayed in matching box card style */}
+        <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
           {testimonials.map((t, idx) => (
             <div
               key={idx}
-              className="interactive-card group bg-white/95 text-slate-900 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-orange-200/80 shadow-sm flex flex-col justify-between hover:-translate-y-1.5 transition-all duration-300 min-w-[82vw] xs:min-w-[70vw] sm:min-w-0 snap-center shrink-0 sm:shrink"
+              className="bg-white rounded-3xl p-6 border border-orange-200/80 shadow-md flex flex-col justify-between hover:-translate-y-1.5 transition-all duration-300"
             >
-              <div className="space-y-3 sm:space-y-4">
-                {/* User Avatar */}
-                <div className="flex items-center gap-3">
+              <div>
+                {/* User Avatar & Info */}
+                <div className="flex items-center gap-3.5 mb-3.5">
                   <img
                     src={t.avatar}
                     alt={t.author}
-                    className="w-10 h-10 sm:w-11 sm:h-11 rounded-full object-cover border-2 border-amber-400/40 shadow-xs group-hover:scale-105 group-hover:border-amber-500 transition-all duration-300"
+                    className="w-11 h-11 rounded-full object-cover border-2 border-amber-400 shadow-xs shrink-0"
                   />
                   <div>
-                    <h3 className="font-bold text-xs sm:text-sm text-slate-900 leading-tight group-hover:text-amber-800 transition-colors">
+                    <h3 className="font-bold text-sm text-slate-900 leading-tight">
                       {t.author}
                     </h3>
-                    <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium">
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
                       {t.role}
                     </p>
                   </div>
                 </div>
 
                 {/* Quote */}
-                <p className="text-xs text-slate-600 leading-relaxed italic font-normal line-clamp-4 sm:line-clamp-none">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed italic font-normal">
                   {t.quote}
                 </p>
               </div>
 
-              {/* 5 Gold Stars */}
-              <div className="pt-3 sm:pt-4 mt-2 border-t border-slate-100 flex items-center gap-1 group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.5)] transition-all">
+              {/* Divider and Stars */}
+              <div className="pt-3.5 mt-3.5 border-t border-slate-100 flex items-center gap-1.5">
                 {[...Array(t.rating)].map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 ))}
@@ -140,14 +210,7 @@ export const TestimonialsSection: React.FC = () => {
             <button
               key={dot}
               type="button"
-              onClick={() => {
-                setActiveSlide(dot);
-                const container = document.getElementById('testimonials-scroll');
-                if (container) {
-                  const cardWidth = container.scrollWidth / testimonials.length;
-                  container.scrollTo({ left: dot * cardWidth, behavior: 'smooth' });
-                }
-              }}
+              onClick={() => setActiveSlide(dot)}
               className={`h-2 rounded-full transition-all cursor-pointer ${
                 activeSlide === dot ? 'w-6 bg-amber-500' : 'w-2 bg-orange-200 hover:bg-orange-300'
               }`}
