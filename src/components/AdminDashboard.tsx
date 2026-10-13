@@ -353,8 +353,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const fileSizeMb = file.size / (1024 * 1024);
+    if (fileSizeMb > 50) {
+      setDroneUploadStatus(`File is too large (${fileSizeMb.toFixed(1)} MB). Direct upload is limited to 50MB. Please compress your video (MP4 1080p/720p) or paste a YouTube / Vimeo / Cloud link below.`);
+      if (droneFileInputRef.current) droneFileInputRef.current.value = '';
+      return;
+    }
+
     setIsUploadingDroneVideo(true);
-    setDroneUploadStatus(`Uploading ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)...`);
+    setDroneUploadStatus(`Uploading ${file.name} (${fileSizeMb.toFixed(1)} MB)...`);
 
     try {
       const reader = new FileReader();
@@ -372,9 +379,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         body: JSON.stringify({ name: file.name, base64 })
       });
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to upload video');
+      const contentType = res.headers.get('content-type') || '';
+      let data: any = null;
+      if (contentType.includes('application/json')) {
+        try {
+          data = await res.json();
+        } catch {
+          data = null;
+        }
+      }
+
+      if (!res.ok || !data?.success) {
+        if (res.status === 413) {
+          throw new Error(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Please compress to under 50MB or paste a video link.`);
+        }
+        throw new Error(data?.error || `Upload failed (HTTP ${res.status}). Please try again or paste a link.`);
       }
 
       setDroneTourForm(prev => ({
@@ -3380,7 +3399,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                     Video Source (MP4 / WebM / Link) *
                   </label>
-                  <span className="text-[11px] text-amber-700 font-medium">Unlimited file size</span>
+                  <span className="text-[11px] text-amber-700 font-medium">Max 50MB (or paste link below)</span>
                 </div>
 
                 {/* Direct Video File Upload */}

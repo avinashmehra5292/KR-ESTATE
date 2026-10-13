@@ -152,8 +152,8 @@ function brochureRowToApi(row: any): any {
 }
 
 // Helper to upload base64 file to Supabase Storage (returns public URL)
-async function uploadToSupabaseStorage(base64Data: string, fileName: string, bucket: string): Promise<string | null> {
-  if (!supabase) return null;
+async function uploadToSupabaseStorage(base64Data: string, fileName: string, bucket: string): Promise<{ url: string | null; error?: string }> {
+  if (!supabase) return { url: null, error: 'Supabase client not initialized' };
   try {
     const matches = base64Data.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
     const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64Data, 'base64');
@@ -165,14 +165,14 @@ async function uploadToSupabaseStorage(base64Data: string, fileName: string, buc
 
     if (error) {
       console.error(`Supabase Storage upload error (${bucket}/${fileName}):`, error.message);
-      return null;
+      return { url: null, error: error.message };
     }
 
     const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(fileName);
-    return publicUrl.publicUrl;
+    return { url: publicUrl.publicUrl };
   } catch (err: any) {
     console.error('uploadToSupabaseStorage error:', err.message);
-    return null;
+    return { url: null, error: err.message };
   }
 }
 
@@ -223,9 +223,23 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// 3. Safe Body Parser Limits (25mb max to prevent heap-exhaustion DoS while supporting base64 uploads)
-app.use(express.json({ limit: '25mb' }));
-app.use(express.urlencoded({ limit: '25mb', extended: true }));
+// 3. Safe Body Parser Limits (100mb to support video uploads up to 75MB)
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
+
+// Handle payload-too-large and JSON parse errors gracefully as JSON (never return HTML)
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  if (err.type === 'entity.too.large' || err.status === 413) {
+    return res.status(413).json({
+      success: false,
+      error: 'File is too large for cloud upload (exceeds 100MB limit). Please compress the video or use a direct video link.'
+    });
+  }
+  if (err instanceof SyntaxError && 'body' in err) {
+    return res.status(400).json({ success: false, error: 'Malformed JSON payload.' });
+  }
+  next(err);
+});
 const staticCacheOptions = {
   maxAge: '7d',
   etag: true,
@@ -1042,9 +1056,12 @@ app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
 
       // Use Supabase Storage in production, local fs in development
       if (useSupabase && supabase) {
-        const publicUrl = await uploadToSupabaseStorage(base64, `videos/${fileName}`, 'uploads');
-        if (!publicUrl) {
-          return res.status(500).json({ success: false, error: 'Failed to upload video to cloud storage' });
+        const uploadResult = await uploadToSupabaseStorage(base64, `videos/${fileName}`, 'uploads');
+        if (!uploadResult.url) {
+          const errMsg = uploadResult.error && uploadResult.error.toLowerCase().includes('exceeded')
+            ? `Video file exceeds Supabase Storage free tier size limit (50MB). Please compress the video (MP4 1080p/720p) or paste a YouTube / Vimeo / direct cloud link.`
+            : `Failed to upload video to cloud storage: ${uploadResult.error || 'Upload failed'}. Please check your bucket settings or paste a video link.`;
+          return res.status(400).json({ success: false, error: errMsg });
         }
         const matches = base64.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
         const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64, 'base64');
@@ -1052,7 +1069,7 @@ app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
         console.log(`Uploaded video to Supabase Storage: ${fileName} (${sizeMb} MB)`);
         return res.json({
           success: true,
-          videoUrl: publicUrl,
+          videoUrl: uploadResult.url,
           fileName,
           sizeMb,
         });
@@ -1307,9 +1324,9 @@ async function processUploadedImages(body: any): Promise<string[]> {
       const fileName = `upload-${Date.now()}-${index + 1}.${rawExt}`;
 
       if (useSupabase && supabase) {
-        const publicUrl = await uploadToSupabaseStorage(base64, `images/${fileName}`, 'uploads');
-        if (publicUrl) return publicUrl;
-        console.warn('Supabase storage upload failed, falling back to local fs...');
+        const uploadResult = await uploadToSupabaseStorage(base64, `images/${fileName}`, 'uploads');
+        if (uploadResult.url) return uploadResult.url;
+        console.warn('Supabase storage upload failed, falling back to local fs...', uploadResult.error);
       }
 
       // Local filesystem storage

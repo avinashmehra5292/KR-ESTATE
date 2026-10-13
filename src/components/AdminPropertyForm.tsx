@@ -221,8 +221,15 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const fileSizeMb = file.size / (1024 * 1024);
+    if (fileSizeMb > 50) {
+      setError(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Direct upload limit is 50MB. Please compress your video (MP4 1080p/720p) or paste a YouTube / Vimeo / Cloud link.`);
+      if (videoInputRef.current) videoInputRef.current.value = '';
+      return;
+    }
+
     setIsUploadingVideo(true);
-    setVideoUploadStatus(`Preparing ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB)...`);
+    setVideoUploadStatus(`Preparing ${file.name} (${fileSizeMb.toFixed(1)} MB)...`);
 
     try {
       const reader = new FileReader();
@@ -242,9 +249,21 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
         body: JSON.stringify({ name: file.name, base64 })
       });
 
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Failed to upload video');
+      const contentType = res.headers.get('content-type') || '';
+      let data: any = null;
+      if (contentType.includes('application/json')) {
+        try {
+          data = await res.json();
+        } catch {
+          data = null;
+        }
+      }
+
+      if (!res.ok || !data?.success) {
+        if (res.status === 413) {
+          throw new Error(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Please compress the video to under 50MB or paste a video link.`);
+        }
+        throw new Error(data?.error || `Upload failed (HTTP ${res.status}). Please try again or paste a link.`);
       }
 
       setFormData(prev => ({
@@ -1084,7 +1103,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
                 <div>
                   <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 uppercase tracking-wide">
                     <Video className="w-4 h-4 text-amber-600" />
-                    Property Video Tour & Drone Flythrough (No Duration or Storage Limit)
+                    Property Video Tour & Drone Flythrough (Max 50MB per upload · Or paste any link)
                   </span>
                   <p className="text-[11px] text-slate-500 mt-0.5">
                     Upload an MP4/WebM video file directly from your computer or paste any video link (YouTube, Vimeo, MP4 stream).
