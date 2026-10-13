@@ -58,7 +58,7 @@ export interface DroneTour {
   title: string;
   sector: string;
   locality?: string;
-  duration: string;
+  duration?: string;
   videoUrl: string;
   fallbackUrl?: string;
   thumbnailUrl: string;

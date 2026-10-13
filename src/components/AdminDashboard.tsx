@@ -163,9 +163,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     locality: 'Expressway Growth Hub',
     videoUrl: '',
     thumbnailUrl: '',
-    duration: '02:45',
     description: '',
-    altitude: '180M • 4K 60FPS',
     badge: 'Master Corridor · 4K 60FPS',
     isFeatured: false
   });
@@ -280,9 +278,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         locality: existingTour.locality || 'Expressway Growth Hub',
         videoUrl: existingTour.videoUrl,
         thumbnailUrl: existingTour.thumbnailUrl || '/corridor-expressway.jpg',
-        duration: existingTour.duration || '02:45',
         description: existingTour.description || '',
-        altitude: existingTour.altitude || '180M • 4K 60FPS',
         badge: existingTour.badge || 'Master Corridor · 4K 60FPS',
         isFeatured: Boolean(existingTour.isFeatured)
       });
@@ -294,9 +290,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
         locality: 'Expressway Growth Hub',
         videoUrl: '',
         thumbnailUrl: '/corridor-expressway.jpg',
-        duration: '02:45',
         description: 'Comprehensive 4K aerial drone survey capturing master corridors, arterial sector roads, and regional growth masterplan developments.',
-        altitude: '180M • 4K 60FPS',
         badge: 'Master Corridor · 4K 60FPS',
         isFeatured: false
       });
@@ -2314,9 +2308,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                               Featured
                             </div>
                           )}
-                          <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white font-mono">
-                            {tour.duration || '02:45'}
-                          </div>
                         </div>
 
                         {/* Content */}
@@ -2331,9 +2322,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                             <p className="text-xs text-slate-600 line-clamp-2 mt-1">
                               {tour.description}
                             </p>
-                            <div className="mt-2 text-[11px] text-slate-400 font-mono truncate">
-                              Telemetry: {tour.altitude || '180M • 4K 60FPS'}
-                            </div>
+                            {tour.badge && (
+                              <div className="mt-2 text-[11px] text-amber-700/80 font-medium truncate">
+                                {tour.badge}
+                              </div>
+                            )}
                           </div>
 
                           {/* Actions */}
@@ -2343,7 +2336,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                               onClick={() => setPreviewDroneVideo({
                                 title: tour.title,
                                 videoUrl: tour.videoUrl,
-                                duration: tour.duration,
                                 description: tour.description
                               })}
                               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 transition-colors cursor-pointer"
@@ -3361,7 +3353,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <h3 className="font-bold text-base text-slate-900">
                     {editingDroneTourId ? 'Edit 4K Drone Tour' : 'Add New 4K Drone Tour'}
                   </h3>
-                  <p className="text-xs text-slate-500">Configure aerial survey footage, flight corridor telemetry, and showcase overview.</p>
+                  <p className="text-xs text-slate-500">Configure aerial survey footage, flight corridor overview, and badge label.</p>
                 </div>
               </div>
               <button
@@ -3418,45 +3410,18 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* Duration, Altitude & Badge Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Flight Duration *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={droneTourForm.duration}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, duration: e.target.value }))}
-                    placeholder="e.g. 02:45"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Telemetry / Altitude
-                  </label>
-                  <input
-                    type="text"
-                    value={droneTourForm.altitude || ''}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, altitude: e.target.value }))}
-                    placeholder="e.g. 180M • 4K 60FPS"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Badge Label
-                  </label>
-                  <input
-                    type="text"
-                    value={droneTourForm.badge || ''}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, badge: e.target.value }))}
-                    placeholder="e.g. Master Corridor · 4K 60FPS"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
-                  />
-                </div>
+              {/* Badge Label */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Badge Label
+                </label>
+                <input
+                  type="text"
+                  value={droneTourForm.badge || ''}
+                  onChange={(e) => setDroneTourForm(prev => ({ ...prev, badge: e.target.value }))}
+                  placeholder="e.g. Master Corridor · 4K 60FPS"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
+                />
               </div>
 
               {/* Featured toggle */}
@@ -3556,15 +3521,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <video
                     src={droneTourForm.videoUrl}
                     controls
-                    onLoadedMetadata={(e) => {
-                      const sec = Math.round(e.currentTarget.duration);
-                      if (sec && !isNaN(sec)) {
-                        const mins = Math.floor(sec / 60);
-                        const remainingSec = sec % 60;
-                        const formatted = `${String(mins).padStart(2, '0')}:${String(remainingSec).padStart(2, '0')}`;
-                        setDroneTourForm(prev => ({ ...prev, duration: formatted }));
-                      }
-                    }}
                     className="w-full max-h-48 rounded-lg bg-black object-contain"
                   />
                 </div>
@@ -3630,7 +3586,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <div className="min-w-0">
                   <h3 className="font-bold text-sm text-white truncate">{previewDroneVideo.title}</h3>
                   <p className="text-[11px] text-neutral-400 truncate">
-                    {isPreviewPortrait ? 'Vertical Portrait Tour' : (previewDroneVideo.duration || '4K UHD Aerial Experience')}
+                    {isPreviewPortrait ? 'Vertical Portrait Tour' : '4K UHD Aerial Experience'}
                   </p>
                 </div>
               </div>
