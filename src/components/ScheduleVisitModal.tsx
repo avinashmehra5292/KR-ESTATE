@@ -72,18 +72,18 @@ Pickup Required: ${pickupRequired ? `Yes (${pickupCity === 'Others' ? customPick
       className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
       onClick={onClose}
     >
-      <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+      <div className="flex min-h-full items-center justify-center p-2.5 sm:p-6">
         <div 
-          className="relative w-full max-w-xl rounded-3xl border border-orange-200/90 bg-[#FFF8F3] shadow-[0_25px_60px_rgba(0,0,0,0.35)] overflow-hidden p-6 sm:p-8 text-slate-900 text-left my-8 ring-1 ring-amber-500/20"
+          className="relative w-full max-w-xl rounded-2xl sm:rounded-3xl border border-orange-200/90 bg-[#FFF8F3] shadow-[0_25px_60px_rgba(0,0,0,0.35)] overflow-hidden p-4 sm:p-8 text-slate-900 text-left my-4 sm:my-8 ring-1 ring-amber-500/20"
           onClick={(e) => e.stopPropagation()}
         >
         
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-6 right-6 p-2 rounded-full bg-white hover:bg-orange-100 text-slate-500 hover:text-slate-900 border border-orange-200 transition-colors cursor-pointer"
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 p-1.5 sm:p-2 rounded-full bg-white hover:bg-orange-100 text-slate-500 hover:text-slate-900 border border-orange-200 transition-colors cursor-pointer"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4 sm:h-5 sm:w-5" />
         </button>
 
         {submitted ? (

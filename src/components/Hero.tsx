@@ -58,14 +58,14 @@ export const Hero: React.FC<HeroProps> = ({
     <section id="home" className="relative min-h-[calc(100dvh-4rem)] lg:min-h-[calc(100vh-5rem)] flex flex-col justify-between overflow-hidden bg-[#FFF3EB]">
       
       {/* Sunset Luxury Penthouse Balcony Skyline Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none w-full max-w-full">
         {/* Instant 0ms Base64 Warm Blur Placeholder */}
         <div
-          className="absolute inset-0 bg-cover bg-center filter blur-xl scale-110 block lg:hidden"
+          className="absolute inset-0 bg-cover bg-center filter blur-xl scale-100 block lg:hidden"
           style={{ backgroundImage: `url("${MOBILE_BLUR}")` }}
         />
         <div
-          className="absolute inset-0 bg-cover bg-[center_28%] filter blur-xl scale-110 hidden lg:block"
+          className="absolute inset-0 bg-cover bg-[center_28%] filter blur-xl scale-105 hidden lg:block"
           style={{ backgroundImage: `url("${DESKTOP_BLUR}")` }}
         />
 
@@ -106,7 +106,7 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="absolute bottom-0 inset-x-0 z-2 h-20 sm:h-28 bg-gradient-to-t from-[#FFF3EB] to-transparent" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-6 lg:pt-8 pb-2 sm:pb-5 lg:pb-8 w-full flex-1 flex flex-col justify-between">
+      <div className="relative z-10 max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-2 sm:pt-6 lg:pt-8 pb-2 sm:pb-5 lg:pb-8 w-full max-w-full flex-1 flex flex-col justify-between">
         
         {/* Top Split: Left Editorial & Right Floating Info Badges */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-6 lg:gap-8 items-start pt-1 sm:pt-4 lg:pt-6">
@@ -204,7 +204,7 @@ export const Hero: React.FC<HeroProps> = ({
         </div>
 
         {/* Bottom Floating Search Dock & 6 Quick Navigation Categories */}
-        <div className="mt-2 sm:mt-6 lg:mt-8 space-y-2 sm:space-y-4">
+        <div className="mt-2 sm:mt-6 lg:mt-8 space-y-2 sm:space-y-4 w-full max-w-full overflow-hidden">
           
           {/* Glass Search Bar */}
           <div className="w-full bg-white/95 backdrop-blur-xl border border-orange-200/80 rounded-xl sm:rounded-2xl p-2 sm:p-3.5 shadow-xl shadow-amber-950/5">
@@ -289,7 +289,7 @@ export const Hero: React.FC<HeroProps> = ({
           </div>
 
           {/* Row of 6 Quick Action Round Icons: Sleek horizontal scroll on mobile, responsive grid on desktop */}
-          <div className="flex overflow-x-auto no-scrollbar gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-6 pt-0.5 pb-1">
+          <div className="flex overflow-x-auto no-scrollbar gap-2 sm:grid sm:grid-cols-3 lg:grid-cols-6 pt-0.5 pb-1 w-full max-w-full">
             {[
               {
                 icon: Briefcase,

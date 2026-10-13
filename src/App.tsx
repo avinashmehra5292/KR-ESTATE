@@ -155,10 +155,10 @@ export default function App() {
 
   return (
     <SiteSettingsProvider>
-      <div className="min-h-screen bg-[#FFF3EB] text-slate-900 flex flex-col font-sans-body selection:bg-amber-500 selection:text-white relative overflow-x-hidden">
+      <div className="min-h-screen bg-[#FFF3EB] text-slate-900 flex flex-col font-sans-body selection:bg-amber-500 selection:text-white relative w-full max-w-full overflow-x-hidden">
 
         {/* Decorative ambient background lighting mesh for luxury peach ambiance */}
-        <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none">
+        <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none w-full max-w-full">
           <div className="absolute top-[-15%] left-[-10%] w-[55%] h-[55%] rounded-full bg-amber-400/15 blur-[140px] animate-ambient-1" />
           <div className="absolute top-[25%] right-[-15%] w-[50%] h-[65%] rounded-full bg-orange-300/15 blur-[150px] animate-ambient-2" />
           <div className="absolute bottom-[-15%] left-[20%] w-[60%] h-[55%] rounded-full bg-rose-300/10 blur-[140px] animate-ambient-1" style={{ animationDelay: '5s' }} />
@@ -173,7 +173,7 @@ export default function App() {
           onOpenAdminLogin={() => setAdminLoginOpen(true)}
         />
 
-        <main className="flex-1">
+        <main className="flex-1 w-full max-w-full overflow-x-hidden">
           {/* Hero Section */}
           <Hero
             onSearch={(params) => setSearchFilterParams(params)}

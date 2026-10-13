@@ -50,27 +50,27 @@ export const EmiCalculator: React.FC = () => {
   };
 
   return (
-    <section id="calculator" className="py-20 lg:py-28 border-b border-orange-200/60 bg-[#FBE8DC]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="calculator" className="py-10 sm:py-20 lg:py-28 border-b border-orange-200/60 bg-[#FBE8DC] w-full max-w-full overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full max-w-full">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <div className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+          <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 mb-1.5 sm:mb-2">
             Financial Planning
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+          <h2 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-slate-900">
             Home Loan &amp; EMI Calculator
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-slate-700 leading-relaxed">
+          <p className="mt-2 text-xs sm:text-base text-slate-700 leading-relaxed">
             Calculate your monthly repayment schedules with competitive interest rates from top institutional lenders in Noida.
           </p>
         </div>
 
         {/* Calculator Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center max-w-6xl mx-auto">
           
           {/* Sliders Input Panel (Col 7) */}
-          <div className="lg:col-span-7 rounded-3xl border border-orange-200/80 bg-white/95 p-6 sm:p-8 backdrop-blur-xl shadow-xl space-y-6">
+          <div className="lg:col-span-7 rounded-2xl sm:rounded-3xl border border-orange-200/80 bg-white/95 p-4 sm:p-8 backdrop-blur-xl shadow-lg space-y-5 sm:space-y-6">
             
             {/* Loan Amount Slider */}
             <div>
@@ -79,7 +79,7 @@ export const EmiCalculator: React.FC = () => {
                   <IndianRupee className="h-3.5 w-3.5 text-amber-700" />
                   Loan Amount
                 </label>
-                <span className="font-mono text-lg font-bold text-amber-800 tabular-nums">
+                <span className="font-mono text-base sm:text-lg font-bold text-amber-800 tabular-nums">
                   {formatRupees(loanAmountLakhs * 100000)}
                 </span>
               </div>
@@ -99,13 +99,13 @@ export const EmiCalculator: React.FC = () => {
                 <span>₹10 Cr</span>
               </div>
               {/* Quick Presets */}
-              <div className="flex flex-wrap gap-2 mt-2.5">
+              <div className="flex flex-wrap gap-1.5 sm:gap-2 mt-2.5">
                 {[50, 100, 150, 250, 500].map((amt) => (
                   <button
                     key={amt}
                     type="button"
                     onClick={() => setLoanAmountLakhs(amt)}
-                    className={`px-3 py-1 text-xs rounded-lg transition-all cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs rounded-lg transition-all cursor-pointer ${
                       loanAmountLakhs === amt
                         ? 'bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold shadow-md'
                         : 'bg-orange-50 text-slate-700 hover:text-slate-950 hover:bg-orange-100 border border-orange-200/80'
@@ -124,7 +124,7 @@ export const EmiCalculator: React.FC = () => {
                   <Percent className="h-3.5 w-3.5 text-amber-700" />
                   Interest Rate (% p.a.)
                 </label>
-                <span className="font-mono text-lg font-bold text-slate-900 tabular-nums">
+                <span className="font-mono text-base sm:text-lg font-bold text-slate-900 tabular-nums">
                   {interestRate.toFixed(2)}%
                 </span>
               </div>
@@ -149,10 +149,10 @@ export const EmiCalculator: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
                   <Clock className="h-3.5 w-3.5 text-amber-700" />
-                  Loan Duration (Tenure)
+                  Loan Duration
                 </label>
-                <span className="font-mono text-lg font-bold text-slate-900 tabular-nums">
-                  {tenureYears} Years ({tenureYears * 12} Months)
+                <span className="font-mono text-sm sm:text-base font-bold text-slate-900 tabular-nums">
+                  {tenureYears} Yrs <span className="text-slate-500 text-xs font-normal">({tenureYears * 12}m)</span>
                 </span>
               </div>
               <input
@@ -175,7 +175,7 @@ export const EmiCalculator: React.FC = () => {
           </div>
 
           {/* Results Summary Box (Col 5) */}
-          <div className="lg:col-span-5 rounded-3xl border border-amber-500/40 bg-gradient-to-br from-[#1C120C] via-[#2A1B12] to-[#180F0A] p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden text-white">
+          <div className="lg:col-span-5 rounded-2xl sm:rounded-3xl border border-amber-500/40 bg-gradient-to-br from-[#1C120C] via-[#2A1B12] to-[#180F0A] p-5 sm:p-8 backdrop-blur-xl shadow-xl relative overflow-hidden text-white">
             <div className="absolute top-0 right-0 -mr-12 -mt-12 h-44 w-44 rounded-full bg-amber-500/15 blur-3xl pointer-events-none" />
 
             <div className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">

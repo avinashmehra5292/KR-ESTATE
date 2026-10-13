@@ -40,7 +40,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <article 
       onClick={() => onSelectProperty(property)}
-      className="group interactive-card flex flex-col rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer relative"
+      className="group interactive-card flex flex-col rounded-2xl sm:rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer relative"
     >
       {/* ================= TOP PHOTO BANNER ================= */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
@@ -101,7 +101,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
       </div>
 
       {/* ================= CARD BODY ================= */}
-      <div className="flex flex-1 flex-col p-5 sm:p-6 justify-between space-y-4">
+      <div className="flex flex-1 flex-col p-4 sm:p-6 justify-between space-y-3.5 sm:space-y-4">
         
         <div>
           {/* Sector & BHK Subtitle */}

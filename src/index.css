@@ -4,6 +4,9 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light;
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
   }
 
   body {
@@ -11,6 +14,9 @@
     background-color: #FFF3EB;
     color: #1e293b;
     overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
+    position: relative;
   }
 
   /* Amber Text Selection Highlight */

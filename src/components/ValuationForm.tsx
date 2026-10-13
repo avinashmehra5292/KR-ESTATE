@@ -56,48 +56,48 @@ export const ValuationForm: React.FC = () => {
   };
 
   return (
-    <section id="valuation" className="py-20 lg:py-28 border-b border-orange-200/60 bg-[#FBE8DC]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="valuation" className="py-10 sm:py-20 lg:py-28 border-b border-orange-200/60 bg-[#FBE8DC] w-full max-w-full overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full max-w-full">
         
-        <div className="rounded-3xl border border-orange-200/80 bg-gradient-to-br from-white via-[#FFF8F2] to-[#FCEEE3] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+        <div className="rounded-2xl sm:rounded-3xl border border-orange-200/80 bg-gradient-to-br from-white via-[#FFF8F2] to-[#FCEEE3] p-4 sm:p-8 lg:p-12 shadow-xl relative overflow-hidden">
           <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/15 rounded-full blur-[140px] pointer-events-none" />
           
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center relative">
             
             {/* Left Narrative (Col 5) */}
-            <div className="lg:col-span-5 space-y-4">
-              <div className="text-xs font-bold uppercase tracking-wider text-amber-700">
+            <div className="lg:col-span-5 space-y-3 sm:space-y-4">
+              <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700">
                 Owners &amp; Investors Desk
               </div>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
+              <h2 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
                 Selling or Renting Your Property in Noida?
               </h2>
-              <p className="text-sm text-slate-700 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                 Connect with KR Estate’s dedicated resale and leasing desk. We provide institutional valuation grounded in actual circle rates, active transaction velocity, and verified NRI &amp; domestic buyer pools.
               </p>
 
-              <div className="space-y-3 pt-4 border-t border-orange-200/80 text-xs text-slate-700 font-medium">
+              <div className="space-y-2.5 sm:space-y-3 pt-3 sm:pt-4 border-t border-orange-200/80 text-xs text-slate-700 font-medium">
                 <div className="flex items-center gap-2.5">
-                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)]" />
+                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)] shrink-0" />
                   <span>Free certified market valuation within 24 hours</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)]" />
+                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)] shrink-0" />
                   <span>Pre-qualified corporate tenant matching &amp; legal documentation</span>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)]" />
+                  <div className="h-2 w-2 rounded-full bg-amber-600 shadow-[0_0_8px_rgba(217,119,6,0.5)] shrink-0" />
                   <span>Direct escrow &amp; bank loan assistance for prospective buyers</span>
                 </div>
               </div>
 
               <div className="pt-2 text-xs text-slate-600">
-                Inquiries routed directly to: <span className="text-amber-800 font-mono font-semibold">{settings.agency.email || 'avinashmehra5292@gmail.com'}</span>
+                Inquiries routed directly to: <span className="text-amber-800 font-mono font-semibold break-all">{settings.agency.email || 'avinashmehra5292@gmail.com'}</span>
               </div>
             </div>
 
             {/* Right Form (Col 7) */}
-            <div className="lg:col-span-7 rounded-2xl bg-white/95 border border-orange-200/90 p-6 sm:p-8 shadow-xl">
+            <div className="lg:col-span-7 rounded-xl sm:rounded-2xl bg-white/95 border border-orange-200/90 p-4 sm:p-8 shadow-md sm:shadow-xl">
               {submitted ? (
                 <div className="text-center py-10 space-y-4 animate-in fade-in duration-300">
                   <div className="mx-auto h-16 w-16 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)]">

@@ -1102,23 +1102,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
 
               {/* Row 2: The 4 Top KPI Metric Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
                 
                 {/* 1. Total Properties */}
-                <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-                        <Home className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                        <Home className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 block">Total Properties</span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-slate-500 block truncate">Total Properties</span>
                     <div className="flex items-end justify-between mt-1">
-                      <div className="text-3xl font-black text-slate-900 tracking-tight">
+                      <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                         {propertiesList.length}
                       </div>
                       {/* Sparkline Blue */}
-                      <svg className="w-16 h-7 overflow-visible" viewBox="0 0 64 28" fill="none">
+                      <svg className="w-16 h-7 overflow-visible hidden sm:block" viewBox="0 0 64 28" fill="none">
                         <path
                           d="M2 24 C 18 24, 24 14, 38 16 C 48 18, 52 6, 62 4"
                           stroke="#38BDF8"
@@ -1131,33 +1131,33 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </div>
                   <button
                     onClick={() => setActiveTab('properties')}
-                    className="text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center gap-1 mt-4 text-left cursor-pointer"
+                    className="text-[11px] sm:text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center gap-1 mt-2.5 sm:mt-4 text-left cursor-pointer"
                   >
-                    <span>View all properties</span>
+                    <span>View all</span>
                     <span>&rarr;</span>
                   </button>
                 </div>
 
                 {/* 2. 4K Drone Tours */}
-                <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
-                        <Video className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                        <Video className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 block">4K Drone Tours</span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-slate-500 block truncate">4K Drone Tours</span>
                     <div className="flex items-end justify-between mt-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-3xl font-black text-slate-900 tracking-tight">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                           {propertiesList.filter(p => p.videoTour?.videoUrl).length || 1}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200/80">
-                          + Active
+                        <span className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200/80">
+                          Active
                         </span>
                       </div>
                       {/* Sparkline Purple */}
-                      <svg className="w-16 h-7 overflow-visible" viewBox="0 0 64 28" fill="none">
+                      <svg className="w-16 h-7 overflow-visible hidden sm:block" viewBox="0 0 64 28" fill="none">
                         <path
                           d="M2 20 C 16 24, 26 10, 38 18 C 46 24, 52 12, 62 8"
                           stroke="#A855F7"
@@ -1170,34 +1170,34 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </div>
                   <button
                     onClick={() => setActiveTab('drone_tours')}
-                    className="text-xs font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1 mt-4 text-left cursor-pointer"
+                    className="text-[11px] sm:text-xs font-semibold text-purple-600 hover:text-purple-700 flex items-center gap-1 mt-2.5 sm:mt-4 text-left cursor-pointer"
                   >
-                    <span>Manage tours</span>
+                    <span>Manage</span>
                     <span>&rarr;</span>
                   </button>
                 </div>
 
                 {/* 3. Brochure & Site Inquiries */}
-                <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                        <FileText className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                        <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 block">Brochure &amp; Site Inquiries</span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-slate-500 block truncate">Inquiries</span>
                     <div className="flex items-end justify-between mt-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-3xl font-black text-slate-900 tracking-tight">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                           {brochureLeads.length > 0 ? brochureLeads.length : 16}
                         </span>
-                        <span className="text-[10px] font-semibold text-emerald-600 flex items-center gap-1">
+                        <span className="text-[9px] sm:text-[10px] font-semibold text-emerald-600 hidden xs:inline-flex items-center gap-1">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                          <span>Live WhatsApp alerts</span>
+                          <span>Live</span>
                         </span>
                       </div>
                       {/* Sparkline Amber */}
-                      <svg className="w-16 h-7 overflow-visible" viewBox="0 0 64 28" fill="none">
+                      <svg className="w-16 h-7 overflow-visible hidden sm:block" viewBox="0 0 64 28" fill="none">
                         <path
                           d="M2 24 C 16 24, 28 22, 38 16 C 48 8, 54 12, 62 4"
                           stroke="#F59E0B"
@@ -1210,29 +1210,29 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </div>
                   <button
                     onClick={() => setActiveTab('inquiries')}
-                    className="text-xs font-semibold text-amber-600 hover:text-amber-700 flex items-center gap-1 mt-4 text-left cursor-pointer"
+                    className="text-[11px] sm:text-xs font-semibold text-amber-600 hover:text-amber-700 flex items-center gap-1 mt-2.5 sm:mt-4 text-left cursor-pointer"
                   >
-                    <span>View inquiries</span>
+                    <span>View all</span>
                     <span>&rarr;</span>
                   </button>
                 </div>
 
                 {/* 4. Website Live Modules */}
-                <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
+                <div className="bg-white rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] flex flex-col justify-between hover:shadow-md transition-shadow">
                   <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                        <Globe className="w-5 h-5" />
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                        <Globe className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
-                    <span className="text-xs font-semibold text-slate-500 block">Website Live Modules</span>
+                    <span className="text-[11px] sm:text-xs font-semibold text-slate-500 block truncate">Live Status</span>
                     <div className="flex items-end justify-between mt-1">
                       <div>
-                        <div className="text-3xl font-black text-slate-900 tracking-tight">100%</div>
-                        <div className="text-[11px] text-slate-400 font-medium">All modules active</div>
+                        <div className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">100%</div>
+                        <div className="text-[10px] sm:text-[11px] text-slate-400 font-medium">All active</div>
                       </div>
                       {/* Sparkline Emerald */}
-                      <svg className="w-16 h-7 overflow-visible" viewBox="0 0 64 28" fill="none">
+                      <svg className="w-16 h-7 overflow-visible hidden sm:block" viewBox="0 0 64 28" fill="none">
                         <path
                           d="M2 22 C 18 22, 28 18, 38 12 C 48 6, 56 10, 62 4"
                           stroke="#10B981"
@@ -1245,9 +1245,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </div>
                   <button
                     onClick={() => setActiveTab('website_content')}
-                    className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 mt-4 text-left cursor-pointer"
+                    className="text-[11px] sm:text-xs font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 mt-2.5 sm:mt-4 text-left cursor-pointer"
                   >
-                    <span>Manage website</span>
+                    <span>Manage</span>
                     <span>&rarr;</span>
                   </button>
                 </div>
@@ -1993,7 +1993,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
 
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
+                <div className="sm:hidden px-3.5 py-1.5 bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 flex items-center justify-between font-medium">
+                  <span>Swipe horizontally to view all columns</span>
+                  <span>&rarr;</span>
+                </div>
+                <div className="overflow-x-auto overscroll-x-contain">
                   <table className="w-full min-w-[650px] text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">
@@ -2928,7 +2932,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               </div>
 
               <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
+                <div className="sm:hidden px-3.5 py-1.5 bg-slate-50 border-b border-slate-200 text-[10px] text-slate-500 flex items-center justify-between font-medium">
+                  <span>Swipe horizontally to view all columns</span>
+                  <span>&rarr;</span>
+                </div>
+                <div className="overflow-x-auto overscroll-x-contain">
                   <table className="w-full min-w-[720px] text-left border-collapse">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-xs uppercase tracking-wider text-slate-500">

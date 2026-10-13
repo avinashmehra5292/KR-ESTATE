@@ -88,7 +88,7 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
   return (
     <section
       id="impact"
-      className="relative py-14 sm:py-16 lg:py-20 bg-[#FFF3EB] text-slate-900 overflow-hidden border-b border-orange-200/60"
+      className="relative py-10 sm:py-16 lg:py-20 bg-[#FFF3EB] text-slate-900 overflow-hidden border-b border-orange-200/60 w-full max-w-full"
     >
       {/* Subtle ambient lighting mesh */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -120,13 +120,13 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
             </div>
 
             {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-4 my-7 pt-1">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 my-5 sm:my-7 pt-1">
               {/* Stat 1: Appreciation */}
               <div className="flex flex-col">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   {/* Appreciation Graph Icon */}
                   <svg
-                    className="w-5 h-5 text-amber-600 shrink-0"
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -142,23 +142,23 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                     <path d="m6 13 5-5 4 4 5-6" />
                     <path d="M16 6h4v4" />
                   </svg>
-                  <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
+                  <span className="text-base sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
                     14.2%
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-600 leading-[1.3] mt-1.5 font-sans">
-                  Avg. Appreciation
+                <div className="text-[10px] sm:text-[11px] text-slate-600 leading-tight mt-1 sm:mt-1.5 font-sans">
+                  Avg. Growth
                   <br />
-                  <span className="text-slate-500">(Expressway)</span>
+                  <span className="text-slate-500 text-[9px] sm:text-[10px]">(Expressway)</span>
                 </div>
               </div>
 
               {/* Stat 2: Verified Listings */}
               <div className="flex flex-col">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   {/* Verified Shield Icon */}
                   <svg
-                    className="w-5 h-5 text-amber-600 shrink-0"
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -170,23 +170,23 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     <path d="m9 12 2 2 4-4" />
                   </svg>
-                  <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
+                  <span className="text-base sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
                     250+
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-600 leading-[1.3] mt-1.5 font-sans">
-                  Premium Portfolio
+                <div className="text-[10px] sm:text-[11px] text-slate-600 leading-tight mt-1 sm:mt-1.5 font-sans">
+                  Curated
                   <br />
-                  Listings
+                  Portfolios
                 </div>
               </div>
 
               {/* Stat 3: Client Satisfaction */}
               <div className="flex flex-col">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   {/* Satisfaction Seal Icon */}
                   <svg
-                    className="w-5 h-5 text-amber-600 shrink-0"
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 shrink-0"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -199,14 +199,14 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                     <path d="m9 12 2 2 4-4" />
                     <path d="M12 1.5v2M12 20.5v2M1.5 12h2M20.5 12h2" />
                   </svg>
-                  <span className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
+                  <span className="text-base sm:text-2xl font-bold text-slate-900 tracking-tight font-sans">
                     98%
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-600 leading-[1.3] mt-1.5 font-sans">
+                <div className="text-[10px] sm:text-[11px] text-slate-600 leading-tight mt-1 sm:mt-1.5 font-sans">
                   Client
                   <br />
-                  Satisfaction
+                  Trust Rate
                 </div>
               </div>
             </div>

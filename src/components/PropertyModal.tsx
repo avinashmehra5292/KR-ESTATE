@@ -126,7 +126,7 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
     <>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200">
         <div 
-          className="relative w-full max-w-7xl h-[92vh] sm:h-[95vh] max-h-[96vh] flex flex-col lg:flex-row rounded-3xl border border-amber-500/30 bg-[#0A0E18] shadow-[0_25px_70px_rgba(0,0,0,0.85)] ring-1 ring-amber-500/20 overflow-hidden text-slate-100"
+          className="relative w-full max-w-7xl h-[92vh] sm:h-[95vh] max-h-[96vh] flex flex-col lg:flex-row rounded-2xl sm:rounded-3xl border border-amber-500/30 bg-[#0A0E18] shadow-[0_25px_70px_rgba(0,0,0,0.85)] ring-1 ring-amber-500/20 overflow-hidden text-slate-100"
           onClick={(e) => e.stopPropagation()}
         >
           {/* ======================================================== */}
@@ -135,7 +135,7 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
           <div className="w-full lg:w-[50%] xl:w-[52%] flex flex-col h-full bg-[#0A0E18] order-2 lg:order-1 overflow-hidden border-t lg:border-t-0 lg:border-r border-slate-800">
             
             {/* Scrollable Details Content */}
-            <div className="flex-1 overflow-y-auto p-5 sm:p-7 lg:p-8 space-y-7">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-7 lg:p-8 space-y-5 sm:space-y-7">
               
               {/* Property Title & Header */}
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-slate-800">
@@ -571,7 +571,7 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
           {/* ======================================================== */}
           {/* RIGHT COLUMN: Interactive High-Res Gallery Showcase      */}
           {/* ======================================================== */}
-          <div className="w-full lg:w-[50%] xl:w-[48%] flex flex-col h-[340px] sm:h-[400px] lg:h-full bg-slate-950 relative order-1 lg:order-2 overflow-hidden select-none shrink-0 lg:shrink">
+          <div className="w-full lg:w-[50%] xl:w-[48%] flex flex-col h-[220px] sm:h-[360px] lg:h-full bg-slate-950 relative order-1 lg:order-2 overflow-hidden select-none shrink-0 lg:shrink">
             
             {/* Atmospheric Ambient Glow Layer */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -585,12 +585,12 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
             </div>
 
             {/* Floating Top Control Toolbar */}
-            <div className="absolute top-3.5 sm:top-4 inset-x-3.5 sm:inset-x-5 z-30 flex items-center justify-between pointer-events-none">
+            <div className="absolute top-2.5 sm:top-4 inset-x-2.5 sm:inset-x-5 z-30 flex items-center justify-between pointer-events-none">
               {/* Left Tags */}
-              <div className="flex items-center gap-2 pointer-events-auto">
-                <span className="flex items-center gap-1.5 text-xs font-semibold text-white bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 shadow-lg">
-                  <Camera className="h-3.5 w-3.5 text-amber-400" />
-                  <span>Photo {activePhotoIdx + 1} of {gallery.length}</span>
+              <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
+                <span className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-white bg-black/75 backdrop-blur-md px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full border border-white/20 shadow-lg">
+                  <Camera className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-amber-400" />
+                  <span>{activePhotoIdx + 1} / {gallery.length}</span>
                 </span>
 
                 {property.videoTour && onWatchVideo && (
@@ -600,9 +600,9 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
                       onClose();
                       onWatchVideo(property.videoTour);
                     }}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3.5 py-1.5 rounded-full transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                    className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
                   >
-                    <Play className="h-3.5 w-3.5 fill-current" />
+                    <Play className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />
                     <span className="hidden sm:inline">Watch 4K Tour</span>
                     <span className="sm:hidden">Video</span>
                   </button>
@@ -610,38 +610,38 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
               </div>
 
               {/* Right Controls (Expand + Close) */}
-              <div className="flex items-center gap-2 pointer-events-auto">
+              <div className="flex items-center gap-1.5 sm:gap-2 pointer-events-auto">
                 <button
                   onClick={() => setIsLightboxOpen(true)}
-                  className="w-9 h-9 rounded-full bg-black/75 hover:bg-black/90 text-white hover:text-amber-300 backdrop-blur-md border border-white/20 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-black/90 text-white hover:text-amber-300 backdrop-blur-md border border-white/20 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center"
                   title="Fullscreen Lightbox"
                   aria-label="Fullscreen Lightbox"
                 >
-                  <Maximize2 className="h-4 w-4" />
+                  <Maximize2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </button>
                 <button
                   onClick={onClose}
-                  className="w-9 h-9 rounded-full bg-black/75 hover:bg-black/90 text-white hover:text-rose-400 backdrop-blur-md border border-white/20 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/75 hover:bg-black/90 text-white hover:text-rose-400 backdrop-blur-md border border-white/20 shadow-lg transition-all hover:scale-105 active:scale-95 cursor-pointer flex items-center justify-center"
                   title="Close modal"
                   aria-label="Close modal"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </button>
               </div>
             </div>
 
             {/* Central High-Resolution Display Stage */}
             <div 
-              className="relative flex-1 flex items-center justify-center p-4 sm:p-6 overflow-hidden cursor-pointer"
+              className="relative flex-1 flex items-center justify-center p-2 sm:p-6 overflow-hidden cursor-pointer"
               onClick={() => setIsLightboxOpen(true)}
               title="Click to view full-screen lightbox"
             >
-              <div className="relative max-h-full max-w-full flex items-center justify-center rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:border-amber-400/40 transition-all duration-300">
+              <div className="relative max-h-full max-w-full flex items-center justify-center rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl border border-white/10 group-hover:border-amber-400/40 transition-all duration-300">
                 <img
                   key={activePhotoIdx}
                   src={currentPhoto.url}
                   alt={currentPhoto.caption || property.title}
-                  className="max-h-[220px] sm:max-h-[280px] lg:max-h-[52vh] xl:max-h-[58vh] w-auto max-w-full object-contain rounded-2xl animate-in fade-in zoom-in-95 duration-300"
+                  className="max-h-[160px] sm:max-h-[280px] lg:max-h-[52vh] xl:max-h-[58vh] w-auto max-w-full object-contain rounded-xl sm:rounded-2xl animate-in fade-in zoom-in-95 duration-300"
                 />
 
                 {/* Subtle Hover Action Pill */}

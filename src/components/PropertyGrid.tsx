@@ -112,7 +112,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
   return (
     <section 
       id="properties" 
-      className="py-16 lg:py-24 bg-[#FBE8DC] text-slate-900 border-b border-orange-200/60 relative overflow-hidden"
+      className="py-12 sm:py-16 lg:py-24 bg-[#FBE8DC] text-slate-900 border-b border-orange-200/60 relative overflow-hidden w-full max-w-full"
     >
       {/* Subtle ambient lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -120,18 +120,18 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[350px] bg-orange-300/10 blur-[150px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full max-w-full">
         
         {/* ================= SECTION HEADER ================= */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div>
-            <div className="text-[11px] font-bold uppercase tracking-[0.2em] text-amber-800 mb-2 font-mono">
+            <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-amber-800 mb-1.5 sm:mb-2 font-mono">
               VERIFIED PORTFOLIOS
             </div>
-            <h2 className="font-serif-luxury text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 uppercase leading-[1.15]">
+            <h2 className="font-serif-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 uppercase leading-[1.15]">
               CURATED PROPERTIES IN NOIDA &amp; JEWAR CORRIDOR
             </h2>
-            <p className="text-slate-700 text-xs sm:text-sm mt-2 max-w-3xl leading-relaxed">
+            <p className="text-slate-700 text-xs sm:text-sm mt-1.5 sm:mt-2 max-w-3xl leading-relaxed">
               Hand-vetted residential landmarks and commercial assets with clean land titles, RERA approvals, and institutional developer track records.
             </p>
           </div>
@@ -147,10 +147,10 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
         </div>
 
         {/* ================= FILTER & SEARCH TOOLBAR ================= */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-10 pb-2">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-10 pb-2 w-full max-w-full">
           
           {/* Left Category Tabs (Pills) */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full max-w-full">
             {CATEGORY_TABS.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
