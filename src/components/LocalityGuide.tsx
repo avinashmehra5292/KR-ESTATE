@@ -224,7 +224,7 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
           </div>
 
           {/* ================= CENTER COLUMN: CORRIDOR TWILIGHT SHOWCASE ================= */}
-          <div className="lg:col-span-4 relative rounded-[22px] overflow-hidden group min-h-[340px] sm:min-h-[360px] lg:min-h-[380px] border border-amber-500/30 shadow-xl flex flex-col justify-end p-6 sm:p-7">
+          <div className="lg:col-span-4 relative rounded-3xl overflow-hidden group min-h-[380px] sm:min-h-[420px] lg:min-h-[460px] border border-black/10 shadow-2xl shadow-slate-900/15 flex flex-col justify-end p-6 sm:p-7">
             {/* Background Corridor Image with smooth transitions */}
             <img
               key={activeCorridor.id}
@@ -243,22 +243,19 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                 <h3 className="font-serif-luxury text-2xl sm:text-3xl text-white font-normal tracking-tight leading-tight">
                   {activeCorridor.name}
                 </h3>
-                <p className="text-xs sm:text-[13px] text-[#E0E8E4]/90 font-normal mt-1 leading-snug">
+                <p className="text-xs sm:text-[13px] text-white/90 font-normal mt-1 leading-snug">
                   {activeCorridor.subtitle}
                 </p>
               </div>
 
-              {/* Watch Drone Tour Button with Radar Halo */}
+              {/* Watch Drone Tour Button */}
               <button
                 type="button"
                 onClick={handlePlayTour}
-                className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/45 hover:bg-black/70 backdrop-blur-md border border-[#C5A059]/75 hover:border-[#C5A059] text-white text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-lg group/btn shine-sweep"
+                className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-md border border-white/20 hover:border-white/40 text-white text-xs font-semibold tracking-wide transition-all cursor-pointer shadow-lg"
               >
-                <div className="relative flex items-center justify-center">
-                  <span className="absolute inset-0 rounded-full bg-[#C5A059]/40 animate-radar-halo" />
-                  <div className="w-6 h-6 rounded-full bg-black/60 border border-[#C5A059]/60 flex items-center justify-center text-white shrink-0 group-hover/btn:bg-[#C5A059] group-hover/btn:text-black group-hover/btn:border-[#C5A059] transition-all relative z-10">
-                    <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
-                  </div>
+                <div className="w-6 h-6 rounded-full bg-black/70 border border-white/30 flex items-center justify-center text-white shrink-0">
+                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                 </div>
                 <span>Watch Drone Tour</span>
               </button>
@@ -266,35 +263,32 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
           </div>
 
           {/* ================= RIGHT COLUMN: KEY GROWTH CORRIDORS CARD ================= */}
-          <div className="lg:col-span-4 bg-white/95 backdrop-blur-xl border border-orange-200/80 rounded-[22px] p-6 sm:p-7 flex flex-col justify-between shadow-xl relative overflow-hidden">
-            {/* Top gold glow hairline */}
-            <div className="absolute inset-x-0 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400/60 to-transparent pointer-events-none" />
-
+          <div className="lg:col-span-4 bg-white border border-orange-100/60 rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xl shadow-orange-950/5 relative overflow-hidden">
             <div>
               {/* Header */}
-              <div className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.22em] text-amber-800 font-sans">
+              <div className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.2em] text-amber-800 font-sans">
                 KEY GROWTH CORRIDORS
               </div>
 
               {/* Hairline subtle line under header */}
-              <div className="h-[1px] bg-orange-200/80 mt-3.5 mb-4" />
+              <div className="h-[1px] bg-orange-100/80 mt-3.5 mb-4" />
 
               {/* 3 Corridor Items */}
-              <div className="space-y-3.5">
+              <div className="space-y-2">
                 {/* Item 1: Noida Expressway */}
                 <div
                   onClick={() => handleCorridorClick(CORRIDORS[0])}
-                  className={`flex items-start gap-3.5 p-2 rounded-xl transition-all cursor-pointer group ${
+                  className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all cursor-pointer group ${
                     selectedCorridorId === 'expressway'
-                      ? 'bg-orange-100/60'
-                      : 'hover:bg-orange-50/70'
+                      ? 'bg-[#FFF1E8]'
+                      : 'hover:bg-orange-50/60'
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-full border flex items-center justify-center shrink-0 transition-all ${
                       selectedCorridorId === 'expressway'
-                        ? 'border-amber-600 bg-amber-500/20 text-amber-800'
-                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-500 group-hover:bg-amber-100/50'
+                        ? 'border-amber-300/80 bg-amber-100/80 text-amber-800'
+                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-400 group-hover:bg-amber-100/50'
                     }`}
                   >
                     {/* Expressway Roads SVG */}
@@ -324,22 +318,22 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                 </div>
 
                 {/* Subtle Divider 1 */}
-                <div className="h-[1px] bg-orange-200/60" />
+                <div className="h-[1px] bg-orange-100/60" />
 
                 {/* Item 2: Sector 150 Sports City */}
                 <div
                   onClick={() => handleCorridorClick(CORRIDORS[1])}
-                  className={`flex items-start gap-3.5 p-2 rounded-xl transition-all cursor-pointer group ${
+                  className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all cursor-pointer group ${
                     selectedCorridorId === 'sec150'
-                      ? 'bg-orange-100/60'
-                      : 'hover:bg-orange-50/70'
+                      ? 'bg-[#FFF1E8]'
+                      : 'hover:bg-orange-50/60'
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-full border flex items-center justify-center shrink-0 transition-all ${
                       selectedCorridorId === 'sec150'
-                        ? 'border-amber-600 bg-amber-500/20 text-amber-800'
-                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-500 group-hover:bg-amber-100/50'
+                        ? 'border-amber-300/80 bg-amber-100/80 text-amber-800'
+                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-400 group-hover:bg-amber-100/50'
                     }`}
                   >
                     {/* Sports City Shield SVG */}
@@ -368,22 +362,22 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
                 </div>
 
                 {/* Subtle Divider 2 */}
-                <div className="h-[1px] bg-orange-200/60" />
+                <div className="h-[1px] bg-orange-100/60" />
 
                 {/* Item 3: Jewar Airport */}
                 <div
                   onClick={() => handleCorridorClick(CORRIDORS[2])}
-                  className={`flex items-start gap-3.5 p-2 rounded-xl transition-all cursor-pointer group ${
+                  className={`flex items-start gap-3.5 p-3 rounded-2xl transition-all cursor-pointer group ${
                     selectedCorridorId === 'jewar'
-                      ? 'bg-orange-100/60'
-                      : 'hover:bg-orange-50/70'
+                      ? 'bg-[#FFF1E8]'
+                      : 'hover:bg-orange-50/60'
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-full border flex items-center justify-center shrink-0 transition-all ${
                       selectedCorridorId === 'jewar'
-                        ? 'border-amber-600 bg-amber-500/20 text-amber-800'
-                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-500 group-hover:bg-amber-100/50'
+                        ? 'border-amber-300/80 bg-amber-100/80 text-amber-800'
+                        : 'border-orange-200 bg-orange-50 text-amber-700 group-hover:border-amber-400 group-hover:bg-amber-100/50'
                     }`}
                   >
                     {/* Airplane SVG */}
@@ -412,13 +406,13 @@ export const LocalityGuide: React.FC<LocalityGuideProps> = ({
             </div>
 
             {/* Bottom Link: Explore All Corridors */}
-            <div className="pt-4 border-t border-white/[0.08] mt-4">
+            <div className="pt-4 border-t border-orange-100/80 mt-4">
               <a
                 href="#properties"
-                className="inline-flex items-center gap-2 text-xs font-semibold text-[#C5A059] hover:text-[#F3D98A] transition-colors group/link"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:text-amber-800 transition-colors group/link"
               >
                 <span>Explore All Corridors</span>
-                <ArrowRight className="w-3.5 h-3.5 text-[#C5A059] group-hover/link:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-700 group-hover/link:translate-x-1 transition-transform" />
               </a>
             </div>
           </div>

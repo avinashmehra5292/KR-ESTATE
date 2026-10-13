@@ -62,39 +62,39 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
         
         {/* Header */}
         <div className="max-w-2xl mb-12">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-800 mb-2 font-sans">
             <Sparkles className="h-4 w-4 text-amber-600 animate-pulse" />
             <span>AI Real Estate Matchmaker</span>
           </div>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-slate-900">
+          <h2 className="font-serif-luxury text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 uppercase">
             KR Estate Smart Property Advisory
           </h2>
-          <p className="mt-2 text-sm sm:text-base text-slate-700 leading-relaxed">
+          <p className="mt-2 text-sm sm:text-base text-slate-700 leading-relaxed font-normal">
             Powered by Gemini intelligence trained on real-time Noida micro-market transactions, RERA records, and infrastructure timelines.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
           
-          {/* Query Configuration Form (Col 5 on tablet & desktop) */}
-          <div className="md:col-span-5 rounded-3xl border border-orange-200/80 bg-white p-5 sm:p-7 md:p-8 shadow-lg text-slate-900 flex flex-col justify-between">
+          {/* Query Configuration Form (Col 5) */}
+          <div className="lg:col-span-5 rounded-3xl border border-orange-100/60 bg-white p-6 sm:p-8 shadow-xl shadow-orange-950/5 flex flex-col justify-between text-slate-900">
             <div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+              <h3 className="text-sm font-bold text-slate-900 mb-6 flex items-center gap-2">
                 <Bot className="h-4 w-4 text-amber-600" />
                 <span>Specify Your Investment Criteria</span>
               </h3>
 
-              <form onSubmit={handleGenerateReport} className="space-y-3.5 sm:space-y-4">
+              <form onSubmit={handleGenerateReport} className="space-y-4">
                 
                 {/* Goal */}
                 <div>
-                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                  <label className="text-xs font-bold text-slate-800 block mb-1.5">
                     Primary Objective
                   </label>
                   <select
                     value={goal}
                     onChange={(e) => setGoal(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                    className="w-full px-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl bg-white border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer shadow-2xs"
                   >
                     <option value="end_use" className="bg-white text-slate-900">Family Living / End-Use Residence</option>
                     <option value="rental_income" className="bg-white text-slate-900">High Rental Income &amp; Corporate Tenants</option>
@@ -105,13 +105,13 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
 
                 {/* Budget */}
                 <div>
-                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                  <label className="text-xs font-bold text-slate-800 block mb-1.5">
                     Budget Allocation
                   </label>
                   <select
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                    className="w-full px-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl bg-white border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer shadow-2xs"
                   >
                     <option value="under_1cr" className="bg-white text-slate-900">Under ₹1.00 Crore</option>
                     <option value="1.5cr_3cr" className="bg-white text-slate-900">₹1.50 Cr – ₹3.00 Cr</option>
@@ -122,13 +122,13 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
 
                 {/* Configuration */}
                 <div>
-                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                  <label className="text-xs font-bold text-slate-800 block mb-1.5">
                     Desired Configuration
                   </label>
                   <select
                     value={config}
                     onChange={(e) => setConfig(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                    className="w-full px-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl bg-white border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer shadow-2xs"
                   >
                     <option value="2bhk" className="bg-white text-slate-900">2 BHK Apartment / Suite</option>
                     <option value="3bhk" className="bg-white text-slate-900">3 BHK Luxury Residence</option>
@@ -140,13 +140,13 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
 
                 {/* Priority */}
                 <div>
-                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                  <label className="text-xs font-bold text-slate-800 block mb-1.5">
                     Non-Negotiable Priority
                   </label>
                   <select
                     value={preference}
                     onChange={(e) => setPreference(e.target.value)}
-                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                    className="w-full px-4 py-2.5 sm:py-3 text-xs sm:text-sm rounded-2xl bg-white border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer shadow-2xs"
                   >
                     <option value="greens" className="bg-white text-slate-900">Maximum Greenery &amp; Sports Infrastructure (Sec 150)</option>
                     <option value="metro" className="bg-white text-slate-900">Walking Distance to Metro Station</option>
@@ -161,7 +161,7 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                    className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5 active:scale-95"
                   >
                     {loading ? (
                       <>
@@ -181,8 +181,8 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
             </div>
           </div>
 
-          {/* AI Output Executive Report (Col 7 on tablet & desktop) */}
-          <div className="md:col-span-7 rounded-3xl border border-orange-200/80 bg-white p-5 sm:p-7 md:p-8 shadow-lg min-h-[300px] md:min-h-full flex flex-col justify-between text-slate-900">
+          {/* AI Output Executive Report (Col 7) */}
+          <div className="lg:col-span-7 rounded-3xl border border-orange-100/60 bg-white p-6 sm:p-8 shadow-xl shadow-orange-950/5 min-h-[380px] lg:min-h-full flex flex-col justify-center text-slate-900">
             
             {advisoryReport ? (
               <div className="space-y-5 animate-in fade-in duration-300">
@@ -246,13 +246,13 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center text-center my-auto py-8 sm:py-12 px-3 sm:px-6">
-                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-orange-100/90 border border-orange-200/80 text-amber-700 flex items-center justify-center mb-3 sm:mb-4 shadow-xs">
-                  <Bot className="h-7 w-7 sm:h-8 sm:w-8 text-amber-600" />
+                <div className="h-16 w-16 rounded-2xl bg-[#FFF0E5] border border-orange-200/60 text-amber-600 flex items-center justify-center mb-5 shadow-xs">
+                  <Bot className="h-8 w-8 text-amber-600" />
                 </div>
-                <h4 className="text-sm sm:text-base font-bold text-slate-900 font-display uppercase tracking-wider">
+                <h4 className="font-serif-luxury text-base sm:text-lg font-bold text-slate-900 uppercase tracking-wide">
                   Instant Algorithmic Property Advisory
                 </h4>
-                <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed">
+                <p className="mt-2.5 text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed">
                   Select your criteria to receive a custom investment memo detailing recommended developments, projected rental yields, and corridor infrastructure analysis.
                 </p>
               </div>
