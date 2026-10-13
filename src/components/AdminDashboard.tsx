@@ -13,6 +13,7 @@ import { AdminPropertyForm } from './AdminPropertyForm';
 import { useSiteSettings } from '../context/SiteSettingsContext';
 import defaultLocalities from '../data/localities.json';
 import { getAdminAuthHeaders, clearAdminAuth } from '../utils/adminAuth';
+import { VideoSizeExceededModal } from './VideoSizeExceededModal';
 
 interface AdminDashboardProps {
   onClose: () => void;
@@ -168,6 +169,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
   const [isPreviewPortrait, setIsPreviewPortrait] = useState(false);
   const [deletingDroneTourId, setDeletingDroneTourId] = useState<string | null>(null);
   const droneFileInputRef = useRef<HTMLInputElement>(null);
+  const droneUrlInputRef = useRef<HTMLInputElement>(null);
+  const [sizeExceededModal, setSizeExceededModal] = useState<{
+    isOpen: boolean;
+    sizeMb: number;
+    fileName: string;
+  }>({
+    isOpen: false,
+    sizeMb: 0,
+    fileName: ''
+  });
 
   // Forms for Website Content
   const [heroForm, setHeroForm] = useState(settings.hero);
@@ -355,7 +366,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
     const fileSizeMb = file.size / (1024 * 1024);
     if (fileSizeMb > 50) {
-      setDroneUploadStatus(`File is too large (${fileSizeMb.toFixed(1)} MB). Direct upload is limited to 50MB. Please compress your video (MP4 1080p/720p) or paste a YouTube / Vimeo / Cloud link below.`);
+      setSizeExceededModal({
+        isOpen: true,
+        sizeMb: fileSizeMb,
+        fileName: file.name
+      });
+      setDroneUploadStatus(`File is too large (${fileSizeMb.toFixed(1)} MB). Direct upload is limited to 50MB. Please paste a YouTube or Google Drive link below.`);
       if (droneFileInputRef.current) droneFileInputRef.current.value = '';
       return;
     }
@@ -394,7 +410,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
         if (!uploadRes.ok) {
           if (uploadRes.status === 413) {
-            throw new Error(`Video file exceeds cloud storage size limit (50MB). Please compress the video to under 50MB or paste a link.`);
+            setSizeExceededModal({
+              isOpen: true,
+              sizeMb: fileSizeMb,
+              fileName: file.name
+            });
+            throw new Error(`Video file exceeds cloud storage size limit (50MB). Please paste a YouTube or Google Drive link.`);
           }
           let errDetail = `HTTP ${uploadRes.status}`;
           try {
@@ -455,6 +476,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
       setTimeout(() => setDroneUploadStatus(''), 4000);
     } catch (err: any) {
       console.error(err);
+      if (fileSizeMb > 50 || err.message?.toLowerCase().includes('50mb') || err.message?.toLowerCase().includes('too large') || err.message?.toLowerCase().includes('exceeds')) {
+        setSizeExceededModal({
+          isOpen: true,
+          sizeMb: fileSizeMb,
+          fileName: file.name
+        });
+      }
       setDroneUploadStatus(`Upload failed: ${err.message}`);
     } finally {
       setIsUploadingDroneVideo(false);
@@ -3479,11 +3507,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 )}
 
                 <input
+                  ref={droneUrlInputRef}
                   type="text"
                   required
                   value={droneTourForm.videoUrl}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, videoUrl: e.target.value }))}
-                  placeholder="https://... or /uploads/videos/drone-tour.mp4"
+                  placeholder="e.g. https://youtube.com/watch?v=... or https://drive.google.com/file/d/... or /uploads/videos/..."
                   className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
                 />
               </div>
@@ -3619,7 +3648,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
             {/* Video Player */}
             <div className={`relative ${isPreviewPortrait ? 'aspect-[9/16] max-h-[72vh]' : 'aspect-video'} bg-black flex items-center justify-center overflow-hidden`}>
-              {isPreviewPortrait && (
+              {isPreviewPortrait && !previewDroneVideo.videoUrl?.includes('youtube.com') && !previewDroneVideo.videoUrl?.includes('youtu.be') && !previewDroneVideo.videoUrl?.includes('drive.google.com') && (
                 <video
                   src={previewDroneVideo.videoUrl}
                   muted
@@ -3630,20 +3659,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-125 pointer-events-none"
                 />
               )}
-              <video
-                key={previewDroneVideo.videoUrl}
-                src={previewDroneVideo.videoUrl}
-                controls
-                autoPlay
-                playsInline
-                onLoadedMetadata={(e) => {
-                  const { videoWidth, videoHeight } = e.currentTarget;
-                  if (videoWidth && videoHeight) {
-                    setIsPreviewPortrait(videoHeight > videoWidth);
-                  }
-                }}
-                className="w-full h-full object-contain relative z-10"
-              />
+
+              {previewDroneVideo.videoUrl?.includes('youtube.com') || previewDroneVideo.videoUrl?.includes('youtu.be') ? (
+                <iframe
+                  src={previewDroneVideo.videoUrl.includes('/shorts/') ? previewDroneVideo.videoUrl.replace('/shorts/', '/embed/') : previewDroneVideo.videoUrl.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/')}
+                  className="w-full h-full relative z-10"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : previewDroneVideo.videoUrl?.includes('drive.google.com') ? (
+                <iframe
+                  src={previewDroneVideo.videoUrl.includes('/file/d/') ? `https://drive.google.com/file/d/${previewDroneVideo.videoUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)?.[1] || ''}/preview` : previewDroneVideo.videoUrl.replace(/\/view(\?.*)?$/, '/preview')}
+                  className="w-full h-full relative z-10 border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  key={previewDroneVideo.videoUrl}
+                  src={previewDroneVideo.videoUrl}
+                  controls
+                  autoPlay
+                  playsInline
+                  onLoadedMetadata={(e) => {
+                    const { videoWidth, videoHeight } = e.currentTarget;
+                    if (videoWidth && videoHeight) {
+                      setIsPreviewPortrait(videoHeight > videoWidth);
+                    }
+                  }}
+                  className="w-full h-full object-contain relative z-10"
+                />
+              )}
             </div>
 
             {/* Description Footer */}
@@ -3655,6 +3701,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
           </div>
         </div> 
       )}
+
+      {/* Video Size Exceeded Modal Suggesting YouTube / Google Drive */}
+      <VideoSizeExceededModal
+        isOpen={sizeExceededModal.isOpen}
+        onClose={() => setSizeExceededModal(prev => ({ ...prev, isOpen: false }))}
+        fileSizeMb={sizeExceededModal.sizeMb}
+        fileName={sizeExceededModal.fileName}
+        onPasteLinkClick={() => {
+          setTimeout(() => {
+            if (droneUrlInputRef.current) {
+              droneUrlInputRef.current.focus();
+              droneUrlInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 150);
+        }}
+      />
     </div>
   );
 };

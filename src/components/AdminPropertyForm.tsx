@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 import { Property, FloorPlan, PropertyType, PropertyStatus } from '../types';
 import { getAdminAuthHeaders } from '../utils/adminAuth';
+import { VideoSizeExceededModal } from './VideoSizeExceededModal';
 
 interface AdminPropertyFormProps {
   onClose: () => void;
@@ -42,8 +43,18 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
   const [existingGalleryImages, setExistingGalleryImages] = useState<{ url: string; caption: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const videoUrlInputRef = useRef<HTMLInputElement>(null);
   const [isUploadingVideo, setIsUploadingVideo] = useState(false);
   const [videoUploadStatus, setVideoUploadStatus] = useState<string>('');
+  const [sizeExceededModal, setSizeExceededModal] = useState<{
+    isOpen: boolean;
+    sizeMb: number;
+    fileName: string;
+  }>({
+    isOpen: false,
+    sizeMb: 0,
+    fileName: ''
+  });
 
   // Amenity temporary input states
   const [newAmenityInput, setNewAmenityInput] = useState('');
@@ -223,7 +234,12 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
 
     const fileSizeMb = file.size / (1024 * 1024);
     if (fileSizeMb > 50) {
-      setError(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Direct upload limit is 50MB. Please compress your video (MP4 1080p/720p) or paste a YouTube / Vimeo / Cloud link.`);
+      setSizeExceededModal({
+        isOpen: true,
+        sizeMb: fileSizeMb,
+        fileName: file.name
+      });
+      setError(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Direct upload limit is 50MB. Please paste a YouTube or Google Drive link.`);
       if (videoInputRef.current) videoInputRef.current.value = '';
       return;
     }
@@ -330,6 +346,13 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
       setTimeout(() => setVideoUploadStatus(''), 4500);
     } catch (err: any) {
       console.error(err);
+      if (fileSizeMb > 50 || err.message?.toLowerCase().includes('50mb') || err.message?.toLowerCase().includes('too large') || err.message?.toLowerCase().includes('exceeds')) {
+        setSizeExceededModal({
+          isOpen: true,
+          sizeMb: fileSizeMb,
+          fileName: file.name
+        });
+      }
       setError(`Video upload failed: ${err.message}`);
       setVideoUploadStatus('');
     } finally {
@@ -1208,11 +1231,12 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
                     Video URL or Stream Link
                   </label>
                   <input 
+                    ref={videoUrlInputRef}
                     name="videoUrl" 
                     value={formData.videoTour?.videoUrl || ''} 
                     onChange={handleVideoTourChange} 
                     className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400" 
-                    placeholder="e.g. /uploads/videos/... or https://youtube.com/watch?v=..." 
+                    placeholder="e.g. https://youtube.com/watch?v=... or https://drive.google.com/file/d/... or /uploads/videos/..." 
                   />
                 </div>
                 <div>
@@ -1899,11 +1923,31 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
     </div>
   );
 
-  if (inlineMode) return formContent;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-      {formContent}
-    </div>
+    <>
+      {inlineMode ? (
+        formContent
+      ) : (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
+          {formContent}
+        </div>
+      )}
+
+      {/* Video Size Exceeded Modal Suggesting YouTube / Google Drive */}
+      <VideoSizeExceededModal
+        isOpen={sizeExceededModal.isOpen}
+        onClose={() => setSizeExceededModal(prev => ({ ...prev, isOpen: false }))}
+        fileSizeMb={sizeExceededModal.sizeMb}
+        fileName={sizeExceededModal.fileName}
+        onPasteLinkClick={() => {
+          setTimeout(() => {
+            if (videoUrlInputRef.current) {
+              videoUrlInputRef.current.focus();
+              videoUrlInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+          }, 150);
+        }}
+      />
+    </>
   );
 };

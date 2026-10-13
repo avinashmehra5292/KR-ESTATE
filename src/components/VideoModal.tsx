@@ -90,11 +90,25 @@ export const VideoModal: React.FC<VideoModalProps> = ({
     activeVideo.videoUrl?.includes('youtu.be')
   );
 
+  const isGoogleDrive = Boolean(
+    activeVideo.videoUrl?.includes('drive.google.com')
+  );
+
   const getYoutubeEmbedUrl = (url: string) => {
     if (url.includes('/shorts/')) {
       return url.replace('/shorts/', '/embed/');
     }
     return url.replace('watch?v=', 'embed/').replace('youtu.be/', 'youtube.com/embed/');
+  };
+
+  const getGoogleDriveEmbedUrl = (url: string) => {
+    if (url.includes('/file/d/')) {
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+      }
+    }
+    return url.replace(/\/view(\?.*)?$/, '/preview');
   };
 
   return (
@@ -133,7 +147,7 @@ export const VideoModal: React.FC<VideoModalProps> = ({
         {/* Video Player Container */}
         <div className={`relative ${isPortrait ? 'w-full aspect-[9/16] max-h-[60vh] sm:max-h-[66vh] mx-auto' : 'aspect-video w-full'} bg-black group overflow-hidden flex items-center justify-center transition-all duration-300`}>
           {/* Ambient Blurred Backdrop for Portrait Videos */}
-          {isPortrait && !isYoutube && (
+          {isPortrait && !isYoutube && !isGoogleDrive && (
             <video
               src={activeVideo.videoUrl}
               muted
@@ -149,6 +163,13 @@ export const VideoModal: React.FC<VideoModalProps> = ({
             <iframe
               src={getYoutubeEmbedUrl(activeVideo.videoUrl)}
               className="w-full h-full relative z-10"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : isGoogleDrive ? (
+            <iframe
+              src={getGoogleDriveEmbedUrl(activeVideo.videoUrl)}
+              className="w-full h-full relative z-10 border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />

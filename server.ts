@@ -332,13 +332,13 @@ async function getOrInitAdminCredentials(): Promise<AdminCredentials> {
         creds.salt = crypto.randomBytes(16).toString('hex');
         creds.hash = hashPassword(process.env.ADMIN_PASSWORD, creds.salt);
         creds.updatedAt = new Date().toISOString();
-        try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch {}
+        try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch { }
       }
     }
 
     if (process.env.ADMIN_USERNAME && creds.username.toLowerCase() !== process.env.ADMIN_USERNAME.toLowerCase()) {
       creds.username = process.env.ADMIN_USERNAME;
-      try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch {}
+      try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch { }
     }
 
     if (process.env.ADMIN_TOTP_SECRET && !creds.totpSecret) {
@@ -803,7 +803,7 @@ Keep the tone authoritative, trustworthy, and actionable. Do not use generic buz
     }
 
     if (!reportText) {
-      const cleanGoal = typeof goal === 'string' 
+      const cleanGoal = typeof goal === 'string'
         ? goal.replace(/[<>{}`$]/g, '').replace(/SYSTEM_PROMPT|API_KEY|DROP\s+TABLE|--/gi, '').trim().slice(0, 100)
         : 'wealth generation';
       const cleanBudget = typeof budget === 'string'
@@ -1284,7 +1284,7 @@ app.post('/api/admin/localities', async (req: Request, res: Response) => {
       const file = path.resolve(__dirname, 'src', 'data', 'localities.ts');
       const newContent = `import { LocalityInfo } from '../types';\n\nexport const NOIDA_LOCALITIES: LocalityInfo[] = ${JSON.stringify(req.body, null, 2)};\n`;
       await fs.writeFile(file, newContent, 'utf8');
-      
+
       // Also keep localities.json synchronized
       const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
       await fs.writeFile(jsonPath, JSON.stringify(req.body, null, 2), 'utf8');
@@ -1429,8 +1429,8 @@ app.post('/api/admin/properties', async (req: Request, res: Response) => {
       req.body.coverImage = uploadedUrls[0];
       req.body.galleryImages = uploadedUrls.map((url, idx) => ({
         url,
-        caption: idx === 0 
-          ? (req.body.title ? `${req.body.title} - Main View` : 'Main View') 
+        caption: idx === 0
+          ? (req.body.title ? `${req.body.title} - Main View` : 'Main View')
           : `${req.body.title || 'Property'} - Photo ${idx + 1}`
       }));
     }
@@ -1450,11 +1450,11 @@ app.post('/api/admin/properties', async (req: Request, res: Response) => {
     req.body.totalAcres = req.body.totalAcres ? Number(req.body.totalAcres) : 0;
     req.body.openGreensPercentage = req.body.openGreensPercentage ? Number(req.body.openGreensPercentage) : 0;
 
-    req.body.shortDescription = req.body.shortDescription?.trim() || 
-      req.body.tagline?.trim() || 
+    req.body.shortDescription = req.body.shortDescription?.trim() ||
+      req.body.tagline?.trim() ||
       `Ultra-luxury development by ${developer} located in ${sector}, featuring bespoke architectural design, state-of-the-art amenities, and rapid expressway connectivity.`;
 
-    req.body.fullDescription = req.body.fullDescription?.trim() || 
+    req.body.fullDescription = req.body.fullDescription?.trim() ||
       `${title} sets a new benchmark in luxury living at ${sector}, Noida. Conceived by ${developer}, this distinguished landmark offers expansive floor layouts, panoramic skyline vistas, and world-class recreational facilities.`;
 
     req.body.distanceToMetro = req.body.distanceToMetro?.trim() || '';
