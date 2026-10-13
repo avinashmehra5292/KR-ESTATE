@@ -74,113 +74,115 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 lg:gap-8 items-stretch max-w-6xl mx-auto">
           
-          {/* Query Configuration Form (Col 5) */}
-          <div className="lg:col-span-5 rounded-2xl sm:rounded-3xl border border-orange-200/80 bg-white/95 p-4 sm:p-8 backdrop-blur-xl shadow-lg text-slate-900">
-            <h3 className="text-xs sm:text-sm font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
-              <Bot className="h-4 w-4 text-amber-600" />
-              Specify Your Investment Criteria
-            </h3>
+          {/* Query Configuration Form (Col 5 on tablet & desktop) */}
+          <div className="md:col-span-5 rounded-3xl border border-orange-200/80 bg-white p-5 sm:p-7 md:p-8 shadow-lg text-slate-900 flex flex-col justify-between">
+            <div>
+              <h3 className="text-xs sm:text-sm font-bold text-slate-900 mb-4 sm:mb-6 flex items-center gap-2">
+                <Bot className="h-4 w-4 text-amber-600" />
+                <span>Specify Your Investment Criteria</span>
+              </h3>
 
-            <form onSubmit={handleGenerateReport} className="space-y-3.5 sm:space-y-4">
-              
-              {/* Goal */}
-              <div>
-                <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
-                  Primary Objective
-                </label>
-                <select
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs rounded-xl bg-orange-50/60 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer"
-                >
-                  <option value="end_use" className="bg-white text-slate-900">Family Living / End-Use Residence</option>
-                  <option value="rental_income" className="bg-white text-slate-900">High Rental Income &amp; Corporate Tenants</option>
-                  <option value="capital_growth" className="bg-white text-slate-900">Long-Term Capital Compounding (Jewar Airport Belt)</option>
-                  <option value="commercial_retail" className="bg-white text-slate-900">Commercial High-Street Retail / Office ROI</option>
-                </select>
-              </div>
+              <form onSubmit={handleGenerateReport} className="space-y-3.5 sm:space-y-4">
+                
+                {/* Goal */}
+                <div>
+                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                    Primary Objective
+                  </label>
+                  <select
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                  >
+                    <option value="end_use" className="bg-white text-slate-900">Family Living / End-Use Residence</option>
+                    <option value="rental_income" className="bg-white text-slate-900">High Rental Income &amp; Corporate Tenants</option>
+                    <option value="capital_growth" className="bg-white text-slate-900">Long-Term Capital Compounding (Jewar Airport Belt)</option>
+                    <option value="commercial_retail" className="bg-white text-slate-900">Commercial High-Street Retail / Office ROI</option>
+                  </select>
+                </div>
 
-              {/* Budget */}
-              <div>
-                <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
-                  Budget Allocation
-                </label>
-                <select
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value)}
-                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs rounded-xl bg-orange-50/60 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer"
-                >
-                  <option value="under_1cr" className="bg-white text-slate-900">Under ₹1.00 Crore</option>
-                  <option value="1.5cr_3cr" className="bg-white text-slate-900">₹1.50 Cr – ₹3.00 Cr</option>
-                  <option value="3cr_6cr" className="bg-white text-slate-900">₹3.00 Cr – ₹6.00 Cr</option>
-                  <option value="ultra_luxury" className="bg-white text-slate-900">Ultra-Luxury (₹6.00 Cr – ₹20.00 Cr+)</option>
-                </select>
-              </div>
+                {/* Budget */}
+                <div>
+                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                    Budget Allocation
+                  </label>
+                  <select
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                  >
+                    <option value="under_1cr" className="bg-white text-slate-900">Under ₹1.00 Crore</option>
+                    <option value="1.5cr_3cr" className="bg-white text-slate-900">₹1.50 Cr – ₹3.00 Cr</option>
+                    <option value="3cr_6cr" className="bg-white text-slate-900">₹3.00 Cr – ₹6.00 Cr</option>
+                    <option value="ultra_luxury" className="bg-white text-slate-900">Ultra-Luxury (₹6.00 Cr – ₹20.00 Cr+)</option>
+                  </select>
+                </div>
 
-              {/* Configuration */}
-              <div>
-                <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
-                  Desired Configuration
-                </label>
-                <select
-                  value={config}
-                  onChange={(e) => setConfig(e.target.value)}
-                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs rounded-xl bg-orange-50/60 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer"
-                >
-                  <option value="2bhk" className="bg-white text-slate-900">2 BHK Apartment / Suite</option>
-                  <option value="3bhk" className="bg-white text-slate-900">3 BHK Luxury Residence</option>
-                  <option value="4bhk" className="bg-white text-slate-900">4 BHK Sky Mansion / Penthouse</option>
-                  <option value="plot" className="bg-white text-slate-900">Freehold Plotted Villa Land</option>
-                  <option value="commercial_office" className="bg-white text-slate-900">Lockable Grade-A Commercial Space</option>
-                </select>
-              </div>
+                {/* Configuration */}
+                <div>
+                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                    Desired Configuration
+                  </label>
+                  <select
+                    value={config}
+                    onChange={(e) => setConfig(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                  >
+                    <option value="2bhk" className="bg-white text-slate-900">2 BHK Apartment / Suite</option>
+                    <option value="3bhk" className="bg-white text-slate-900">3 BHK Luxury Residence</option>
+                    <option value="4bhk" className="bg-white text-slate-900">4 BHK Sky Mansion / Penthouse</option>
+                    <option value="plot" className="bg-white text-slate-900">Freehold Plotted Villa Land</option>
+                    <option value="commercial_office" className="bg-white text-slate-900">Lockable Grade-A Commercial Space</option>
+                  </select>
+                </div>
 
-              {/* Priority */}
-              <div>
-                <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
-                  Non-Negotiable Priority
-                </label>
-                <select
-                  value={preference}
-                  onChange={(e) => setPreference(e.target.value)}
-                  className="w-full px-3 py-2 sm:px-3.5 sm:py-2.5 text-xs rounded-xl bg-orange-50/60 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer"
-                >
-                  <option value="greens" className="bg-white text-slate-900">Maximum Greenery &amp; Sports Infrastructure (Sec 150)</option>
-                  <option value="metro" className="bg-white text-slate-900">Walking Distance to Metro Station</option>
-                  <option value="ready" className="bg-white text-slate-900">Ready to Move / Instant Possession</option>
-                  <option value="golf" className="bg-white text-slate-900">Golf-Facing Ultra-Luxury (Sec 128 / Sec 43)</option>
-                  <option value="airport" className="bg-white text-slate-900">Fastest Access to Jewar International Airport</option>
-                </select>
-              </div>
+                {/* Priority */}
+                <div>
+                  <label className="text-[11px] sm:text-xs font-bold text-slate-800 block mb-1">
+                    Non-Negotiable Priority
+                  </label>
+                  <select
+                    value={preference}
+                    onChange={(e) => setPreference(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-orange-50/50 hover:bg-orange-50/80 border border-orange-200/80 text-slate-900 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                  >
+                    <option value="greens" className="bg-white text-slate-900">Maximum Greenery &amp; Sports Infrastructure (Sec 150)</option>
+                    <option value="metro" className="bg-white text-slate-900">Walking Distance to Metro Station</option>
+                    <option value="ready" className="bg-white text-slate-900">Ready to Move / Instant Possession</option>
+                    <option value="golf" className="bg-white text-slate-900">Golf-Facing Ultra-Luxury (Sec 128 / Sec 43)</option>
+                    <option value="airport" className="bg-white text-slate-900">Fastest Access to Jewar International Airport</option>
+                  </select>
+                </div>
 
-              {/* Submit Button */}
-              <div className="pt-2">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full py-3 sm:py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5 active:scale-95"
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      <span>Synthesizing Market Intelligence...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="h-4 w-4" />
-                      <span>Generate Advisory Report</span>
-                    </>
-                  )}
-                </button>
-              </div>
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 disabled:opacity-50 text-slate-950 font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer hover:-translate-y-0.5 active:scale-95"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <span>Synthesizing Market Intelligence...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="h-4 w-4" />
+                        <span>Generate Advisory Report</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
-            </form>
+              </form>
+            </div>
           </div>
 
-          {/* AI Output Executive Report (Col 7) */}
-          <div className="lg:col-span-7 rounded-2xl sm:rounded-3xl border border-orange-200/80 bg-white/95 p-4 sm:p-8 backdrop-blur-xl shadow-lg min-h-[220px] lg:min-h-[420px] flex flex-col justify-between text-slate-900">
+          {/* AI Output Executive Report (Col 7 on tablet & desktop) */}
+          <div className="md:col-span-7 rounded-3xl border border-orange-200/80 bg-white p-5 sm:p-7 md:p-8 shadow-lg min-h-[300px] md:min-h-full flex flex-col justify-between text-slate-900">
             
             {advisoryReport ? (
               <div className="space-y-5 animate-in fade-in duration-300">
@@ -243,15 +245,15 @@ export const AiPropertyAdvisor: React.FC<AiAdvisorProps> = ({
 
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center text-center py-8 sm:py-16 px-3 sm:px-4">
-                <div className="h-12 w-12 sm:h-16 sm:w-16 rounded-xl sm:rounded-2xl bg-orange-100 border border-orange-200 text-amber-700 flex items-center justify-center mb-3 sm:mb-4 shadow-xs">
-                  <Bot className="h-6 w-6 sm:h-8 sm:w-8 text-amber-600" />
+              <div className="flex flex-col items-center justify-center text-center my-auto py-8 sm:py-12 px-3 sm:px-6">
+                <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-2xl bg-orange-100/90 border border-orange-200/80 text-amber-700 flex items-center justify-center mb-3 sm:mb-4 shadow-xs">
+                  <Bot className="h-7 w-7 sm:h-8 sm:w-8 text-amber-600" />
                 </div>
-                <h4 className="text-sm sm:text-base font-bold text-slate-900 font-display">
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 font-display uppercase tracking-wider">
                   Instant Algorithmic Property Advisory
                 </h4>
-                <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed">
-                  Select your criteria to receive a custom investment memo detailing recommended developments, projected rental yields, and sector infrastructure catalysts.
+                <p className="mt-2 text-xs sm:text-sm text-slate-600 max-w-md leading-relaxed">
+                  Select your criteria to receive a custom investment memo detailing recommended developments, projected rental yields, and corridor infrastructure analysis.
                 </p>
               </div>
             )}
