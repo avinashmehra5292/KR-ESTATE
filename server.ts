@@ -186,6 +186,9 @@ app.use((_req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
   next();
 });
 
@@ -203,11 +206,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     /^\/totp\.json/i,
     /^\/\.env/i,
     /^\/server\.ts/i,
-    /^\/package\.json/i,
-    /^\/tsconfig\.json/i,
+    /^\/package.*\.json/i,
+    /^\/tsconfig.*\.json/i,
     /^\/vite\.config\.ts/i,
     /^\/\.git/i,
     /brochurerequests\.json/i,
+    /supabase-migration\.sql/i,
+    /seed-supabase\.ts/i,
+    /^\/\./i,
   ];
 
   if (blockedPatterns.some((pattern) => pattern.test(normalizedPath))) {
@@ -449,7 +455,8 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
     const expiresAt = now + 24 * 60 * 60 * 1000;
     activeAdminSessions.set(token, { username: creds.username, expiresAt });
 
-    res.setHeader('Set-Cookie', `kr_admin_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400`);
+    const secureFlag = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+    res.setHeader('Set-Cookie', `kr_admin_token=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=86400${secureFlag}`);
 
     return res.json({
       success: true,
