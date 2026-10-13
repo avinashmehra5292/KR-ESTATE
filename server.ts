@@ -299,20 +299,38 @@ function hashPassword(password: string, salt: string): string {
 
 async function getOrInitAdminCredentials(): Promise<AdminCredentials> {
   const fs = await import('fs/promises');
+  const configuredPassword = process.env.ADMIN_PASSWORD || 'QWERTY';
+  const configuredUsername = process.env.ADMIN_USERNAME || 'ADMIN';
   try {
     const raw = await fs.readFile(ADMIN_AUTH_FILE, 'utf8');
     const creds: AdminCredentials = JSON.parse(raw);
+
+    // If ADMIN_PASSWORD is set in environment and differs, sync it
+    if (process.env.ADMIN_PASSWORD) {
+      const currentHash = hashPassword(process.env.ADMIN_PASSWORD, creds.salt);
+      if (currentHash !== creds.hash) {
+        creds.salt = crypto.randomBytes(16).toString('hex');
+        creds.hash = hashPassword(process.env.ADMIN_PASSWORD, creds.salt);
+        creds.updatedAt = new Date().toISOString();
+        try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch {}
+      }
+    }
+
+    if (process.env.ADMIN_USERNAME && creds.username.toLowerCase() !== process.env.ADMIN_USERNAME.toLowerCase()) {
+      creds.username = process.env.ADMIN_USERNAME;
+      try { await fs.writeFile(ADMIN_AUTH_FILE, JSON.stringify(creds, null, 2), 'utf8'); } catch {}
+    }
+
     if (process.env.ADMIN_TOTP_SECRET && !creds.totpSecret) {
       creds.totpSecret = process.env.ADMIN_TOTP_SECRET;
       creds.totpEnabled = true;
     }
     return creds;
   } catch {
-    const initialPassword = process.env.ADMIN_PASSWORD || 'QWERTY';
     const salt = crypto.randomBytes(16).toString('hex');
-    const hash = hashPassword(initialPassword, salt);
+    const hash = hashPassword(configuredPassword, salt);
     const creds: AdminCredentials = {
-      username: 'admin',
+      username: configuredUsername,
       salt,
       hash,
       updatedAt: new Date().toISOString(),
