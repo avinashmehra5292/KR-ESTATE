@@ -256,7 +256,7 @@ app.post('/api/admin/login', async (req: Request, res: Response) => {
       const remaining = Math.max(0, 5 - attempts);
       return res.status(401).json({
         error: attempts >= 5
-          ? 'Too many failed login attempts. Security lock active for 15 minutes.'
+          ? 'Too many failed attempts. Security lock active for 15 minutes.'
           : `Invalid admin credentials. ${remaining} attempt(s) remaining.`
       });
     }

@@ -56,23 +56,23 @@ export const ValuationForm: React.FC = () => {
   };
 
   return (
-    <section id="valuation" className="py-12 sm:py-20 lg:py-28 border-b border-orange-200/60 bg-[#FFF3EB] w-full max-w-full overflow-hidden">
+    <section id="valuation" className="py-10 sm:py-20 lg:py-28 border-b border-orange-200/60 bg-[#FBE8DC] w-full max-w-full overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full max-w-full">
         
-        <div className="rounded-3xl border border-orange-100/70 bg-white p-5 sm:p-8 lg:p-12 shadow-xl shadow-orange-950/5 relative overflow-hidden">
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/10 rounded-full blur-[140px] pointer-events-none" />
+        <div className="rounded-2xl sm:rounded-3xl border border-orange-200/80 bg-gradient-to-br from-white via-[#FFF8F2] to-[#FCEEE3] p-4 sm:p-8 lg:p-12 shadow-xl relative overflow-hidden">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-400/15 rounded-full blur-[140px] pointer-events-none" />
           
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10 items-center relative">
             
             {/* Left Narrative (Col 5) */}
             <div className="lg:col-span-5 space-y-3 sm:space-y-4">
-              <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-800 font-sans">
+              <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-amber-700">
                 Owners &amp; Investors Desk
               </div>
-              <h2 className="font-serif-luxury text-2xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight uppercase">
+              <h2 className="font-display text-2xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
                 Selling or Renting Your Property in Noida?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                 Connect with KR Estate’s dedicated resale and leasing desk. We provide institutional valuation grounded in actual circle rates, active transaction velocity, and verified NRI &amp; domestic buyer pools.
               </p>
 
@@ -97,7 +97,7 @@ export const ValuationForm: React.FC = () => {
             </div>
 
             {/* Right Form (Col 7) */}
-            <div className="lg:col-span-7 rounded-2xl sm:rounded-3xl bg-[#FFFBF8] border border-orange-200/70 p-5 sm:p-8 shadow-md">
+            <div className="lg:col-span-7 rounded-xl sm:rounded-2xl bg-white/95 border border-orange-200/90 p-4 sm:p-8 shadow-md sm:shadow-xl">
               {submitted ? (
                 <div className="text-center py-10 space-y-4 animate-in fade-in duration-300">
                   <div className="mx-auto h-16 w-16 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-600 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)]">
@@ -271,7 +271,7 @@ export const ValuationForm: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-3.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 disabled:opacity-50 rounded-2xl transition-all shadow-md cursor-pointer flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95"
+                    className="w-full py-3.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:via-amber-400 hover:to-amber-500 disabled:opacity-50 rounded-xl transition-all shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.45)] cursor-pointer flex items-center justify-center gap-2 hover:-translate-y-0.5"
                   >
                     {loading ? (
                       <>
