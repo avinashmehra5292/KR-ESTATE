@@ -1036,6 +1036,66 @@ app.post('/api/request-brochure', async (req: Request, res: Response) => {
   });
 });
 
+// API Route: Request Direct Cloud Video Upload URL (Bypasses server proxy and memory limits for large videos)
+app.post('/api/admin/get-video-upload-url', async (req: Request, res: Response) => {
+  try {
+    const { name, size } = req.body;
+    if (size && Number(size) > 50 * 1024 * 1024) {
+      const sizeMb = (Number(size) / (1024 * 1024)).toFixed(1);
+      return res.status(400).json({
+        success: false,
+        error: `Video file is too large (${sizeMb} MB). Maximum direct upload limit is 50MB. Please compress your video or paste a YouTube / Vimeo / Cloud link.`
+      });
+    }
+
+    const rawExt = (name && name.split('.').pop()?.toLowerCase()) || 'mp4';
+    const ALLOWED_VIDEO_EXTS = ['mp4', 'webm', 'mov', 'mkv'];
+
+    if (!ALLOWED_VIDEO_EXTS.includes(rawExt)) {
+      return res.status(400).json({
+        success: false,
+        error: `Invalid video format (.${escapeHtml(rawExt)}). Only MP4, WebM, MOV, and MKV video files are permitted.`
+      });
+    }
+
+    if (useSupabase && supabase) {
+      const cleanName = (name ? name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_') : 'tour');
+      const fileName = `videos/video-${cleanName.slice(0, 40)}-${Date.now()}.${rawExt}`;
+
+      const { data, error } = await supabase.storage
+        .from('uploads')
+        .createSignedUploadUrl(fileName, { upsert: true });
+
+      if (error || !data?.signedUrl) {
+        console.error('Supabase createSignedUploadUrl error:', error?.message);
+        return res.status(500).json({
+          success: false,
+          error: `Could not generate cloud upload URL: ${error?.message || 'Storage error'}`
+        });
+      }
+
+      const { data: publicUrlData } = supabase.storage.from('uploads').getPublicUrl(fileName);
+
+      return res.json({
+        success: true,
+        directUpload: true,
+        signedUrl: data.signedUrl,
+        publicUrl: publicUrlData.publicUrl,
+        fileName,
+      });
+    } else {
+      // Local development without Supabase
+      return res.json({
+        success: true,
+        directUpload: false,
+      });
+    }
+  } catch (err: any) {
+    console.error('Error in /api/admin/get-video-upload-url:', err);
+    return res.status(500).json({ success: false, error: err.message || 'Server error' });
+  }
+});
+
 // API Route: Upload Property Video (Strict extension whitelist & sanitization)
 app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
   try {

@@ -232,52 +232,101 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
     setVideoUploadStatus(`Preparing ${file.name} (${fileSizeMb.toFixed(1)} MB)...`);
 
     try {
-      const reader = new FileReader();
-      const base64Promise = new Promise<string>((resolve, reject) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = (err) => reject(err);
-      });
-      reader.readAsDataURL(file);
-
-      const base64 = await base64Promise;
-      setVideoUploadStatus(`Uploading ${file.name} to server...`);
-
-      const res = await fetch('/api/admin/upload-video', {
+      // 1. Request signed cloud upload URL from server
+      const slotRes = await fetch('/api/admin/get-video-upload-url', {
         method: 'POST',
         headers: getAdminAuthHeaders({ 'Content-Type': 'application/json' }),
         credentials: 'include',
-        body: JSON.stringify({ name: file.name, base64 })
+        body: JSON.stringify({ name: file.name, size: file.size })
       });
 
-      const contentType = res.headers.get('content-type') || '';
-      let data: any = null;
-      if (contentType.includes('application/json')) {
-        try {
-          data = await res.json();
-        } catch {
-          data = null;
-        }
+      const slotData = await slotRes.json().catch(() => null);
+      if (!slotRes.ok || !slotData?.success) {
+        throw new Error(slotData?.error || `Failed to initiate video upload (HTTP ${slotRes.status})`);
       }
 
-      if (!res.ok || !data?.success) {
-        if (res.status === 413) {
-          throw new Error(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Please compress the video to under 50MB or paste a video link.`);
+      let finalVideoUrl = '';
+
+      if (slotData.directUpload && slotData.signedUrl) {
+        // Direct binary upload to Supabase Storage:
+        // Completely bypasses Render reverse proxy limits and RAM constraints!
+        setVideoUploadStatus(`Uploading ${file.name} directly to cloud storage (${fileSizeMb.toFixed(1)} MB)...`);
+
+        const uploadRes = await fetch(slotData.signedUrl, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': file.type || 'video/mp4'
+          },
+          body: file
+        });
+
+        if (!uploadRes.ok) {
+          if (uploadRes.status === 413) {
+            throw new Error(`Video file exceeds cloud storage size limit (50MB). Please compress the video to under 50MB or paste a link.`);
+          }
+          let errDetail = `HTTP ${uploadRes.status}`;
+          try {
+            const errJson = await uploadRes.json();
+            if (errJson?.message) errDetail = errJson.message;
+            else if (errJson?.error) errDetail = errJson.error;
+          } catch {
+            const errText = await uploadRes.text().catch(() => '');
+            if (errText) errDetail = errText;
+          }
+          throw new Error(`Cloud upload failed (${errDetail}). Please try again or paste a video link.`);
         }
-        throw new Error(data?.error || `Upload failed (HTTP ${res.status}). Please try again or paste a link.`);
+
+        finalVideoUrl = slotData.publicUrl;
+      } else {
+        // Fallback for local development if Supabase not configured
+        setVideoUploadStatus(`Uploading ${file.name} to server (${fileSizeMb.toFixed(1)} MB)...`);
+        const reader = new FileReader();
+        const base64Promise = new Promise<string>((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (err) => reject(err);
+        });
+        reader.readAsDataURL(file);
+
+        const base64 = await base64Promise;
+        const res = await fetch('/api/admin/upload-video', {
+          method: 'POST',
+          headers: getAdminAuthHeaders({ 'Content-Type': 'application/json' }),
+          credentials: 'include',
+          body: JSON.stringify({ name: file.name, base64 })
+        });
+
+        const contentType = res.headers.get('content-type') || '';
+        let data: any = null;
+        if (contentType.includes('application/json')) {
+          try {
+            data = await res.json();
+          } catch {
+            data = null;
+          }
+        }
+
+        if (!res.ok || !data?.success) {
+          if (res.status === 413) {
+            throw new Error(`Video file is too large (${fileSizeMb.toFixed(1)} MB). Please compress the video to under 50MB or paste a video link.`);
+          }
+          throw new Error(data?.error || `Upload failed (HTTP ${res.status}). Please try again or paste a link.`);
+        }
+
+        finalVideoUrl = data.videoUrl;
       }
 
       setFormData(prev => ({
         ...prev,
         videoTour: {
           title: prev.videoTour?.title?.trim() || `${prev.title?.trim() || 'Property'} 4K Drone Tour`,
-          videoUrl: data.videoUrl,
+          videoUrl: finalVideoUrl,
           thumbnailUrl: prev.videoTour?.thumbnailUrl || prev.coverImage || '',
           duration: prev.videoTour?.duration || '03:00',
           description: prev.videoTour?.description || `4K aerial inspection and architectural walkthrough of ${prev.title?.trim() || 'this development'}.`
         }
       }));
 
-      setVideoUploadStatus(`Video uploaded successfully! (${data.sizeMb} MB)`);
+      setVideoUploadStatus(`Video uploaded successfully! (${fileSizeMb.toFixed(1)} MB)`);
       setTimeout(() => setVideoUploadStatus(''), 4500);
     } catch (err: any) {
       console.error(err);
