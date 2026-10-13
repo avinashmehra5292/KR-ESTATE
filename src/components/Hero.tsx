@@ -17,7 +17,7 @@ import {
 interface HeroProps {
   onSearch: (params: { sector: string; type: string; budget: string }) => void;
   onOpenScheduleModal: () => void;
-  onWatchVideo?: () => void;
+  onWatchVideo?: (category?: 'drone' | 'property') => void;
   onOpenClientVideoModal?: () => void;
 }
 
@@ -138,20 +138,24 @@ export const Hero: React.FC<HeroProps> = ({
                 <span>Across Noida Corridor</span>
               </div>
 
-              {/* Watch 4K Drone Tour Button with Animated Radar Halo */}
+              {/* Drone Tours & Aerial Showcase Button with Animated Radar Halo */}
               <button
                 type="button"
-                onClick={onWatchVideo}
-                className="inline-flex items-center gap-2 sm:gap-3 text-slate-950 hover:text-amber-800 bg-white/90 hover:bg-white backdrop-blur-md px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-orange-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer group shine-sweep"
+                onClick={() => onWatchVideo && onWatchVideo('drone')}
+                className="inline-flex items-center gap-2 sm:gap-2.5 text-slate-950 hover:text-amber-800 bg-white/90 hover:bg-white backdrop-blur-md px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border border-orange-200/80 shadow-xs hover:shadow-md transition-all cursor-pointer group shine-sweep"
+                title="Drone Tours & Aerial Showcase: Noida Expressway & Sector 150 (02:45)"
               >
                 <span className="relative flex items-center justify-center">
                   <span className="absolute inset-0 rounded-full bg-amber-400/40 animate-radar-halo" />
                   <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full border border-amber-500 bg-amber-500/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-slate-950 transition-all shadow-xs relative z-10">
-                    <Play className="w-2.5 h-2.5 fill-amber-600 group-hover:fill-slate-950 text-amber-600 group-hover:text-slate-950 translate-x-0.5 transition-colors" />
+                    <Compass className="w-3.5 h-3.5 text-amber-600 group-hover:text-slate-950 transition-colors" />
                   </span>
                 </span>
                 <span className="text-[11px] sm:text-xs font-bold tracking-wide">
-                  Watch 4K Tour
+                  Drone Tours &amp; Aerial Showcase
+                </span>
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-200/80 font-bold hidden xs:inline">
+                  02:45
                 </span>
               </button>
             </div>

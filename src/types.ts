@@ -45,12 +45,28 @@ export interface Property {
     thumbnailUrl: string;
     duration: string;
     description: string;
-  };
+  } | null;
   architecturalTheme?: {
     gradient: string;
     accentColor: string;
     iconType: 'tower' | 'villa' | 'commercial' | 'tree' | 'sparkle';
   };
+}
+
+export interface DroneTour {
+  id: string;
+  title: string;
+  sector: string;
+  locality?: string;
+  duration: string;
+  videoUrl: string;
+  fallbackUrl?: string;
+  thumbnailUrl: string;
+  description: string;
+  altitude?: string;
+  badge?: string;
+  isFeatured?: boolean;
+  createdAt?: string;
 }
 
 export interface LocalityInfo {

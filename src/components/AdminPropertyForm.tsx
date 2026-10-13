@@ -334,11 +334,11 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
       setFormData(prev => ({
         ...prev,
         videoTour: {
-          title: prev.videoTour?.title?.trim() || `${prev.title?.trim() || 'Property'} 4K Drone Tour`,
+          title: prev.videoTour?.title?.trim() || `${prev.title?.trim() || 'Property'} Video Walkthrough`,
           videoUrl: finalVideoUrl,
           thumbnailUrl: prev.videoTour?.thumbnailUrl || prev.coverImage || '',
           duration: prev.videoTour?.duration || '03:00',
-          description: prev.videoTour?.description || `4K aerial inspection and architectural walkthrough of ${prev.title?.trim() || 'this development'}.`
+          description: prev.videoTour?.description || `Architectural walkthrough and virtual tour of ${prev.title?.trim() || 'this development'}.`
         }
       }));
 
@@ -764,7 +764,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
       // Video tour: prioritize user's entry, or omit cleanly if removed/empty
       const hasVideoUrl = Boolean(formData.videoTour?.videoUrl?.trim());
       const cleanVideoTour = hasVideoUrl ? {
-        title: formData.videoTour?.title?.trim() || `${title} 4K Drone Tour`,
+        title: formData.videoTour?.title?.trim() || `${title} Video Walkthrough`,
         videoUrl: formData.videoTour!.videoUrl.trim(),
         thumbnailUrl: formData.videoTour?.thumbnailUrl?.trim() || resolvedCover || fallbackLuxuryImage,
         duration: formData.videoTour?.duration?.trim() || '02:30',
@@ -1169,16 +1169,16 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
               </div>
             </div>
 
-            {/* 4K Drone Tour & Property Video Section (No storage or duration limit) */}
+            {/* Property Video Walkthrough Section (Dedicated project video) */}
             <div className="mt-4 p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-3">
                 <div>
                   <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 uppercase tracking-wide">
                     <Video className="w-4 h-4 text-amber-600" />
-                    Property Video Tour & Drone Flythrough (Max 50MB per upload · Or paste any link)
+                    Property Video Walkthrough (Project Specific)
                   </span>
                   <p className="text-[11px] text-slate-500 mt-0.5">
-                    Upload an MP4/WebM video file directly from your computer or paste any video link (YouTube, Vimeo, MP4 stream).
+                    Upload an MP4/WebM architectural walkthrough reel or paste a video link (YouTube, Vimeo, MP4 stream).
                   </p>
                 </div>
 

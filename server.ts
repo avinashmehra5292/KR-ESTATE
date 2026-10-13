@@ -1356,6 +1356,61 @@ async function writePropertiesArray(properties: any[], propertyFile: string) {
   }
 }
 
+// Helper to read drone tours independently from properties
+async function getDroneToursArray(): Promise<{ droneTours: any[]; droneToursFile: string }> {
+  const fs = await import('fs/promises');
+  const droneToursFile = path.resolve(__dirname, 'src', 'data', 'droneTours.json');
+  try {
+    const raw = await fs.readFile(droneToursFile, 'utf8');
+    const droneTours = JSON.parse(raw);
+    return { droneTours, droneToursFile };
+  } catch (err) {
+    return {
+      droneTours: [
+        {
+          id: 'corridor-noida-exp-sec150',
+          title: 'Noida Expressway & Sector 150 Drone Flythrough',
+          sector: 'Noida Expressway & Sector 150 Corridor',
+          locality: 'Expressway Growth Hub',
+          duration: '02:45',
+          videoUrl: '/uploads/videos/noida-expressway-sec150-drone.mp4',
+          fallbackUrl: 'https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/videos/video-WhatsApp_Video_2026-10-11_at_9_38_22_PM-1791904739290.mp4',
+          thumbnailUrl: '/corridor-expressway.jpg',
+          description: 'Comprehensive 4K aerial drone survey capturing the Noida-Greater Noida Expressway, 45m arterial sector roads, and Sector 150 sports city green masterplan developments.',
+          altitude: '180M • 4K 60FPS',
+          badge: 'Master Corridor · 4K 60FPS',
+          isFeatured: true
+        }
+      ],
+      droneToursFile
+    };
+  }
+}
+
+// Helper to write drone tours independently from properties
+async function writeDroneToursArray(droneTours: any[], droneToursFile: string) {
+  try {
+    const fs = await import('fs/promises');
+    await fs.writeFile(droneToursFile, JSON.stringify(droneTours, null, 2), 'utf8');
+    const tsFile = path.resolve(__dirname, 'src', 'data', 'droneTours.ts');
+    const tsContent = `import { DroneTour } from '../types';\n\nexport const INITIAL_DRONE_TOURS: DroneTour[] = ${JSON.stringify(droneTours, null, 2)};\n`;
+    await fs.writeFile(tsFile, tsContent, 'utf8');
+  } catch (err) {
+    console.warn('Failed to save drone tours file:', err);
+  }
+}
+
+// API Route: Public Get All Drone Tours (Standalone & Separate from Properties)
+app.get('/api/drone-tours', async (_req: Request, res: Response) => {
+  try {
+    const { droneTours } = await getDroneToursArray();
+    return res.json(droneTours);
+  } catch (e: any) {
+    console.error('Error fetching drone tours:', e);
+    return res.status(500).json({ error: 'Failed to read drone tours' });
+  }
+});
+
 // API Route: Public/Client Get All Properties
 app.get('/api/properties', async (_req: Request, res: Response) => {
   try {
@@ -1756,6 +1811,95 @@ app.delete('/api/admin/properties/:id/drone-tour', async (req: Request, res: Res
   } catch (error: any) {
     console.error('Error deleting drone tour:', error);
     res.status(500).json({ error: error.message || 'Failed to delete drone tour.' });
+  }
+});
+
+// ==========================================
+// STANDALONE DRONE TOURS & AERIAL SHOWCASE API
+// (Stored & managed completely separate from properties)
+// ==========================================
+
+// API Route: Admin - Add New Standalone Drone Tour
+app.post('/api/admin/drone-tours', async (req: Request, res: Response) => {
+  try {
+    const { droneTours, droneToursFile } = await getDroneToursArray();
+    const { title, sector, locality, duration, videoUrl, fallbackUrl, thumbnailUrl, description, altitude, badge, isFeatured } = req.body;
+    if (!videoUrl || typeof videoUrl !== 'string' || !videoUrl.trim()) {
+      return res.status(400).json({ error: 'A valid video URL or uploaded video path is required.' });
+    }
+    const newDroneTour = {
+      id: req.body.id || `drone-tour-${Date.now()}`,
+      title: title?.trim() || '4K Aerial Drone Tour',
+      sector: sector?.trim() || 'Noida Expressway Corridor',
+      locality: locality?.trim() || 'Growth Corridor',
+      duration: duration?.trim() || '02:45',
+      videoUrl: videoUrl.trim(),
+      fallbackUrl: fallbackUrl?.trim() || undefined,
+      thumbnailUrl: thumbnailUrl?.trim() || '/corridor-expressway.jpg',
+      description: description?.trim() || '4K aerial inspection and corridor survey.',
+      altitude: altitude?.trim() || '180M • 4K 60FPS',
+      badge: badge?.trim() || 'Corridor · 4K',
+      isFeatured: Boolean(isFeatured),
+      createdAt: new Date().toISOString()
+    };
+    droneTours.push(newDroneTour);
+    await writeDroneToursArray(droneTours, droneToursFile);
+    return res.json({ success: true, message: 'Drone tour added to showcase!', droneTour: newDroneTour });
+  } catch (error: any) {
+    console.error('Error creating drone tour:', error);
+    return res.status(500).json({ error: error.message || 'Failed to create drone tour.' });
+  }
+});
+
+// API Route: Admin - Update Standalone Drone Tour
+app.put('/api/admin/drone-tours/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { droneTours, droneToursFile } = await getDroneToursArray();
+    const existingIndex = droneTours.findIndex((t: any) => t.id === id);
+    if (existingIndex === -1) {
+      return res.status(404).json({ error: `Drone tour with id ${id} not found.` });
+    }
+    const existing = droneTours[existingIndex];
+    const { title, sector, locality, duration, videoUrl, fallbackUrl, thumbnailUrl, description, altitude, badge, isFeatured } = req.body;
+    const updated = {
+      ...existing,
+      title: title !== undefined ? title.trim() : existing.title,
+      sector: sector !== undefined ? sector.trim() : existing.sector,
+      locality: locality !== undefined ? locality.trim() : existing.locality,
+      duration: duration !== undefined ? duration.trim() : existing.duration,
+      videoUrl: videoUrl !== undefined ? videoUrl.trim() : existing.videoUrl,
+      fallbackUrl: fallbackUrl !== undefined ? fallbackUrl.trim() : existing.fallbackUrl,
+      thumbnailUrl: thumbnailUrl !== undefined ? thumbnailUrl.trim() : existing.thumbnailUrl,
+      description: description !== undefined ? description.trim() : existing.description,
+      altitude: altitude !== undefined ? altitude.trim() : existing.altitude,
+      badge: badge !== undefined ? badge.trim() : existing.badge,
+      isFeatured: isFeatured !== undefined ? Boolean(isFeatured) : existing.isFeatured,
+    };
+    droneTours[existingIndex] = updated;
+    await writeDroneToursArray(droneTours, droneToursFile);
+    return res.json({ success: true, message: 'Drone tour updated successfully!', droneTour: updated });
+  } catch (error: any) {
+    console.error('Error updating drone tour:', error);
+    return res.status(500).json({ error: error.message || 'Failed to update drone tour.' });
+  }
+});
+
+// API Route: Admin - Delete Standalone Drone Tour
+app.delete('/api/admin/drone-tours/:id', async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { droneTours, droneToursFile } = await getDroneToursArray();
+    const existingIndex = droneTours.findIndex((t: any) => t.id === id);
+    if (existingIndex === -1) {
+      return res.status(404).json({ error: `Drone tour with id ${id} not found.` });
+    }
+    const removed = droneTours.splice(existingIndex, 1)[0];
+    await writeDroneToursArray(droneTours, droneToursFile);
+    return res.json({ success: true, message: 'Drone tour deleted successfully!', droneTour: removed });
+  } catch (error: any) {
+    console.error('Error deleting drone tour:', error);
+    return res.status(500).json({ error: error.message || 'Failed to delete drone tour.' });
   }
 });
 

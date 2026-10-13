@@ -7,7 +7,7 @@ interface PropertyCardProps {
   property: Property;
   onSelectProperty: (property: Property) => void;
   onScheduleVisit: (propertyName: string) => void;
-  onWatchVideo?: (video: any) => void;
+  onWatchVideo?: (property: Property, video?: any) => void;
 }
 
 export const PropertyCard: React.FC<PropertyCardProps> = ({
@@ -21,7 +21,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   const handleVideoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onWatchVideo && property.videoTour) {
-      onWatchVideo(property.videoTour);
+      onWatchVideo(property, property.videoTour);
     } else {
       onSelectProperty(property);
     }

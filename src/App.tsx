@@ -15,7 +15,8 @@ import { AiPropertyAdvisor } from './components/AiPropertyAdvisor';
 import { ValuationForm } from './components/ValuationForm';
 import { Footer } from './components/Footer';
 import { PropertyModal } from './components/PropertyModal';
-import { VideoModal } from './components/VideoModal';
+import { DroneShowcaseModal } from './components/DroneShowcaseModal';
+import { PropertyVideoModal } from './components/PropertyVideoModal';
 import { NoidaExpresswayClientVideoModal } from './components/NoidaExpresswayClientVideoModal';
 import { ScheduleVisitModal } from './components/ScheduleVisitModal';
 import { DomainSetupModal } from './components/DomainSetupModal';
@@ -32,12 +33,19 @@ export default function App() {
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [preselectedProjectForVisit, setPreselectedProjectForVisit] = useState<string | undefined>(undefined);
   const [domainModalOpen, setDomainModalOpen] = useState(false);
-  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  // Standalone 4K Drone Tours & Aerial Showcase Modal state
+  const [droneShowcaseModalOpen, setDroneShowcaseModalOpen] = useState(false);
+  const [activeDroneTourId, setActiveDroneTourId] = useState<string | undefined>(undefined);
+
+  // Standalone Property Video Walkthrough Modal state
+  const [propertyVideoModalOpen, setPropertyVideoModalOpen] = useState(false);
+  const [selectedPropertyForVideo, setSelectedPropertyForVideo] = useState<Property | null>(null);
+  const [selectedPropertyVideo, setSelectedPropertyVideo] = useState<any>(null);
+
   const [clientVideoModalOpen, setClientVideoModalOpen] = useState(false);
   const [adminFormOpen, setAdminFormOpen] = useState(false);
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [clientNameParam, setClientNameParam] = useState<string>('Mr. & Mrs. R. Kapoor');
-  const [activeVideoTour, setActiveVideoTour] = useState<any>(undefined);
 
   // Auto-detect client, expressway tour, or /admin URL params
   useEffect(() => {
@@ -109,13 +117,20 @@ export default function App() {
     setScheduleModalOpen(true);
   };
 
-  const handleOpenVideoTour = (video?: any) => {
-    if (video) {
-      setActiveVideoTour(video);
+  const handleOpenDroneShowcase = (tourId?: string) => {
+    setActiveDroneTourId(tourId);
+    setDroneShowcaseModalOpen(true);
+  };
+
+  const handleOpenPropertyVideo = (prop?: Property | null, video?: any) => {
+    if (prop) {
+      setSelectedPropertyForVideo(prop);
+      setSelectedPropertyVideo(video || prop.videoTour || null);
     } else {
-      setActiveVideoTour(NOIDA_PROPERTIES[0].videoTour);
+      setSelectedPropertyForVideo(null);
+      setSelectedPropertyVideo(video || null);
     }
-    setVideoModalOpen(true);
+    setPropertyVideoModalOpen(true);
   };
 
   const handleSelectPropertyByName = (title: string) => {
@@ -178,7 +193,7 @@ export default function App() {
           <Hero
             onSearch={(params) => setSearchFilterParams(params)}
             onOpenScheduleModal={() => handleOpenScheduleModal()}
-            onWatchVideo={() => handleOpenVideoTour(NOIDA_PROPERTIES[0].videoTour)}
+            onWatchVideo={() => handleOpenDroneShowcase()}
             onOpenClientVideoModal={() => setClientVideoModalOpen(true)}
           />
 
@@ -187,7 +202,7 @@ export default function App() {
             properties={NOIDA_PROPERTIES}
             onSelectProperty={(prop) => setSelectedProperty(prop)}
             onScheduleVisit={(title) => handleOpenScheduleModal(title)}
-            onWatchVideo={(video) => handleOpenVideoTour(video)}
+            onWatchVideo={(prop, video) => handleOpenPropertyVideo(prop, video)}
             searchFilterParams={searchFilterParams}
             onResetFilters={() =>
               setSearchFilterParams({ sector: 'all', type: 'all', budget: 'all' })
@@ -197,7 +212,7 @@ export default function App() {
           {/* Sector & Growth Corridor Guides (Our Impact & Key Growth Corridors) */}
           <LocalityGuide
             onSelectLocalityFilter={handleSelectLocalityFilter}
-            onWatchDroneTour={(tour) => handleOpenVideoTour(tour || NOIDA_PROPERTIES[0].videoTour)}
+            onWatchDroneTour={(tour) => handleOpenDroneShowcase(tour?.id)}
           />
 
           {/* End-to-End Real Estate Advisory Services */}
@@ -244,15 +259,29 @@ export default function App() {
           property={selectedProperty}
           onClose={() => setSelectedProperty(null)}
           onOpenScheduleModal={(title) => handleOpenScheduleModal(title)}
-          onWatchVideo={(video) => handleOpenVideoTour(video)}
+          onWatchVideo={(prop, video) => handleOpenPropertyVideo(prop || selectedProperty, video)}
         />
 
-        {/* 4K Drone Aerial & Walkthrough Video Player Modal */}
-        <VideoModal
-          isOpen={videoModalOpen}
-          onClose={() => setVideoModalOpen(false)}
-          initialVideo={activeVideoTour}
+        {/* Dedicated 4K Drone Tours & Aerial Showcase Modal */}
+        <DroneShowcaseModal
+          isOpen={droneShowcaseModalOpen}
+          onClose={() => setDroneShowcaseModalOpen(false)}
+          initialTourId={activeDroneTourId}
           onOpenScheduleModal={handleOpenScheduleModal}
+        />
+
+        {/* Dedicated Property Walkthrough Video Modal */}
+        <PropertyVideoModal
+          isOpen={propertyVideoModalOpen}
+          onClose={() => {
+            setPropertyVideoModalOpen(false);
+            setSelectedPropertyForVideo(null);
+            setSelectedPropertyVideo(null);
+          }}
+          property={selectedPropertyForVideo}
+          video={selectedPropertyVideo}
+          onOpenScheduleModal={handleOpenScheduleModal}
+          onSelectProperty={(prop) => setSelectedProperty(prop)}
         />
 
         {/* Bespoke Real Estate Noida Expressway Video Studio & Client Presentation Reel */}

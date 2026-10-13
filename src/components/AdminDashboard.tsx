@@ -7,8 +7,9 @@ import {
   ArrowUpRight, ArrowUp, Zap, Clock, Calendar, CheckSquare, Layers, Home,
   UploadCloud, FilePlus, Edit3, ShieldCheck
 } from 'lucide-react';
-import { Property, LocalityInfo } from '../types';
+import { Property, LocalityInfo, DroneTour } from '../types';
 import { NOIDA_PROPERTIES } from '../data/properties';
+import { INITIAL_DRONE_TOURS } from '../data/droneTours';
 import { AdminPropertyForm } from './AdminPropertyForm';
 import { useSiteSettings } from '../context/SiteSettingsContext';
 import defaultLocalities from '../data/localities.json';
@@ -153,14 +154,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   // Property list & Drone Tours state
   const [propertiesList, setPropertiesList] = useState<Property[]>(NOIDA_PROPERTIES);
+  const [droneToursList, setDroneToursList] = useState<DroneTour[]>(INITIAL_DRONE_TOURS);
+  const [editingDroneTourId, setEditingDroneTourId] = useState<string | null>(null);
   const [droneTourModalOpen, setDroneTourModalOpen] = useState(false);
-  const [droneTourTargetPropId, setDroneTourTargetPropId] = useState<string>('');
   const [droneTourForm, setDroneTourForm] = useState({
     title: '',
+    sector: 'Noida Expressway & Sector 150 Corridor',
+    locality: 'Expressway Growth Hub',
     videoUrl: '',
     thumbnailUrl: '',
     duration: '02:45',
-    description: ''
+    description: '',
+    altitude: '180M • 4K 60FPS',
+    badge: 'Master Corridor · 4K 60FPS',
+    isFeatured: false
   });
   const [isUploadingDroneVideo, setIsUploadingDroneVideo] = useState(false);
   const [droneUploadStatus, setDroneUploadStatus] = useState('');
@@ -230,6 +237,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     // Also preload brochure & site leads count and live properties
     fetchBrochureLeads();
     refreshPropertiesList();
+    fetchDroneTours();
   }, []);
 
   // Fetch properties and sync on mount
@@ -247,29 +255,50 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     }
   };
 
-  // Drone Tours Action Handlers
-  const handleOpenAddDroneTour = (propId?: string) => {
-    const target = propId
-      ? propertiesList.find(p => p.id === propId)
-      : (propertiesList.find(p => !p.videoTour?.videoUrl) || propertiesList[0]);
+  // Fetch standalone Drone Tours on mount
+  const fetchDroneTours = async () => {
+    try {
+      const res = await fetch('/api/drone-tours');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setDroneToursList(data);
+        }
+      }
+    } catch {
+      // Keep static INITIAL_DRONE_TOURS
+    }
+  };
 
-    if (!target) return;
-    setDroneTourTargetPropId(target.id);
-    if (target.videoTour && target.videoTour.videoUrl) {
+  // Drone Tours Action Handlers (Completely standalone - no property coupling)
+  const handleOpenAddDroneTour = (existingTour?: DroneTour) => {
+    if (existingTour) {
+      setEditingDroneTourId(existingTour.id);
       setDroneTourForm({
-        title: target.videoTour.title || `${target.title} 4K Drone Tour`,
-        videoUrl: target.videoTour.videoUrl || '',
-        thumbnailUrl: target.videoTour.thumbnailUrl || target.coverImage || '',
-        duration: target.videoTour.duration || '02:45',
-        description: target.videoTour.description || `4K aerial inspection and architectural walkthrough of ${target.title} in ${target.sector}.`
+        title: existingTour.title,
+        sector: existingTour.sector || 'Noida Expressway & Sector 150 Corridor',
+        locality: existingTour.locality || 'Expressway Growth Hub',
+        videoUrl: existingTour.videoUrl,
+        thumbnailUrl: existingTour.thumbnailUrl || '/corridor-expressway.jpg',
+        duration: existingTour.duration || '02:45',
+        description: existingTour.description || '',
+        altitude: existingTour.altitude || '180M • 4K 60FPS',
+        badge: existingTour.badge || 'Master Corridor · 4K 60FPS',
+        isFeatured: Boolean(existingTour.isFeatured)
       });
     } else {
+      setEditingDroneTourId(null);
       setDroneTourForm({
-        title: `${target.title} 4K Drone Tour & Aerial Walkthrough`,
+        title: '',
+        sector: 'Noida Expressway & Sector 150 Corridor',
+        locality: 'Expressway Growth Hub',
         videoUrl: '',
-        thumbnailUrl: target.coverImage || '',
+        thumbnailUrl: '/corridor-expressway.jpg',
         duration: '02:45',
-        description: `4K aerial inspection and architectural walkthrough of ${target.title} in ${target.sector}.`
+        description: 'Comprehensive 4K aerial drone survey capturing master corridors, arterial sector roads, and regional growth masterplan developments.',
+        altitude: '180M • 4K 60FPS',
+        badge: 'Master Corridor · 4K 60FPS',
+        isFeatured: false
       });
     }
     setDroneUploadStatus('');
@@ -278,8 +307,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
   const handleSaveDroneTour = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!droneTourTargetPropId) {
-      alert('Please select a target property.');
+    if (!droneTourForm.title.trim()) {
+      alert('Please enter a Title for the drone tour.');
       return;
     }
     if (!droneTourForm.videoUrl.trim()) {
@@ -289,27 +318,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
     setDroneActionLoading(true);
     try {
-      const res = await fetch(`/api/admin/properties/${droneTourTargetPropId}/drone-tour`, {
-        method: 'POST',
+      const isEdit = Boolean(editingDroneTourId);
+      const url = isEdit ? `/api/admin/drone-tours/${editingDroneTourId}` : '/api/admin/drone-tours';
+      const method = isEdit ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: getAdminAuthHeaders({ 'Content-Type': 'application/json' }),
         credentials: 'include',
         body: JSON.stringify(droneTourForm)
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setPropertiesList(prev => prev.map(p => {
-          if (p.id === droneTourTargetPropId) {
-            return { ...p, videoTour: data.videoTour };
-          }
-          return p;
-        }));
-        const idx = NOIDA_PROPERTIES.findIndex(p => p.id === droneTourTargetPropId);
-        if (idx !== -1) {
-          NOIDA_PROPERTIES[idx].videoTour = data.videoTour;
+        if (isEdit) {
+          setDroneToursList(prev => prev.map(t => t.id === editingDroneTourId ? data.droneTour : t));
+        } else {
+          setDroneToursList(prev => [...prev, data.droneTour]);
         }
-
         setDroneTourModalOpen(false);
-        setSaveStatus({ tab: 'drone_tours', message: `4K Drone Tour successfully published for ${data.property?.title || 'property'}!` });
+        setSaveStatus({ tab: 'drone_tours', message: `Drone Tour "${data.droneTour?.title || droneTourForm.title}" successfully published!` });
         setTimeout(() => setSaveStatus(null), 3500);
       } else {
         alert(data.error || 'Failed to save drone tour');
@@ -321,34 +348,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
     }
   };
 
-  const handleDeleteDroneTour = async (propertyId: string, propertyTitle: string) => {
-    if (!window.confirm(`Are you sure you want to delete the 4K Drone Tour for "${propertyTitle}"?\n\nThe property listing will remain active, but the drone video tour will be removed.`)) {
+  const handleDeleteDroneTour = async (tourId: string, tourTitle: string) => {
+    if (!window.confirm(`Are you sure you want to permanently delete the Drone Tour "${tourTitle}"?\n\nThis will remove it from the Drone Tours & Aerial Showcase.`)) {
       return;
     }
 
-    setDeletingDroneTourId(propertyId);
+    setDeletingDroneTourId(tourId);
     try {
-      const res = await fetch(`/api/admin/properties/${propertyId}/drone-tour`, {
+      const res = await fetch(`/api/admin/drone-tours/${tourId}`, {
         method: 'DELETE',
         headers: getAdminAuthHeaders(),
         credentials: 'include'
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setPropertiesList(prev => prev.map(p => {
-          if (p.id === propertyId) {
-            const copy = { ...p };
-            delete copy.videoTour;
-            return copy;
-          }
-          return p;
-        }));
-        const idx = NOIDA_PROPERTIES.findIndex(p => p.id === propertyId);
-        if (idx !== -1) {
-          delete NOIDA_PROPERTIES[idx].videoTour;
-        }
-
-        setSaveStatus({ tab: 'drone_tours', message: `4K Drone Tour deleted from "${propertyTitle}"!` });
+        setDroneToursList(prev => prev.filter(t => t.id !== tourId));
+        setSaveStatus({ tab: 'drone_tours', message: `Drone Tour "${tourTitle}" deleted!` });
         setTimeout(() => setSaveStatus(null), 3500);
       } else {
         alert(data.error || 'Failed to delete drone tour');
@@ -880,7 +895,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <span>4K Drone Tours</span>
             </div>
             <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-700/60">
-              {propertiesList.filter(p => p.videoTour?.videoUrl).length}
+              {droneToursList.length}
             </span>
           </button>
 
@@ -1248,7 +1263,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                     <div className="flex items-end justify-between mt-1">
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <span className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                          {propertiesList.filter(p => p.videoTour?.videoUrl).length || 1}
+                          {droneToursList.length}
                         </span>
                         <span className="px-1.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-200/80">
                           Active
@@ -2102,7 +2117,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                         <th className="p-4 font-semibold">Property</th>
                         <th className="p-4 font-semibold">Sector</th>
                         <th className="p-4 font-semibold">Base Price</th>
-                        <th className="p-4 font-semibold">Video Tour</th>
+                        <th className="p-4 font-semibold">Property Video</th>
                         <th className="p-4 font-semibold">Status</th>
                         <th className="p-4 font-semibold text-right">Actions</th>
                       </tr>
@@ -2119,45 +2134,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                           <td className="p-4">
                             {prop.videoTour?.videoUrl ? (
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
-                                  <Film className="w-3 h-3 text-amber-600" />
-                                  Active ({prop.videoTour.duration || '4K'})
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-900 border border-sky-200">
+                                  <Video className="w-3 h-3 text-sky-600" />
+                                  Walkthrough ({prop.videoTour.duration || 'Video'})
                                 </span>
                                 <button
                                   type="button"
                                   onClick={() => setPreviewDroneVideo(prop.videoTour!)}
-                                  title="Watch Drone Tour"
-                                  className="p-1 rounded-md text-amber-700 hover:bg-amber-100 transition-colors cursor-pointer"
+                                  title="Watch Property Walkthrough Video"
+                                  className="p-1 rounded-md text-sky-700 hover:bg-sky-100 transition-colors cursor-pointer"
                                 >
-                                  <Play className="w-3.5 h-3.5 fill-amber-700" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpenAddDroneTour(prop.id)}
-                                  title="Edit Drone Tour"
-                                  className="p-1 rounded-md text-slate-500 hover:bg-slate-100 transition-colors cursor-pointer"
-                                >
-                                  <Edit className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteDroneTour(prop.id, prop.title)}
-                                  disabled={deletingDroneTourId === prop.id}
-                                  title="Delete Drone Tour"
-                                  className="p-1 rounded-md text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer disabled:opacity-40"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
+                                  <Play className="w-3.5 h-3.5 fill-sky-700" />
                                 </button>
                               </div>
                             ) : (
-                              <button
-                                type="button"
-                                onClick={() => handleOpenAddDroneTour(prop.id)}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-semibold rounded-lg bg-slate-100 hover:bg-amber-50 hover:text-amber-800 hover:border-amber-200 border border-slate-200 text-slate-600 transition-colors cursor-pointer"
-                              >
-                                <Plus className="w-3 h-3" />
-                                Add Drone Tour
-                              </button>
+                              <span className="text-[11px] text-slate-400 font-medium">None attached</span>
                             )}
                           </td>
                           <td className="p-4">
@@ -2194,7 +2185,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             </div>
           )}
 
-          {/* TAB: 4K DRONE TOURS MANAGEMENT */}
+          {/* TAB: 4K DRONE TOURS MANAGEMENT (Completely standalone & separate from properties) */}
           {activeTab === 'drone_tours' && (
             <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -2204,9 +2195,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                       <Film className="w-5 h-5" />
                     </span>
                     <div>
-                      <h2 className="text-lg font-bold text-slate-900">4K Drone Tours & Aerial Showcase</h2>
+                      <h2 className="text-lg font-bold text-slate-900">4K Drone Tours &amp; Aerial Showcase</h2>
                       <p className="text-xs text-slate-500">
-                        Add high-definition aerial footage, upload MP4 video tours, or delete drone walk-throughs for any property.
+                        Manage master corridor flythroughs, Yamuna Expressway aerial surveys, and regional drone showcases completely separate from individual property listings.
                       </p>
                     </div>
                   </div>
@@ -2234,28 +2225,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
                   <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Active Drone Tours</div>
                   <div className="mt-2 text-2xl font-black text-amber-600 flex items-center gap-2">
-                    <span>{propertiesList.filter(p => p.videoTour?.videoUrl).length}</span>
+                    <span>{droneToursList.length}</span>
                     <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                      {Math.round((propertiesList.filter(p => p.videoTour?.videoUrl).length / (propertiesList.length || 1)) * 100)}% Coverage
+                      Live Showcase
                     </span>
                   </div>
-                  <p className="mt-1 text-[11px] text-slate-500">Live 4K aerial tours visible to VIP buyers</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Corridor flythroughs visible in 4K aerial viewer</p>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Pending Drone Coverage</div>
-                  <div className="mt-2 text-2xl font-black text-slate-800">
-                    {propertiesList.filter(p => !p.videoTour?.videoUrl).length}
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Primary Corridor</div>
+                  <div className="mt-2 text-lg font-black text-slate-800 truncate">
+                    Noida Expressway &amp; Sec 150
                   </div>
-                  <p className="mt-1 text-[11px] text-slate-500">Properties ready for new drone tour upload</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Featured 02:45 master corridor drone inspection</p>
                 </div>
 
                 <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
-                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Storage & Video Delivery</div>
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">Aerial Quality &amp; Storage</div>
                   <div className="mt-2 text-2xl font-black text-emerald-600 flex items-center gap-1.5">
-                    <span>Direct MP4 / Stream</span>
+                    <span>4K Ultra-HD 60FPS</span>
                   </div>
-                  <p className="mt-1 text-[11px] text-slate-500">Unlimited size video upload & external embeds supported</p>
+                  <p className="mt-1 text-[11px] text-slate-500">Direct MP4 upload &amp; streaming video delivery</p>
                 </div>
               </div>
 
@@ -2263,20 +2254,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
               <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">Active Property Drone Tours</h3>
-                    <p className="text-xs text-slate-500">Preview, modify or permanently delete drone videos from the property showcase.</p>
+                    <h3 className="text-sm font-bold text-slate-900">Corridor Drone Aerial Tours</h3>
+                    <p className="text-xs text-slate-500">Preview, edit or delete master aerial tours from the Drone Tours &amp; Aerial Showcase.</p>
                   </div>
                   <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-slate-100 text-slate-700">
-                    {propertiesList.filter(p => p.videoTour?.videoUrl).length} Published
+                    {droneToursList.length} Active
                   </span>
                 </div>
 
-                {propertiesList.filter(p => p.videoTour?.videoUrl).length === 0 ? (
+                {droneToursList.length === 0 ? (
                   <div className="text-center py-12 px-4 rounded-xl border border-dashed border-slate-200 bg-slate-50">
                     <Video className="w-10 h-10 text-slate-400 mx-auto mb-2" />
                     <p className="text-sm font-semibold text-slate-700">No active drone tours yet</p>
                     <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1 mb-4">
-                      Upload your first drone footage or paste a video link to activate the 4K aerial tour experience for buyers.
+                      Upload your first drone footage or paste a video link to activate the 4K aerial tour showcase.
                     </p>
                     <button
                       type="button"
@@ -2288,134 +2279,101 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {propertiesList.filter(p => p.videoTour?.videoUrl).map(prop => {
-                      const tour = prop.videoTour!;
-                      return (
-                        <div key={prop.id} className="group relative rounded-xl border border-slate-200 overflow-hidden bg-white shadow-xs hover:shadow-md transition-all flex flex-col">
-                          {/* Thumbnail / Video Preview Header */}
-                          <div className="relative aspect-video bg-neutral-900 overflow-hidden">
-                            <img
-                              src={tour.thumbnailUrl || prop.coverImage || ''}
-                              alt={tour.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = prop.coverImage || '';
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
-                              <button
-                                type="button"
-                                onClick={() => setPreviewDroneVideo(tour)}
-                                className="w-12 h-12 rounded-full bg-amber-400/90 hover:bg-amber-300 text-neutral-950 flex items-center justify-center transition-all hover:scale-110 shadow-lg cursor-pointer"
-                                title="Play Video"
-                              >
-                                <Play className="w-5 h-5 fill-neutral-950 ml-0.5" />
-                              </button>
-                            </div>
-                            <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-amber-300 border border-amber-400/30">
-                              4K UHD
-                            </div>
-                            <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white">
-                              {tour.duration || 'Custom'}
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
-                            <div>
-                              <div className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">
-                                {prop.sector} &bull; {prop.developer}
-                              </div>
-                              <h4 className="font-bold text-sm text-slate-900 line-clamp-1 mt-0.5">
-                                {prop.title}
-                              </h4>
-                              <p className="text-xs text-slate-600 line-clamp-2 mt-1">
-                                {tour.title || tour.description || '4K Aerial Drone Tour'}
-                              </p>
-                              <div className="mt-2 text-[11px] text-slate-400 truncate">
-                                Source: {tour.videoUrl}
-                              </div>
-                            </div>
-
-                            {/* Actions */}
-                            <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                              <button
-                                type="button"
-                                onClick={() => setPreviewDroneVideo(tour)}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 transition-colors cursor-pointer"
-                              >
-                                <Play className="w-3 h-3 fill-amber-700" />
-                                Watch
-                              </button>
-                              <div className="flex items-center gap-1.5">
-                                <button
-                                  type="button"
-                                  onClick={() => handleOpenAddDroneTour(prop.id)}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
-                                  title="Edit Video URL or Details"
-                                >
-                                  <Edit className="w-3.5 h-3.5" />
-                                  Edit
-                                </button>
-                                <button
-                                  type="button"
-                                  onClick={() => handleDeleteDroneTour(prop.id, prop.title)}
-                                  disabled={deletingDroneTourId === prop.id}
-                                  className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors cursor-pointer disabled:opacity-50"
-                                  title="Delete Drone Tour"
-                                >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                  {deletingDroneTourId === prop.id ? 'Deleting...' : 'Delete'}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Properties Awaiting Drone Tours */}
-              <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <div>
-                    <h3 className="text-sm font-bold text-slate-900">Properties Awaiting 4K Drone Tour</h3>
-                    <p className="text-xs text-slate-500">Quickly upload or assign a drone video tour to any of these listings.</p>
-                  </div>
-                  <span className="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-50 text-amber-800 border border-amber-200">
-                    {propertiesList.filter(p => !p.videoTour?.videoUrl).length} Listings Pending
-                  </span>
-                </div>
-
-                {propertiesList.filter(p => !p.videoTour?.videoUrl).length === 0 ? (
-                  <div className="p-6 text-center text-xs text-slate-500 bg-emerald-50 rounded-xl border border-emerald-200">
-                    🎉 All active properties currently have 4K Drone Tours assigned!
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {propertiesList.filter(p => !p.videoTour?.videoUrl).map(prop => (
-                      <div key={prop.id} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-amber-300 transition-all flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3 min-w-0">
+                    {droneToursList.map((tour) => (
+                      <div key={tour.id} className="group relative rounded-xl border border-slate-200 overflow-hidden bg-white shadow-xs hover:shadow-md transition-all flex flex-col">
+                        {/* Thumbnail / Video Preview Header */}
+                        <div className="relative aspect-video bg-neutral-900 overflow-hidden">
                           <img
-                            src={prop.coverImage}
-                            alt={prop.title}
-                            className="w-12 h-12 rounded-lg object-cover shrink-0 border border-slate-200"
+                            src={tour.thumbnailUrl || '/corridor-expressway.jpg'}
+                            alt={tour.title}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = '/corridor-expressway.jpg';
+                            }}
                           />
-                          <div className="min-w-0">
-                            <h4 className="font-semibold text-xs text-slate-900 truncate">{prop.title}</h4>
-                            <p className="text-[11px] text-slate-500 truncate">{prop.sector} &bull; {prop.priceDisplay}</p>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDroneVideo({
+                                title: tour.title,
+                                videoUrl: tour.videoUrl,
+                                duration: tour.duration,
+                                description: tour.description
+                              })}
+                              className="w-12 h-12 rounded-full bg-amber-400/90 hover:bg-amber-300 text-neutral-950 flex items-center justify-center transition-all hover:scale-110 shadow-lg cursor-pointer"
+                              title="Play Video"
+                            >
+                              <Play className="w-5 h-5 fill-neutral-950 ml-0.5" />
+                            </button>
+                          </div>
+                          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-amber-300 border border-amber-400/30">
+                            4K UHD
+                          </div>
+                          {tour.isFeatured && (
+                            <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-500/90 backdrop-blur-xs text-[10px] font-bold text-white">
+                              Featured
+                            </div>
+                          )}
+                          <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-xs text-[10px] font-bold text-white font-mono">
+                            {tour.duration || '02:45'}
                           </div>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => handleOpenAddDroneTour(prop.id)}
-                          className="shrink-0 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-amber-400 hover:bg-amber-300 text-neutral-950 transition-colors shadow-xs cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                          Add Tour
-                        </button>
+
+                        {/* Content */}
+                        <div className="p-4 flex-1 flex flex-col justify-between space-y-3">
+                          <div>
+                            <div className="text-[11px] font-semibold text-amber-700 uppercase tracking-wide">
+                              {tour.sector}
+                            </div>
+                            <h4 className="font-bold text-sm text-slate-900 line-clamp-1 mt-0.5">
+                              {tour.title}
+                            </h4>
+                            <p className="text-xs text-slate-600 line-clamp-2 mt-1">
+                              {tour.description}
+                            </p>
+                            <div className="mt-2 text-[11px] text-slate-400 font-mono truncate">
+                              Telemetry: {tour.altitude || '180M • 4K 60FPS'}
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setPreviewDroneVideo({
+                                title: tour.title,
+                                videoUrl: tour.videoUrl,
+                                duration: tour.duration,
+                                description: tour.description
+                              })}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-800 transition-colors cursor-pointer"
+                            >
+                              <Play className="w-3 h-3 fill-amber-700" />
+                              Watch
+                            </button>
+                            <div className="flex items-center gap-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleOpenAddDroneTour(tour)}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+                                title="Edit Drone Tour"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                                Edit
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteDroneTour(tour.id, tour.title)}
+                                disabled={deletingDroneTourId === tour.id}
+                                className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-semibold rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition-colors cursor-pointer disabled:opacity-50"
+                                title="Delete Drone Tour"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                                {deletingDroneTourId === tour.id ? 'Deleting...' : 'Delete'}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -3401,9 +3359,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                 </span>
                 <div>
                   <h3 className="font-bold text-base text-slate-900">
-                    {droneTourForm.videoUrl ? 'Edit / Configure 4K Drone Tour' : 'Add 4K Drone Tour'}
+                    {editingDroneTourId ? 'Edit 4K Drone Tour' : 'Add New 4K Drone Tour'}
                   </h3>
-                  <p className="text-xs text-slate-500">Configure aerial footage and walkthrough details for the property listing.</p>
+                  <p className="text-xs text-slate-500">Configure aerial survey footage, flight corridor telemetry, and showcase overview.</p>
                 </div>
               </div>
               <button
@@ -3416,47 +3374,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
             </div>
 
             <form onSubmit={handleSaveDroneTour} className="p-6 space-y-4">
-              {/* Select Property */}
-              <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Target Property *
-                </label>
-                <select
-                  value={droneTourTargetPropId}
-                  onChange={(e) => {
-                    const chosenId = e.target.value;
-                    setDroneTourTargetPropId(chosenId);
-                    const chosen = propertiesList.find(p => p.id === chosenId);
-                    if (chosen) {
-                      if (chosen.videoTour?.videoUrl) {
-                        setDroneTourForm({
-                          title: chosen.videoTour.title || `${chosen.title} 4K Drone Tour`,
-                          videoUrl: chosen.videoTour.videoUrl,
-                          thumbnailUrl: chosen.videoTour.thumbnailUrl || chosen.coverImage || '',
-                          duration: chosen.videoTour.duration || '02:45',
-                          description: chosen.videoTour.description || `4K aerial inspection and architectural walkthrough of ${chosen.title} in ${chosen.sector}.`
-                        });
-                      } else {
-                        setDroneTourForm({
-                          title: `${chosen.title} 4K Drone Tour & Aerial Walkthrough`,
-                          videoUrl: '',
-                          thumbnailUrl: chosen.coverImage || '',
-                          duration: '02:45',
-                          description: `4K aerial inspection and architectural walkthrough of ${chosen.title} in ${chosen.sector}.`
-                        });
-                      }
-                    }
-                  }}
-                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 cursor-pointer"
-                >
-                  {propertiesList.map(p => (
-                    <option key={p.id} value={p.id}>
-                      {p.title} ({p.sector}) {p.videoTour?.videoUrl ? '• [Active Tour]' : '• [No Tour Yet]'}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Tour Title */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
@@ -3467,9 +3384,93 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   required
                   value={droneTourForm.title}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, title: e.target.value }))}
-                  placeholder="e.g. Godrej Woods 4K Aerial Drone & Forest Walkthrough"
+                  placeholder="e.g. Noida Expressway & Sector 150 Drone Flythrough"
                   className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                 />
+              </div>
+
+              {/* Corridor & Micro-Market Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Corridor / Sector *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={droneTourForm.sector}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, sector: e.target.value }))}
+                    placeholder="e.g. Noida Expressway & Sector 150 Corridor"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Growth Hub / Locality
+                  </label>
+                  <input
+                    type="text"
+                    value={droneTourForm.locality || ''}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, locality: e.target.value }))}
+                    placeholder="e.g. Expressway Growth Hub"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
+                  />
+                </div>
+              </div>
+
+              {/* Duration, Altitude & Badge Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Flight Duration *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={droneTourForm.duration}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, duration: e.target.value }))}
+                    placeholder="e.g. 02:45"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Telemetry / Altitude
+                  </label>
+                  <input
+                    type="text"
+                    value={droneTourForm.altitude || ''}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, altitude: e.target.value }))}
+                    placeholder="e.g. 180M • 4K 60FPS"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Badge Label
+                  </label>
+                  <input
+                    type="text"
+                    value={droneTourForm.badge || ''}
+                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, badge: e.target.value }))}
+                    placeholder="e.g. Master Corridor · 4K 60FPS"
+                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
+                  />
+                </div>
+              </div>
+
+              {/* Featured toggle */}
+              <div className="flex items-center gap-2 pt-1">
+                <input
+                  type="checkbox"
+                  id="droneFeaturedToggle"
+                  checked={droneTourForm.isFeatured}
+                  onChange={(e) => setDroneTourForm(prev => ({ ...prev, isFeatured: e.target.checked }))}
+                  className="w-4 h-4 rounded text-amber-500 focus:ring-amber-400"
+                />
+                <label htmlFor="droneFeaturedToggle" className="text-xs font-medium text-slate-700 cursor-pointer">
+                  Featured in Homepage Hero "Drone Tours &amp; Aerial Showcase"
+                </label>
               </div>
 
               {/* Upload or Video URL */}
@@ -3478,7 +3479,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                     Video Source (MP4 / WebM / Link) *
                   </label>
-                  <span className="text-[11px] text-amber-700 font-medium">Max 50MB (or paste link below)</span>
+                  <span className="text-[11px] text-amber-700 font-medium">Direct MP4 or link</span>
                 </div>
 
                 {/* Direct Video File Upload */}
@@ -3512,51 +3513,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   required
                   value={droneTourForm.videoUrl}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, videoUrl: e.target.value }))}
-                  placeholder="e.g. https://youtube.com/watch?v=... or https://drive.google.com/file/d/... or /uploads/videos/..."
+                  placeholder="e.g. /uploads/videos/noida-expressway-sec150-drone.mp4 or https://..."
                   className="w-full px-3.5 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400 font-mono"
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Duration */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Estimated Duration
-                  </label>
-                  <input
-                    type="text"
-                    value={droneTourForm.duration || ''}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, duration: e.target.value }))}
-                    placeholder="e.g. 02:45 or 03:10"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
-                  />
-                </div>
-
-                {/* Thumbnail Image URL */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                    Video Thumbnail / Poster URL
-                  </label>
-                  <input
-                    type="text"
-                    value={droneTourForm.thumbnailUrl || ''}
-                    onChange={(e) => setDroneTourForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
-                    placeholder="https://... (defaults to property cover)"
-                    className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
-                  />
-                </div>
+              {/* Thumbnail Image URL */}
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Video Thumbnail / Poster Image URL
+                </label>
+                <input
+                  type="text"
+                  value={droneTourForm.thumbnailUrl || ''}
+                  onChange={(e) => setDroneTourForm(prev => ({ ...prev, thumbnailUrl: e.target.value }))}
+                  placeholder="e.g. /corridor-expressway.jpg"
+                  className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
+                />
               </div>
 
               {/* Description / Highlights */}
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                  Drone Tour Highlights / Overview
+                  Drone Flight Highlights &amp; Corridor Overview
                 </label>
                 <textarea
                   rows={2}
                   value={droneTourForm.description || ''}
                   onChange={(e) => setDroneTourForm(prev => ({ ...prev, description: e.target.value }))}
-                  placeholder="Highlight key aerial views, clubhouse fly-through, expressway connectivity, etc."
+                  placeholder="Comprehensive 4K aerial drone survey capturing the Noida-Greater Noida Expressway, 45m arterial sector roads..."
                   className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-400/40 focus:border-amber-400"
                 />
               </div>
@@ -3571,6 +3556,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   <video
                     src={droneTourForm.videoUrl}
                     controls
+                    onLoadedMetadata={(e) => {
+                      const sec = Math.round(e.currentTarget.duration);
+                      if (sec && !isNaN(sec)) {
+                        const mins = Math.floor(sec / 60);
+                        const remainingSec = sec % 60;
+                        const formatted = `${String(mins).padStart(2, '0')}:${String(remainingSec).padStart(2, '0')}`;
+                        setDroneTourForm(prev => ({ ...prev, duration: formatted }));
+                      }
+                    }}
                     className="w-full max-h-48 rounded-lg bg-black object-contain"
                   />
                 </div>
@@ -3578,16 +3572,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
 
               {/* Modal Footer */}
               <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
-                {propertiesList.find(p => p.id === droneTourTargetPropId)?.videoTour?.videoUrl && (
+                {editingDroneTourId && (
                   <button
                     type="button"
                     disabled={droneActionLoading}
                     onClick={() => {
-                      const prop = propertiesList.find(p => p.id === droneTourTargetPropId);
-                      if (prop) {
-                        setDroneTourModalOpen(false);
-                        handleDeleteDroneTour(prop.id, prop.title);
-                      }
+                      setDroneTourModalOpen(false);
+                      handleDeleteDroneTour(editingDroneTourId, droneTourForm.title);
                     }}
                     className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 transition-colors cursor-pointer mr-auto"
                   >
@@ -3608,8 +3599,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onClose }) => {
                   disabled={droneActionLoading || isUploadingDroneVideo}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-400 hover:bg-amber-300 text-neutral-950 font-bold text-xs rounded-xl transition-colors shadow-xs cursor-pointer disabled:opacity-50"
                 >
-                  <Save className="w-4 h-4" />
-                  {droneActionLoading ? 'Saving Tour...' : 'Save & Publish Drone Tour'}
+                  {droneActionLoading ? (
+                    <>
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                      Saving Tour...
+                    </>
+                  ) : (
+                    <>
+                      <Check className="w-3.5 h-3.5" />
+                      {editingDroneTourId ? 'Update Drone Tour' : 'Publish Drone Tour'}
+                    </>
+                  )}
                 </button>
               </div>
             </form>

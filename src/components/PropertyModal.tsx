@@ -8,7 +8,7 @@ interface PropertyModalProps {
   property: Property | null;
   onClose: () => void;
   onOpenScheduleModal: (projectName: string) => void;
-  onWatchVideo?: (video: any) => void;
+  onWatchVideo?: (property: Property, video?: any) => void;
 }
 
 export const PropertyModal: React.FC<PropertyModalProps> = ({
@@ -214,11 +214,11 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
                       type="button"
                       onClick={() => {
                         onClose();
-                        onWatchVideo(property.videoTour);
+                        onWatchVideo(property, property.videoTour);
                       }}
                       className="px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto shadow-md"
                     >
-                      Play Drone Flythrough
+                      Play Video Walkthrough
                     </button>
                   )}
                 </div>
@@ -598,12 +598,12 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
                     type="button"
                     onClick={() => {
                       onClose();
-                      onWatchVideo(property.videoTour);
+                      onWatchVideo(property, property.videoTour);
                     }}
                     className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
                   >
                     <Play className="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-current" />
-                    <span className="hidden sm:inline">Watch 4K Tour</span>
+                    <span className="hidden sm:inline">Watch Project Video</span>
                     <span className="sm:hidden">Video</span>
                   </button>
                 )}

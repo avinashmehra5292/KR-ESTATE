@@ -7,7 +7,7 @@ interface PropertyGridProps {
   properties: Property[];
   onSelectProperty: (property: Property) => void;
   onScheduleVisit: (propertyName: string) => void;
-  onWatchVideo?: (video: any) => void;
+  onWatchVideo?: (property: Property, video?: any) => void;
   searchFilterParams?: { sector: string; type: string; budget: string };
   onResetFilters?: () => void;
 }

@@ -2,244 +2,6 @@ import { Property } from '../types';
 
 export const NOIDA_PROPERTIES: Property[] = [
   {
-    "id": "godrej-woods-sec43",
-    "title": "Godrej Woods",
-    "developer": "Godrej Properties",
-    "tagline": "Private Urban Forest Residences adjacent to Noida Golf Course",
-    "sector": "Sector 43",
-    "locality": "Central Noida",
-    "propertyType": "luxury_apartment",
-    "status": "under_construction",
-    "possessionDate": "Mid 2026",
-    "priceDisplay": "₹2.65 Cr - ₹6.80 Cr",
-    "priceNumInCrores": 2.65,
-    "pricePerSqFt": 17200,
-    "bhkConfigurations": [
-      "3 BHK",
-      "4 BHK",
-      "5 BHK Penthouse"
-    ],
-    "reraNumber": "UPRERAPRJ704730",
-    "totalAcres": 11,
-    "openGreensPercentage": 78,
-    "coverImage": "/uploads/upload-1791888851141-3.jpg",
-    "galleryImages": [
-      {
-        "url": "/uploads/upload-1791888851125-1.jpg",
-        "caption": "Godrej Woods - Photo 1"
-      },
-      {
-        "url": "/uploads/upload-1791888851130-2.jpg",
-        "caption": "Godrej Woods - Photo 2"
-      },
-      {
-        "url": "/uploads/upload-1791888851141-3.jpg",
-        "caption": "Godrej Woods - Photo 3"
-      },
-      {
-        "url": "/uploads/upload-1791888851147-4.jpg",
-        "caption": "Godrej Woods - Photo 4"
-      }
-    ],
-    "shortDescription": "1,100 dense urban trees, 2 infinity edge swimming pools, elevated walking bridges, and bespoke Turkish hammam bath.",
-    "fullDescription": "Godrej Woods in Sector 43, Noida brings nature right to your doorstep with an authentic private forest ecosystem of over 1,100 mature trees. Nestled right next to the prestigious Noida Golf Course and just 900m from Botanical Garden Metro Interchange, this landmark development merges international luxury specifications with sustainable green architecture.",
-    "amenities": [
-      "2 Infinity Edge Pools",
-      "Urban Forest Canopy Walk",
-      "Turkish Hammam & Spa",
-      "Glass Facade Clubhouse",
-      "Indoor Badminton & Squash Courts",
-      "EV Fast Charging Stations",
-      "Multi-tier 24/7 Biometric Security",
-      "Kids Forest Adventure Zone"
-    ],
-    "highlights": [
-      "Metro Network Distance - 900 Meters (Botanical Garden Metro)",
-      "Jewar International Airport Distance - 42 Mins (Jewar International Airport)",
-      "Expressway Access Distance - 2 Mins (Noida-Greater Noida Expressway)",
-      "Location Advantage - Adjacent to Noida Golf Course & Sector 44",
-      "Location Advantage - 3 Mins from Botanical Garden Metro Station",
-      "Location Advantage - 10 Mins to South Delhi via DND Flyway",
-      "Location Advantage - Private deck with forest and city skyline vistas"
-    ],
-    "floorPlans": [
-      {
-        "name": "3 BHK Royal Luxe",
-        "bedrooms": 3,
-        "bathrooms": 3,
-        "carpetAreaSqFt": 1350,
-        "superAreaSqFt": 1850,
-        "priceEstimate": "₹2.65 Cr"
-      },
-      {
-        "name": "4 BHK Grand Suite",
-        "bedrooms": 4,
-        "bathrooms": 4,
-        "carpetAreaSqFt": 1820,
-        "superAreaSqFt": 2570,
-        "priceEstimate": "₹3.95 Cr"
-      },
-      {
-        "name": "5 BHK Forest Penthouse",
-        "bedrooms": 5,
-        "bathrooms": 5,
-        "carpetAreaSqFt": 2890,
-        "superAreaSqFt": 3750,
-        "priceEstimate": "₹6.80 Cr"
-      }
-    ],
-    "distanceToMetro": "900 Meters (Botanical Garden Metro)",
-    "distanceToAirport": "42 Mins (Jewar International Airport)",
-    "distanceToExpressway": "2 Mins (Noida-Greater Noida Expressway)",
-    "architecturalTheme": {
-      "gradient": "from-emerald-950 via-slate-900 to-emerald-900",
-      "accentColor": "#10b981",
-      "iconType": "tree"
-    },
-    "locationAdvantages": [
-      {
-        "label": "Metro Network Distance",
-        "value": "900 Meters (Botanical Garden Metro)"
-      },
-      {
-        "label": "Jewar International Airport Distance",
-        "value": "42 Mins (Jewar International Airport)"
-      },
-      {
-        "label": "Expressway Access Distance",
-        "value": "2 Mins (Noida-Greater Noida Expressway)"
-      },
-      {
-        "label": "Location Advantage",
-        "value": "Adjacent to Noida Golf Course & Sector 44"
-      },
-      {
-        "label": "Location Advantage",
-        "value": "3 Mins from Botanical Garden Metro Station"
-      },
-      {
-        "label": "Location Advantage",
-        "value": "10 Mins to South Delhi via DND Flyway"
-      },
-      {
-        "label": "Location Advantage",
-        "value": "Private deck with forest and city skyline vistas"
-      }
-    ]
-  },
-  {
-    "id": "ats-knightsbridge-sec124",
-    "title": "ATS Knightsbridge",
-    "developer": "ATS Infrastructure",
-    "tagline": "Ultra-Luxury Sky Mansions at the Border of South Delhi & Noida",
-    "sector": "Sector 124",
-    "locality": "Noida Expressway",
-    "propertyType": "penthouse",
-    "status": "ready_to_move",
-    "possessionDate": "Ready to Move",
-    "priceDisplay": "₹11.50 Cr - ₹24.00 Cr",
-    "priceNumInCrores": 11.5,
-    "pricePerSqFt": 21500,
-    "bhkConfigurations": [
-      "4 BHK Mansion",
-      "6 BHK Sky Villa"
-    ],
-    "reraNumber": "UPRERAPRJ3574",
-    "totalAcres": 6.24,
-    "openGreensPercentage": 82,
-    "coverImage": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
-    "galleryImages": [
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
-        "caption": "ATS Knightsbridge - Iconic 35-Storey Sky Mansion Towers"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-2.jpg",
-        "caption": "ATS Knightsbridge - Triple-Height Grand Chandelier Lobby"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-3.jpg",
-        "caption": "ATS Knightsbridge - Olympic-Sized All-Weather Swimming Pool"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-4.jpg",
-        "caption": "ATS Knightsbridge - Palatial 6,000 Sq.Ft Sky Mansion Living Salon"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-5.jpg",
-        "caption": "ATS Knightsbridge - Presidential Master Suite with Walk-In Dressing Gallery"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-6.jpg",
-        "caption": "ATS Knightsbridge - Royal 35,000 Sq.Ft Clubhouse & Cigar Lounge"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-7.jpg",
-        "caption": "ATS Knightsbridge - Penthouse Private Plunge Pool & Yamuna Skyline Deck"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-8.jpg",
-        "caption": "ATS Knightsbridge - Italian Statuario Marble Spa Bathroom"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-9.jpg",
-        "caption": "ATS Knightsbridge - Formal Banquet Ballroom & Executive Meeting Suites"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-10.jpg",
-        "caption": "ATS Knightsbridge - Grand Porte-Cochere & Private Driveway"
-      },
-      {
-        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-11.jpg",
-        "caption": "ATS Knightsbridge - Private Elevator Vestibule to Single Residence per Floor"
-      }
-    ],
-    "shortDescription": "One majestic residence per floor with dedicated private high-speed elevator elevators and 35,000 sq.ft clubhouse.",
-    "fullDescription": "ATS Knightsbridge is an aristocratic landmark situated at Sector 124, right on the cusp of South Delhi and Noida. Five statuesque 47-storey towers house only one residence per floor per elevator core, guaranteeing absolute exclusivity. Each 4 & 6 BHK sky mansion offers 360-degree unobstructed panoramas of the Yamuna riverfront and Delhi skyline.",
-    "amenities": [
-      "35,000 Sq.Ft Aristocratic Clubhouse",
-      "Olympic-Length Heated Indoor Pool",
-      "Private Screening Theatre & Cigar Lounge",
-      "Helipad Access atop Towers",
-      "Dedicated Chauffeur Concierge Lounge",
-      "Smart Home Automation by Crestron",
-      "Triple-Height Grand Drop-Off Lobby",
-      "VRV Air-Conditioning with Air Quality Filtration"
-    ],
-    "highlights": [
-      "0 km from South Delhi & Kalindi Kunj Border",
-      "Only 1 Residence Per Floor per Elevator",
-      "Sweeping Views of Yamuna Riverfront and Green Belts",
-      "3-Tier Biometric & Facial Recognition Security"
-    ],
-    "floorPlans": [
-      {
-        "name": "4 BHK Grand Sky Mansion",
-        "bedrooms": 4,
-        "bathrooms": 5,
-        "carpetAreaSqFt": 4200,
-        "superAreaSqFt": 6000,
-        "priceEstimate": "₹11.50 Cr"
-      },
-      {
-        "name": "6 BHK Imperial Sky Villa",
-        "bedrooms": 6,
-        "bathrooms": 7,
-        "carpetAreaSqFt": 6800,
-        "superAreaSqFt": 10000,
-        "priceEstimate": "₹22.50 Cr"
-      }
-    ],
-    "distanceToMetro": "1.2 Km (Okhla Bird Sanctuary Metro)",
-    "distanceToAirport": "38 Mins (Jewar International Airport)",
-    "distanceToExpressway": "Direct Exit on Noida-Greater Noida Expressway",
-    "architecturalTheme": {
-      "gradient": "from-amber-950 via-slate-900 to-yellow-950",
-      "accentColor": "#d4af37",
-      "iconType": "sparkle"
-    }
-  },
-  {
     "id": "mahagun-manorialle-sec128",
     "title": "Mahagun Manorialle",
     "developer": "Mahagun Group",
@@ -324,39 +86,41 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Close proximity to Jaypee Hospital and Top International Schools",
       "Rapid access to DND Flyway and Jewar Corridor"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "3 BHK Golf Haven",
         "bedrooms": 3,
         "bathrooms": 4,
-        "carpetAreaSqFt": 1850,
+        "priceEstimate": "₹3.90 Cr",
         "superAreaSqFt": 2700,
-        "priceEstimate": "₹3.90 Cr"
+        "carpetAreaSqFt": 1850
       },
       {
         "name": "4 BHK Imperial Horizon",
         "bedrooms": 4,
         "bathrooms": 5,
-        "carpetAreaSqFt": 2550,
+        "priceEstimate": "₹5.85 Cr",
         "superAreaSqFt": 3775,
-        "priceEstimate": "₹5.85 Cr"
+        "carpetAreaSqFt": 2550
       },
       {
         "name": "5 BHK Golf Duplex Manor",
         "bedrooms": 5,
         "bathrooms": 6,
-        "carpetAreaSqFt": 4100,
+        "priceEstimate": "₹9.20 Cr",
         "superAreaSqFt": 5900,
-        "priceEstimate": "₹9.20 Cr"
+        "carpetAreaSqFt": 4100
       }
     ],
     "distanceToMetro": "2.5 Km (Sector 137 Metro Station)",
     "distanceToAirport": "35 Mins (Jewar International Airport)",
     "distanceToExpressway": "On Noida Expressway Service Corridor",
+    "videoTour": null,
     "architecturalTheme": {
       "gradient": "from-blue-950 via-slate-900 to-indigo-950",
-      "accentColor": "#38bdf8",
-      "iconType": "tower"
+      "iconType": "tower",
+      "accentColor": "#38bdf8"
     }
   },
   {
@@ -441,40 +205,6 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Location Advantage - Zero Overhead Electric Cables Underground Infrastructure",
       "Location Advantage - Direct Gateway to Jewar International Airport (25 Mins)"
     ],
-    "floorPlans": [
-      {
-        "name": "2 BHK + Study Starlit",
-        "bedrooms": 2,
-        "bathrooms": 2,
-        "carpetAreaSqFt": 980,
-        "superAreaSqFt": 1350,
-        "priceEstimate": "₹1.75 Cr"
-      },
-      {
-        "name": "3 BHK Signature Luxe",
-        "bedrooms": 3,
-        "bathrooms": 3,
-        "carpetAreaSqFt": 1320,
-        "superAreaSqFt": 1775,
-        "priceEstimate": "₹2.35 Cr"
-      },
-      {
-        "name": "3 BHK + Servant Grand",
-        "bedrooms": 3,
-        "bathrooms": 4,
-        "carpetAreaSqFt": 1560,
-        "superAreaSqFt": 2150,
-        "priceEstimate": "₹2.85 Cr"
-      }
-    ],
-    "distanceToMetro": "800 Meters (Sector 148 Aqua Line Metro)",
-    "distanceToAirport": "25 Mins (Jewar International Airport)",
-    "distanceToExpressway": "1 Min (Noida-Greater Noida Expressway)",
-    "architecturalTheme": {
-      "gradient": "from-cyan-950 via-slate-900 to-teal-950",
-      "accentColor": "#2dd4bf",
-      "iconType": "tower"
-    },
     "locationAdvantages": [
       {
         "label": "Metro Network Distance",
@@ -504,7 +234,42 @@ export const NOIDA_PROPERTIES: Property[] = [
         "label": "Location Advantage",
         "value": "Direct Gateway to Jewar International Airport (25 Mins)"
       }
-    ]
+    ],
+    "floorPlans": [
+      {
+        "name": "2 BHK + Study Starlit",
+        "bedrooms": 2,
+        "bathrooms": 2,
+        "priceEstimate": "₹1.75 Cr",
+        "superAreaSqFt": 1350,
+        "carpetAreaSqFt": 980
+      },
+      {
+        "name": "3 BHK Signature Luxe",
+        "bedrooms": 3,
+        "bathrooms": 3,
+        "priceEstimate": "₹2.35 Cr",
+        "superAreaSqFt": 1775,
+        "carpetAreaSqFt": 1320
+      },
+      {
+        "name": "3 BHK + Servant Grand",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "priceEstimate": "₹2.85 Cr",
+        "superAreaSqFt": 2150,
+        "carpetAreaSqFt": 1560
+      }
+    ],
+    "distanceToMetro": "800 Meters (Sector 148 Aqua Line Metro)",
+    "distanceToAirport": "25 Mins (Jewar International Airport)",
+    "distanceToExpressway": "1 Min (Noida-Greater Noida Expressway)",
+    "videoTour": null,
+    "architecturalTheme": {
+      "gradient": "from-cyan-950 via-slate-900 to-teal-950",
+      "iconType": "tower",
+      "accentColor": "#2dd4bf"
+    }
   },
   {
     "id": "bhutani-cyberthum-sec140a",
@@ -590,39 +355,41 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Attractive Payment Plans & Pre-Leased Guarantee Options",
       "Grade-A Commercial Space with High Rental Yield"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "Grade-A Smart Office Space",
         "bedrooms": 0,
         "bathrooms": 1,
-        "carpetAreaSqFt": 350,
+        "priceEstimate": "₹42 Lakh",
         "superAreaSqFt": 550,
-        "priceEstimate": "₹42 Lakh"
+        "carpetAreaSqFt": 350
       },
       {
         "name": "Prime High-Street Retail Unit",
         "bedrooms": 0,
         "bathrooms": 1,
-        "carpetAreaSqFt": 250,
+        "priceEstimate": "₹68 Lakh",
         "superAreaSqFt": 400,
-        "priceEstimate": "₹68 Lakh"
+        "carpetAreaSqFt": 250
       },
       {
         "name": "Corporate Anchor Floor Plate",
         "bedrooms": 0,
         "bathrooms": 4,
-        "carpetAreaSqFt": 2800,
+        "priceEstimate": "₹3.60 Cr",
         "superAreaSqFt": 4500,
-        "priceEstimate": "₹3.60 Cr"
+        "carpetAreaSqFt": 2800
       }
     ],
     "distanceToMetro": "500 Meters (Sector 142 Metro Station)",
     "distanceToAirport": "30 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Frontage on Noida Expressway",
+    "videoTour": null,
     "architecturalTheme": {
       "gradient": "from-violet-950 via-slate-900 to-purple-950",
-      "accentColor": "#a855f7",
-      "iconType": "commercial"
+      "iconType": "commercial",
+      "accentColor": "#a855f7"
     }
   },
   {
@@ -708,31 +475,39 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Walking Distance from Sector 144 Metro Station",
       "Dedicated Service Core and Butler Entries"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "4 BHK Wellness Manor",
         "bedrooms": 4,
         "bathrooms": 5,
-        "carpetAreaSqFt": 2950,
+        "priceEstimate": "₹6.20 Cr",
         "superAreaSqFt": 4100,
-        "priceEstimate": "₹6.20 Cr"
+        "carpetAreaSqFt": 2950
       },
       {
         "name": "4 BHK + Family Lounge Sovereign",
         "bedrooms": 4,
         "bathrooms": 6,
-        "carpetAreaSqFt": 3450,
+        "priceEstimate": "₹7.80 Cr",
         "superAreaSqFt": 4700,
-        "priceEstimate": "₹7.80 Cr"
+        "carpetAreaSqFt": 3450
       }
     ],
     "distanceToMetro": "600 Meters (Sector 144 Aqua Line Metro)",
     "distanceToAirport": "30 Mins (Jewar International Airport)",
     "distanceToExpressway": "On Noida Expressway Service Arterial",
+    "videoTour": {
+      "title": "Gulshan Dynasty 4K Drone Tour & Aerial Walkthrough",
+      "videoUrl": "https://www.youtube.com/watch?v=lR5S12tCJUY",
+      "thumbnailUrl": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
+      "duration": "02:45",
+      "description": "4K aerial inspection and architectural walkthrough of Gulshan Dynasty in Sector 144."
+    },
     "architecturalTheme": {
       "gradient": "from-emerald-950 via-slate-900 to-teal-950",
-      "accentColor": "#34d399",
-      "iconType": "sparkle"
+      "iconType": "sparkle",
+      "accentColor": "#34d399"
     }
   },
   {
@@ -819,39 +594,41 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Adjacent to Buddh F1 Circuit & Sports City",
       "Projected 35-40% 3-Year Capital Appreciation"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "Compact Residential Plot (120 Sq.Yd)",
         "bedrooms": 0,
         "bathrooms": 0,
-        "carpetAreaSqFt": 1080,
+        "priceEstimate": "₹65 Lakh",
         "superAreaSqFt": 1080,
-        "priceEstimate": "₹65 Lakh"
+        "carpetAreaSqFt": 1080
       },
       {
         "name": "Standard Villa Plot (250 Sq.Yd)",
         "bedrooms": 0,
         "bathrooms": 0,
-        "carpetAreaSqFt": 2250,
+        "priceEstimate": "₹1.25 Cr",
         "superAreaSqFt": 2250,
-        "priceEstimate": "₹1.25 Cr"
+        "carpetAreaSqFt": 2250
       },
       {
         "name": "Palatial Estate Plot (500 Sq.Yd)",
         "bedrooms": 0,
         "bathrooms": 0,
-        "carpetAreaSqFt": 4500,
+        "priceEstimate": "₹2.40 Cr",
         "superAreaSqFt": 4500,
-        "priceEstimate": "₹2.40 Cr"
+        "carpetAreaSqFt": 4500
       }
     ],
     "distanceToMetro": "Upcoming Jewar Airport Express Metro",
     "distanceToAirport": "12 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Entry from 6-Lane Yamuna Expressway",
+    "videoTour": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-orange-950",
-      "accentColor": "#f59e0b",
-      "iconType": "villa"
+      "iconType": "villa",
+      "accentColor": "#f59e0b"
     }
   },
   {
@@ -937,31 +714,160 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Close to Fortis Hospital and Top Schools",
       "Zero Construction Risk - 100% Registry Ready"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "3 BHK Egyptian Luxe",
         "bedrooms": 3,
         "bathrooms": 3,
-        "carpetAreaSqFt": 1250,
+        "priceEstimate": "₹1.95 Cr",
         "superAreaSqFt": 1820,
-        "priceEstimate": "₹1.95 Cr"
+        "carpetAreaSqFt": 1250
       },
       {
         "name": "4 BHK Grand Pharaoh",
         "bedrooms": 4,
         "bathrooms": 4,
-        "carpetAreaSqFt": 1780,
+        "priceEstimate": "₹2.85 Cr",
         "superAreaSqFt": 2448,
-        "priceEstimate": "₹2.85 Cr"
+        "carpetAreaSqFt": 1780
       }
     ],
     "distanceToMetro": "2.5 Km (Sector 52 Metro Station)",
     "distanceToAirport": "40 Mins (Jewar International Airport)",
     "distanceToExpressway": "5 Mins (FNG Corridor & Noida Expressway)",
+    "videoTour": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-rose-950",
-      "accentColor": "#fbbf24",
-      "iconType": "tower"
+      "iconType": "tower",
+      "accentColor": "#fbbf24"
+    }
+  },
+  {
+    "id": "godrej-woods-sec43",
+    "title": "Godrej Woods",
+    "developer": "Godrej Properties",
+    "tagline": "Private Urban Forest Residences adjacent to Noida Golf Course",
+    "sector": "Sector 43",
+    "locality": "Central Noida",
+    "propertyType": "luxury_apartment",
+    "status": "under_construction",
+    "possessionDate": "Mid 2026",
+    "priceDisplay": "₹2.65 Cr - ₹6.80 Cr",
+    "priceNumInCrores": 2.65,
+    "pricePerSqFt": 17200,
+    "bhkConfigurations": [
+      "3 BHK",
+      "4 BHK",
+      "5 BHK Penthouse"
+    ],
+    "reraNumber": "UPRERAPRJ704730",
+    "totalAcres": 11,
+    "openGreensPercentage": 78,
+    "coverImage": "/uploads/upload-1791888851141-3.jpg",
+    "galleryImages": [
+      {
+        "url": "/uploads/upload-1791888851125-1.jpg",
+        "caption": "Godrej Woods - Photo 1"
+      },
+      {
+        "url": "/uploads/upload-1791888851130-2.jpg",
+        "caption": "Godrej Woods - Photo 2"
+      },
+      {
+        "url": "/uploads/upload-1791888851141-3.jpg",
+        "caption": "Godrej Woods - Photo 3"
+      },
+      {
+        "url": "/uploads/upload-1791888851147-4.jpg",
+        "caption": "Godrej Woods - Photo 4"
+      }
+    ],
+    "shortDescription": "1,100 dense urban trees, 2 infinity edge swimming pools, elevated walking bridges, and bespoke Turkish hammam bath.",
+    "fullDescription": "Godrej Woods in Sector 43, Noida brings nature right to your doorstep with an authentic private forest ecosystem of over 1,100 mature trees. Nestled right next to the prestigious Noida Golf Course and just 900m from Botanical Garden Metro Interchange, this landmark development merges international luxury specifications with sustainable green architecture.",
+    "amenities": [
+      "2 Infinity Edge Pools",
+      "Urban Forest Canopy Walk",
+      "Turkish Hammam & Spa",
+      "Glass Facade Clubhouse",
+      "Indoor Badminton & Squash Courts",
+      "EV Fast Charging Stations",
+      "Multi-tier 24/7 Biometric Security",
+      "Kids Forest Adventure Zone"
+    ],
+    "highlights": [
+      "Metro Network Distance - 900 Meters (Botanical Garden Metro)",
+      "Jewar International Airport Distance - 42 Mins (Jewar International Airport)",
+      "Expressway Access Distance - 2 Mins (Noida-Greater Noida Expressway)",
+      "Location Advantage - Adjacent to Noida Golf Course & Sector 44",
+      "Location Advantage - 3 Mins from Botanical Garden Metro Station",
+      "Location Advantage - 10 Mins to South Delhi via DND Flyway",
+      "Location Advantage - Private deck with forest and city skyline vistas"
+    ],
+    "locationAdvantages": [
+      {
+        "label": "Metro Network Distance",
+        "value": "900 Meters (Botanical Garden Metro)"
+      },
+      {
+        "label": "Jewar International Airport Distance",
+        "value": "42 Mins (Jewar International Airport)"
+      },
+      {
+        "label": "Expressway Access Distance",
+        "value": "2 Mins (Noida-Greater Noida Expressway)"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Adjacent to Noida Golf Course & Sector 44"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "3 Mins from Botanical Garden Metro Station"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "10 Mins to South Delhi via DND Flyway"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Private deck with forest and city skyline vistas"
+      }
+    ],
+    "floorPlans": [
+      {
+        "name": "3 BHK Royal Luxe",
+        "bedrooms": 3,
+        "bathrooms": 3,
+        "priceEstimate": "₹2.65 Cr",
+        "superAreaSqFt": 1850,
+        "carpetAreaSqFt": 1350
+      },
+      {
+        "name": "4 BHK Grand Suite",
+        "bedrooms": 4,
+        "bathrooms": 4,
+        "priceEstimate": "₹3.95 Cr",
+        "superAreaSqFt": 2570,
+        "carpetAreaSqFt": 1820
+      },
+      {
+        "name": "5 BHK Forest Penthouse",
+        "bedrooms": 5,
+        "bathrooms": 5,
+        "priceEstimate": "₹6.80 Cr",
+        "superAreaSqFt": 3750,
+        "carpetAreaSqFt": 2890
+      }
+    ],
+    "distanceToMetro": "900 Meters (Botanical Garden Metro)",
+    "distanceToAirport": "42 Mins (Jewar International Airport)",
+    "distanceToExpressway": "2 Mins (Noida-Greater Noida Expressway)",
+    "videoTour": null,
+    "architecturalTheme": {
+      "gradient": "from-emerald-950 via-slate-900 to-emerald-900",
+      "iconType": "tree",
+      "accentColor": "#10b981"
     }
   },
   {
@@ -1051,31 +957,185 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Surrounded by 1,00,000+ luxury residential catchment",
       "USGBC Gold Certified Green Architecture"
     ],
+    "locationAdvantages": [],
     "floorPlans": [
       {
         "name": "Smart Corporate Suite",
         "bedrooms": 0,
         "bathrooms": 1,
-        "carpetAreaSqFt": 520,
+        "priceEstimate": "₹75 Lakhs",
         "superAreaSqFt": 750,
-        "priceEstimate": "₹75 Lakhs"
+        "carpetAreaSqFt": 520
       },
       {
         "name": "High-Street Anchor Retail",
         "bedrooms": 0,
         "bathrooms": 1,
-        "carpetAreaSqFt": 1100,
+        "priceEstimate": "₹2.20 Cr",
         "superAreaSqFt": 1650,
-        "priceEstimate": "₹2.20 Cr"
+        "carpetAreaSqFt": 1100
       }
     ],
     "distanceToMetro": "500 Meters (Sector 137 / 142 Metro)",
     "distanceToAirport": "35 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Frontage (Noida Expressway)",
+    "videoTour": {
+      "title": "GYGY MENTIS 4K Drone Tour & Aerial Walkthrough",
+      "duration": "02:45",
+      "videoUrl": "https://www.youtube.com/watch?v=3aEaIp1ZPWs",
+      "description": "4K aerial inspection and architectural walkthrough of GYGY MENTIS in Noida Sector 140.",
+      "thumbnailUrl": "/images/properties/prop-1791396536248/prop-1791396536248-1.jpg"
+    },
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-indigo-950",
-      "accentColor": "#f59e0b",
-      "iconType": "tower"
+      "iconType": "tower",
+      "accentColor": "#f59e0b"
+    }
+  },
+  {
+    "id": "ats-knightsbridge-sec124",
+    "title": "ATS Knightsbridge",
+    "developer": "ATS Infrastructure",
+    "tagline": "Ultra-Luxury Sky Mansions at the Border of South Delhi & Noida",
+    "sector": "Sector 124",
+    "locality": "Noida Expressway",
+    "propertyType": "penthouse",
+    "status": "ready_to_move",
+    "possessionDate": "Ready to Move",
+    "priceDisplay": "₹11.50 Cr - ₹24.00 Cr",
+    "priceNumInCrores": 11.5,
+    "pricePerSqFt": 21500,
+    "bhkConfigurations": [
+      "4 BHK Mansion",
+      "6 BHK Sky Villa"
+    ],
+    "reraNumber": "UPRERAPRJ3574",
+    "totalAcres": 6.24,
+    "openGreensPercentage": 82,
+    "coverImage": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
+    "galleryImages": [
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-1.jpg",
+        "caption": "ATS Knightsbridge - Iconic 35-Storey Sky Mansion Towers"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-2.jpg",
+        "caption": "ATS Knightsbridge - Triple-Height Grand Chandelier Lobby"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-3.jpg",
+        "caption": "ATS Knightsbridge - Olympic-Sized All-Weather Swimming Pool"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-4.jpg",
+        "caption": "ATS Knightsbridge - Palatial 6,000 Sq.Ft Sky Mansion Living Salon"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-5.jpg",
+        "caption": "ATS Knightsbridge - Presidential Master Suite with Walk-In Dressing Gallery"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-6.jpg",
+        "caption": "ATS Knightsbridge - Royal 35,000 Sq.Ft Clubhouse & Cigar Lounge"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-7.jpg",
+        "caption": "ATS Knightsbridge - Penthouse Private Plunge Pool & Yamuna Skyline Deck"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-8.jpg",
+        "caption": "ATS Knightsbridge - Italian Statuario Marble Spa Bathroom"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-9.jpg",
+        "caption": "ATS Knightsbridge - Formal Banquet Ballroom & Executive Meeting Suites"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-10.jpg",
+        "caption": "ATS Knightsbridge - Grand Porte-Cochere & Private Driveway"
+      },
+      {
+        "url": "/images/properties/ats-knightsbridge-sec124/ats-knightsbridge-sec124-11.jpg",
+        "caption": "ATS Knightsbridge - Private Elevator Vestibule to Single Residence per Floor"
+      }
+    ],
+    "shortDescription": "One majestic residence per floor with dedicated private high-speed elevator elevators and 35,000 sq.ft clubhouse.",
+    "fullDescription": "ATS Knightsbridge is an aristocratic landmark situated at Sector 124, right on the cusp of South Delhi and Noida. Five statuesque 47-storey towers house only one residence per floor per elevator core, guaranteeing absolute exclusivity. Each 4 & 6 BHK sky mansion offers 360-degree unobstructed panoramas of the Yamuna riverfront and Delhi skyline.",
+    "amenities": [
+      "35,000 Sq.Ft Aristocratic Clubhouse",
+      "Olympic-Length Heated Indoor Pool",
+      "Private Screening Theatre & Cigar Lounge",
+      "Helipad Access atop Towers",
+      "Dedicated Chauffeur Concierge Lounge",
+      "Smart Home Automation by Crestron",
+      "Triple-Height Grand Drop-Off Lobby",
+      "VRV Air-Conditioning with Air Quality Filtration"
+    ],
+    "highlights": [
+      "Metro Network Distance - 1.2 Km (Okhla Bird Sanctuary Metro)",
+      "Jewar International Airport Distance - 38 Mins (Jewar International Airport)",
+      "Expressway Access Distance - Direct Exit on Noida-Greater Noida Expressway",
+      "Location Advantage - 0 km from South Delhi & Kalindi Kunj Border",
+      "Location Advantage - Only 1 Residence Per Floor per Elevator",
+      "Location Advantage - Sweeping Views of Yamuna Riverfront and Green Belts",
+      "Location Advantage - 3-Tier Biometric & Facial Recognition Security"
+    ],
+    "locationAdvantages": [
+      {
+        "label": "Metro Network Distance",
+        "value": "1.2 Km (Okhla Bird Sanctuary Metro)"
+      },
+      {
+        "label": "Jewar International Airport Distance",
+        "value": "38 Mins (Jewar International Airport)"
+      },
+      {
+        "label": "Expressway Access Distance",
+        "value": "Direct Exit on Noida-Greater Noida Expressway"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "0 km from South Delhi & Kalindi Kunj Border"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Only 1 Residence Per Floor per Elevator"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Sweeping Views of Yamuna Riverfront and Green Belts"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "3-Tier Biometric & Facial Recognition Security"
+      }
+    ],
+    "floorPlans": [
+      {
+        "name": "4 BHK Grand Sky Mansion",
+        "bedrooms": 4,
+        "bathrooms": 5,
+        "priceEstimate": "₹11.50 Cr",
+        "superAreaSqFt": 6000,
+        "carpetAreaSqFt": 4200
+      },
+      {
+        "name": "6 BHK Imperial Sky Villa",
+        "bedrooms": 6,
+        "bathrooms": 7,
+        "priceEstimate": "₹22.50 Cr",
+        "superAreaSqFt": 10000,
+        "carpetAreaSqFt": 6800
+      }
+    ],
+    "distanceToMetro": "1.2 Km (Okhla Bird Sanctuary Metro)",
+    "distanceToAirport": "38 Mins (Jewar International Airport)",
+    "distanceToExpressway": "Direct Exit on Noida-Greater Noida Expressway",
+    "videoTour": null,
+    "architecturalTheme": {
+      "gradient": "from-amber-950 via-slate-900 to-yellow-950",
+      "iconType": "sparkle",
+      "accentColor": "#d4af37"
     }
   },
   {
@@ -1146,13 +1206,6 @@ export const NOIDA_PROPERTIES: Property[] = [
         "caption": "EON Fairfox - Multi-Level EV Fast-Charging & Parking Infrastructure"
       }
     ],
-    "videoTour": {
-      "title": "EON Fairfox 4K Project Flythrough",
-      "videoUrl": "/uploads/videos/video-EON_Fairfox-1791662399500.mp4",
-      "thumbnailUrl": "/uploads/upload-1791397244933-1.jpg",
-      "duration": "02:35",
-      "description": "Visual tour of the 88-meter frontage, 13.65-acre central landscaped plaza, skywalk network, and Grade-A commercial towers."
-    },
     "shortDescription": "88-meter grand boulevard frontage commercial landmark with 4 distinct phases, pedestrian skywalks, and high-street retail boulevards.",
     "fullDescription": "EON (Eye of Noida) by Fairfox is a premium 13.65-acre commercial and IT hub situated in Sector 140A along the high-growth corridor of the Noida-Greater Noida Expressway. With an extraordinary 88-meter wide road frontage, EON is thoughtfully divided into four distinct phases connected through elevated skywalks, expansive landscaped central plazas, multi-tiered retail boulevards, food courts, and premium grade-A lockable corporate towers.",
     "amenities": [
@@ -1174,32 +1227,6 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Maharishi University at 5.5km",
       "Indira Gandhi International Airport at 36.5km"
     ],
-    "floorPlans": [
-      {
-        "name": "Lockable Grade-A Office",
-        "bedrooms": 0,
-        "bathrooms": 1,
-        "carpetAreaSqFt": 480,
-        "superAreaSqFt": 720,
-        "priceEstimate": "₹65 Lakhs"
-      },
-      {
-        "name": "High-Street Boulevard Retail",
-        "bedrooms": 0,
-        "bathrooms": 1,
-        "carpetAreaSqFt": 820,
-        "superAreaSqFt": 1280,
-        "priceEstimate": "₹1.85 Cr"
-      }
-    ],
-    "distanceToMetro": "800 Meters (Sector 142 Metro Station)",
-    "distanceToAirport": "35 Mins (Jewar International Airport)",
-    "distanceToExpressway": "Greater Noida Expressway at 4.6km",
-    "architecturalTheme": {
-      "gradient": "from-blue-950 via-slate-900 to-cyan-950",
-      "accentColor": "#38bdf8",
-      "iconType": "tower"
-    },
     "locationAdvantages": [
       {
         "label": "Metro Network Distance",
@@ -1229,6 +1256,39 @@ export const NOIDA_PROPERTIES: Property[] = [
         "label": "",
         "value": "Indira Gandhi International Airport at 36.5km"
       }
-    ]
+    ],
+    "floorPlans": [
+      {
+        "name": "Lockable Grade-A Office",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "priceEstimate": "₹65 Lakhs",
+        "superAreaSqFt": 720,
+        "carpetAreaSqFt": 480
+      },
+      {
+        "name": "High-Street Boulevard Retail",
+        "bedrooms": 0,
+        "bathrooms": 1,
+        "priceEstimate": "₹1.85 Cr",
+        "superAreaSqFt": 1280,
+        "carpetAreaSqFt": 820
+      }
+    ],
+    "distanceToMetro": "800 Meters (Sector 142 Metro Station)",
+    "distanceToAirport": "35 Mins (Jewar International Airport)",
+    "distanceToExpressway": "Greater Noida Expressway at 4.6km",
+    "videoTour": {
+      "title": "EON Fairfox 4K Drone Tour & Aerial Walkthrough",
+      "duration": "3:39",
+      "videoUrl": "https://www.youtube.com/watch?v=cL59ZdSk6YU",
+      "description": "4K aerial inspection and architectural walkthrough of EON Fairfox in Sector 140A, Noida–Greater Noida Expressway.",
+      "thumbnailUrl": "/images/properties/prop-1791396945692/prop-1791396945692-1.jpg"
+    },
+    "architecturalTheme": {
+      "gradient": "from-blue-950 via-slate-900 to-cyan-950",
+      "iconType": "tower",
+      "accentColor": "#38bdf8"
+    }
   }
 ];

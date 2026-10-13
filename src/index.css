@@ -61,29 +61,29 @@
 /* Glassmorphism & Architectural Surface Accents in Luxury Peach */
 .glass-dock {
   background: rgba(255, 243, 235, 0.94);
-  backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
   border: 1px solid rgba(230, 175, 145, 0.35);
 }
 
 .glass-panel {
   background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid rgba(230, 175, 145, 0.3);
 }
 
 .glass-card {
   background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   border: 1px solid rgba(230, 175, 145, 0.3);
 }
 
 .glass-card-elevated {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 243, 235, 0.95) 100%);
-  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
   border: 1px solid rgba(245, 158, 11, 0.35);
   box-shadow: 0 20px 45px -10px rgba(180, 100, 70, 0.12);
 }
@@ -138,8 +138,8 @@
 .vibrant-card {
   background: rgba(255, 255, 255, 0.95);
   border: 1px solid rgba(230, 175, 145, 0.35);
-  backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   box-shadow: 0 10px 30px -10px rgba(180, 100, 70, 0.08);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }

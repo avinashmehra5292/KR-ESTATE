@@ -15,6 +15,7 @@ interface CorridorItem {
   image: string;
   videoTour?: {
     title: string;
+    videoUrl?: string;
     youtubeId?: string;
     duration?: string;
     resolution?: string;
@@ -30,8 +31,9 @@ const CORRIDORS: CorridorItem[] = [
     filterKey: 'Noida Expressway',
     image: '/corridor-expressway.jpg',
     videoTour: {
-      title: 'Noida Expressway Aerial & Infrastructure Showcase',
-      duration: '4:15',
+      title: 'Noida Expressway & Sector 150 Drone Flythrough',
+      duration: '02:45',
+      videoUrl: '/uploads/videos/noida-expressway-sec150-drone.mp4',
       resolution: '4K Ultra HD',
     },
   },
@@ -44,7 +46,8 @@ const CORRIDORS: CorridorItem[] = [
     image: '/prop-godrej.jpg',
     videoTour: {
       title: 'Sector 150 Sports City Luxury Walkthrough',
-      duration: '3:45',
+      duration: '02:45',
+      videoUrl: '/uploads/videos/noida-expressway-sec150-drone.mp4',
       resolution: '4K Ultra HD',
     },
   },
@@ -58,6 +61,7 @@ const CORRIDORS: CorridorItem[] = [
     videoTour: {
       title: 'Jewar Airport Corridor & Yamuna Expressway Aerial Tour',
       duration: '5:20',
+      videoUrl: '/uploads/videos/noida-expressway-sec150-drone.mp4',
       resolution: '4K Ultra HD',
     },
   },

@@ -1,0 +1,18 @@
+import { DroneTour } from '../types';
+
+export const INITIAL_DRONE_TOURS: DroneTour[] = [
+  {
+    "id": "drone-tour-1791911112633",
+    "title": "EON Fairfox IT Infra Private Limited · Sector 140A, Noida–Greater Noida Expressway",
+    "sector": "Sector 140A, Noida–Greater Noida Expressway",
+    "locality": "Expressway Growth Hub",
+    "duration": "04:15",
+    "videoUrl": "https://www.youtube.com/watch?v=cL59ZdSk6YU",
+    "thumbnailUrl": "/corridor-expressway.jpg",
+    "description": "Welcome to an exclusive walkthrough of *Fairfox EON (Eye of Noida)*, one of Noida's premium commercial developments designed for modern businesses, retail brands, and investors.\n\nIn this video, you'll explore the project's architecture, office spaces, retail avenues, strategic location advantages, and why it stands out as a commercial investment opportunity in Noida's high-growth corridor.",
+    "altitude": "180M • 4K 60FPS",
+    "badge": "Master Corridor",
+    "isFeatured": false,
+    "createdAt": "2026-10-13T17:05:12.633Z"
+  }
+];
