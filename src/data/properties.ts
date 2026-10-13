@@ -22,51 +22,23 @@ export const NOIDA_PROPERTIES: Property[] = [
     "reraNumber": "UPRERAPRJ704730",
     "totalAcres": 11,
     "openGreensPercentage": 78,
-    "coverImage": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-1.jpg",
+    "coverImage": "/uploads/upload-1791888851141-3.jpg",
     "galleryImages": [
       {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-1.jpg",
-        "caption": "Godrej Woods - Urban Forest Canopy Towers & Elevation"
+        "url": "/uploads/upload-1791888851125-1.jpg",
+        "caption": "Godrej Woods - Photo 1"
       },
       {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-2.jpg",
-        "caption": "Godrej Woods - Heated Forest Infinity-Edge Swimming Pool"
+        "url": "/uploads/upload-1791888851130-2.jpg",
+        "caption": "Godrej Woods - Photo 2"
       },
       {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-3.jpg",
-        "caption": "Godrej Woods - Elevated Canopy Boardwalk & 1100 Dense Forest Trees"
+        "url": "/uploads/upload-1791888851141-3.jpg",
+        "caption": "Godrej Woods - Photo 3"
       },
       {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-4.jpg",
-        "caption": "Godrej Woods - Luxury 4 BHK Living Room with Forest Balcony Deck"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-5.jpg",
-        "caption": "Godrej Woods - Forest View Master Suite Sanctuary"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-6.jpg",
-        "caption": "Godrej Woods - Bespoke Turkish Hammam & Thermal Spa Bath"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-7.jpg",
-        "caption": "Godrej Woods - Modern Open-Concept Chef Kitchen & Dining"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-8.jpg",
-        "caption": "Godrej Woods - Glass Facade Clubhouse & Executive Lounge"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-9.jpg",
-        "caption": "Godrej Woods - Nature Trails & Shaded Walking Boulevard"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-10.jpg",
-        "caption": "Godrej Woods - Italian Marble Spa Bathroom with Forest Glass View"
-      },
-      {
-        "url": "/images/properties/godrej-woods-sec43/godrej-woods-sec43-11.jpg",
-        "caption": "Godrej Woods - Twilight Illumination & Forest Pool Deck"
+        "url": "/uploads/upload-1791888851147-4.jpg",
+        "caption": "Godrej Woods - Photo 4"
       }
     ],
     "shortDescription": "1,100 dense urban trees, 2 infinity edge swimming pools, elevated walking bridges, and bespoke Turkish hammam bath.",
@@ -414,10 +386,6 @@ export const NOIDA_PROPERTIES: Property[] = [
         "caption": "ACE Starlit - Signature Glass Facade & Contemporary Architecture"
       },
       {
-        "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-2.jpg",
-        "caption": "ACE Starlit - Sunken Green Amphitheater & Designer Water Cascades"
-      },
-      {
         "url": "/images/properties/ace-starlit-sec150/ace-starlit-sec150-3.jpg",
         "caption": "ACE Starlit - Olympic-Grade Resort Swimming Pool & Deck"
       },
@@ -465,10 +433,13 @@ export const NOIDA_PROPERTIES: Property[] = [
       "Modern Co-Working Business Lounge"
     ],
     "highlights": [
-      "In Sector 150: Noida’s Most Prestigious Low-Density Sector",
-      "Adjacent to 42-Acre Shaheed Bhagat Singh Park",
-      "Zero Overhead Electric Cables Underground Infrastructure",
-      "Direct Gateway to Jewar International Airport (25 Mins)"
+      "Metro Network Distance - 800 Meters (Sector 148 Aqua Line Metro)",
+      "Jewar International Airport Distance - 25 Mins (Jewar International Airport)",
+      "Expressway Access Distance - 1 Min (Noida-Greater Noida Expressway)",
+      "In Sector 150 - Noida’s Most Prestigious Low-Density Sector",
+      "Location Advantage - Adjacent to 42-Acre Shaheed Bhagat Singh Park",
+      "Location Advantage - Zero Overhead Electric Cables Underground Infrastructure",
+      "Location Advantage - Direct Gateway to Jewar International Airport (25 Mins)"
     ],
     "floorPlans": [
       {
@@ -503,7 +474,37 @@ export const NOIDA_PROPERTIES: Property[] = [
       "gradient": "from-cyan-950 via-slate-900 to-teal-950",
       "accentColor": "#2dd4bf",
       "iconType": "tower"
-    }
+    },
+    "locationAdvantages": [
+      {
+        "label": "Metro Network Distance",
+        "value": "800 Meters (Sector 148 Aqua Line Metro)"
+      },
+      {
+        "label": "Jewar International Airport Distance",
+        "value": "25 Mins (Jewar International Airport)"
+      },
+      {
+        "label": "Expressway Access Distance",
+        "value": "1 Min (Noida-Greater Noida Expressway)"
+      },
+      {
+        "label": "In Sector 150",
+        "value": "Noida’s Most Prestigious Low-Density Sector"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Adjacent to 42-Acre Shaheed Bhagat Singh Park"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Zero Overhead Electric Cables Underground Infrastructure"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Direct Gateway to Jewar International Airport (25 Mins)"
+      }
+    ]
   },
   {
     "id": "bhutani-cyberthum-sec140a",

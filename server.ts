@@ -7,11 +7,174 @@ import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 import nodemailer from 'nodemailer';
 import crypto from 'crypto';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// --- Supabase Client Initialization ---
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const useSupabase = !!(SUPABASE_URL && SUPABASE_KEY);
+let supabase: SupabaseClient | null = null;
+
+if (useSupabase) {
+  supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  console.log('✅ Supabase client initialized — database-backed storage enabled');
+} else {
+  console.warn('⚠️  SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not set — falling back to local JSON file storage');
+}
+
+// --- Supabase Data Helpers (camelCase ↔ snake_case) ---
+function propertyRowToApi(row: any): any {
+  return {
+    id: row.id,
+    title: row.title,
+    developer: row.developer,
+    tagline: row.tagline,
+    sector: row.sector,
+    locality: row.locality,
+    propertyType: row.property_type,
+    status: row.status,
+    possessionDate: row.possession_date,
+    priceDisplay: row.price_display,
+    priceNumInCrores: row.price_num_in_crores,
+    pricePerSqFt: row.price_per_sq_ft,
+    bhkConfigurations: row.bhk_configurations,
+    reraNumber: row.rera_number,
+    totalAcres: row.total_acres,
+    openGreensPercentage: row.open_greens_percentage,
+    coverImage: row.cover_image,
+    galleryImages: row.gallery_images,
+    shortDescription: row.short_description,
+    fullDescription: row.full_description,
+    amenities: row.amenities,
+    highlights: row.highlights,
+    locationAdvantages: row.location_advantages,
+    floorPlans: row.floor_plans,
+    distanceToMetro: row.distance_to_metro,
+    distanceToAirport: row.distance_to_airport,
+    distanceToExpressway: row.distance_to_expressway,
+    videoTour: row.video_tour,
+    architecturalTheme: row.architectural_theme,
+  };
+}
+
+function apiPropertyToRow(p: any): any {
+  return {
+    id: p.id,
+    title: p.title,
+    developer: p.developer || null,
+    tagline: p.tagline || null,
+    sector: p.sector || null,
+    locality: p.locality || null,
+    property_type: p.propertyType,
+    status: p.status,
+    possession_date: p.possessionDate || null,
+    price_display: p.priceDisplay || null,
+    price_num_in_crores: p.priceNumInCrores ?? null,
+    price_per_sq_ft: p.pricePerSqFt ?? null,
+    bhk_configurations: p.bhkConfigurations || [],
+    rera_number: p.reraNumber || null,
+    total_acres: p.totalAcres ?? null,
+    open_greens_percentage: p.openGreensPercentage ?? null,
+    cover_image: p.coverImage || null,
+    gallery_images: p.galleryImages || [],
+    short_description: p.shortDescription || null,
+    full_description: p.fullDescription || null,
+    amenities: p.amenities || [],
+    highlights: p.highlights || [],
+    location_advantages: p.locationAdvantages || [],
+    floor_plans: p.floorPlans || [],
+    distance_to_metro: p.distanceToMetro || null,
+    distance_to_airport: p.distanceToAirport || null,
+    distance_to_expressway: p.distanceToExpressway || null,
+    video_tour: p.videoTour || null,
+    architectural_theme: p.architecturalTheme || null,
+  };
+}
+
+function localityRowToApi(row: any): any {
+  return {
+    id: row.id,
+    name: row.name,
+    slug: row.slug,
+    subtitle: row.subtitle,
+    description: row.description,
+    avgPricePerSqFt: row.avg_price_per_sq_ft,
+    projectedGrowth3Yr: row.projected_growth_3yr,
+    highlights: row.highlights,
+    metroConnectivity: row.metro_connectivity,
+    landmarkAttractions: row.landmark_attractions,
+    topProjects: row.top_projects,
+  };
+}
+
+function apiLocalityToRow(loc: any): any {
+  return {
+    id: loc.id,
+    name: loc.name,
+    slug: loc.slug || null,
+    subtitle: loc.subtitle || null,
+    description: loc.description || null,
+    avg_price_per_sq_ft: loc.avgPricePerSqFt || null,
+    projected_growth_3yr: loc.projectedGrowth3Yr || null,
+    highlights: loc.highlights || [],
+    metro_connectivity: loc.metroConnectivity || null,
+    landmark_attractions: loc.landmarkAttractions || [],
+    top_projects: loc.topProjects || [],
+  };
+}
+
+function brochureRowToApi(row: any): any {
+  return {
+    id: row.id,
+    createdAt: row.created_at,
+    name: row.full_name,
+    phone: row.phone,
+    email: row.email,
+    interestedProject: row.interested_project,
+    propertyType: row.property_type,
+    budgetRange: row.budget_range,
+    message: row.message,
+    source: row.source,
+    leadType: row.lead_type,
+    propertyId: row.property_id,
+    propertyTitle: row.property_title,
+    sector: row.sector,
+    developer: row.developer,
+    priceDisplay: row.price_display,
+    status: row.lead_status,
+    comment: row.comment,
+  };
+}
+
+// Helper to upload base64 file to Supabase Storage (returns public URL)
+async function uploadToSupabaseStorage(base64Data: string, fileName: string, bucket: string): Promise<string | null> {
+  if (!supabase) return null;
+  try {
+    const matches = base64Data.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
+    const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64Data, 'base64');
+    const contentType = matches ? matches[1] : 'application/octet-stream';
+
+    const { error } = await supabase.storage
+      .from(bucket)
+      .upload(fileName, buffer, { contentType, upsert: true });
+
+    if (error) {
+      console.error(`Supabase Storage upload error (${bucket}/${fileName}):`, error.message);
+      return null;
+    }
+
+    const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    return publicUrl.publicUrl;
+  } catch (err: any) {
+    console.error('uploadToSupabaseStorage error:', err.message);
+    return null;
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -647,17 +810,8 @@ app.post('/api/schedule-visit', async (req: Request, res: Response) => {
   leadInquiries.push(visitData);
   console.log('Site Visit Booked for KR Estate (Target: avinashmehra5292@gmail.com):', visitData);
 
-  // Persist to brochureRequests.json for Admin Dashboard "Brochure & Site Leads"
+  // Persist to database for Admin Dashboard "Brochure & Site Leads"
   try {
-    const fs = await import('fs/promises');
-    const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
-    let list: any[] = [];
-    try {
-      const data = await fs.readFile(brochurePath, 'utf8');
-      list = JSON.parse(data);
-    } catch {
-      list = [];
-    }
     const newVisitLead = {
       id: `VISIT-${Math.floor(100000 + Math.random() * 900000)}`,
       createdAt: new Date().toISOString(),
@@ -673,8 +827,36 @@ app.post('/api/schedule-visit', async (req: Request, res: Response) => {
       priceDisplay: 'Scheduled Visit',
       status: 'Visit Booked'
     };
-    list.unshift(newVisitLead);
-    await fs.writeFile(brochurePath, JSON.stringify(list, null, 2), 'utf8');
+
+    if (useSupabase && supabase) {
+      await supabase.from('brochure_requests').insert({
+        id: newVisitLead.id,
+        full_name: newVisitLead.name,
+        phone: newVisitLead.phone,
+        email: newVisitLead.email,
+        lead_type: newVisitLead.leadType,
+        comment: newVisitLead.comment,
+        property_id: newVisitLead.propertyId,
+        property_title: newVisitLead.propertyTitle,
+        sector: newVisitLead.sector,
+        developer: newVisitLead.developer,
+        price_display: newVisitLead.priceDisplay,
+        lead_status: newVisitLead.status,
+        source: 'site_visit',
+      });
+    } else {
+      const fs = await import('fs/promises');
+      const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
+      let list: any[] = [];
+      try {
+        const data = await fs.readFile(brochurePath, 'utf8');
+        list = JSON.parse(data);
+      } catch {
+        list = [];
+      }
+      list.unshift(newVisitLead);
+      await fs.writeFile(brochurePath, JSON.stringify(list, null, 2), 'utf8');
+    }
   } catch (persistErr) {
     console.error('Failed to persist site visit request:', persistErr);
   }
@@ -750,19 +932,37 @@ app.post('/api/request-brochure', async (req: Request, res: Response) => {
     status: 'New'
   };
 
-  // 1. Persist to brochureRequests.json for Admin Dashboard
+  // 1. Persist to database for Admin Dashboard
   try {
-    const fs = await import('fs/promises');
-    const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
-    let list: any[] = [];
-    try {
-      const data = await fs.readFile(brochurePath, 'utf8');
-      list = JSON.parse(data);
-    } catch {
-      list = [];
+    if (useSupabase && supabase) {
+      await supabase.from('brochure_requests').insert({
+        id: newLead.id,
+        full_name: newLead.name,
+        phone: newLead.phone,
+        email: newLead.email,
+        comment: newLead.comment,
+        property_id: newLead.propertyId,
+        property_title: newLead.propertyTitle,
+        sector: newLead.sector,
+        developer: newLead.developer,
+        price_display: newLead.priceDisplay,
+        lead_type: newLead.leadType,
+        lead_status: newLead.status,
+        source: 'brochure_download',
+      });
+    } else {
+      const fs = await import('fs/promises');
+      const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
+      let list: any[] = [];
+      try {
+        const data = await fs.readFile(brochurePath, 'utf8');
+        list = JSON.parse(data);
+      } catch {
+        list = [];
+      }
+      list.unshift(newLead);
+      await fs.writeFile(brochurePath, JSON.stringify(list, null, 2), 'utf8');
     }
-    list.unshift(newLead);
-    await fs.writeFile(brochurePath, JSON.stringify(list, null, 2), 'utf8');
   } catch (persistErr) {
     console.error('Failed to persist brochure request:', persistErr);
   }
@@ -799,15 +999,7 @@ app.post('/api/request-brochure', async (req: Request, res: Response) => {
 
 // API Route: Upload Property Video (Strict extension whitelist & sanitization)
 app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
-    const fs = await import('fs/promises');
-    const videosDir = path.resolve(__dirname, 'public', 'uploads', 'videos');
-    await fs.mkdir(videosDir, { recursive: true });
-
     if (req.body && req.body.base64) {
       const { name, base64 } = req.body;
       const rawExt = (name && name.split('.').pop()?.toLowerCase()) || 'mp4';
@@ -820,21 +1012,44 @@ app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
         });
       }
 
-      const matches = base64.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
-      const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64, 'base64');
       const cleanName = (name ? name.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_') : 'tour');
       const fileName = `video-${cleanName.slice(0, 40)}-${Date.now()}.${rawExt}`;
-      const filePath = path.resolve(videosDir, fileName);
-      await fs.writeFile(filePath, buffer);
 
-      const sizeMb = (buffer.length / (1024 * 1024)).toFixed(2);
-      console.log(`Uploaded video saved: ${filePath} (${sizeMb} MB)`);
-      return res.json({
-        success: true,
-        videoUrl: `/uploads/videos/${fileName}`,
-        fileName,
-        sizeMb,
-      });
+      // Use Supabase Storage in production, local fs in development
+      if (useSupabase && supabase) {
+        const publicUrl = await uploadToSupabaseStorage(base64, `videos/${fileName}`, 'uploads');
+        if (!publicUrl) {
+          return res.status(500).json({ success: false, error: 'Failed to upload video to cloud storage' });
+        }
+        const matches = base64.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
+        const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64, 'base64');
+        const sizeMb = (buffer.length / (1024 * 1024)).toFixed(2);
+        console.log(`Uploaded video to Supabase Storage: ${fileName} (${sizeMb} MB)`);
+        return res.json({
+          success: true,
+          videoUrl: publicUrl,
+          fileName,
+          sizeMb,
+        });
+      } else {
+        const fs = await import('fs/promises');
+        const videosDir = path.resolve(__dirname, 'public', 'uploads', 'videos');
+        await fs.mkdir(videosDir, { recursive: true });
+
+        const matches = base64.match(/^data:([A-Za-z0-9\-+\/]+);base64,(.+)$/);
+        const buffer = matches ? Buffer.from(matches[2], 'base64') : Buffer.from(base64, 'base64');
+        const filePath = path.resolve(videosDir, fileName);
+        await fs.writeFile(filePath, buffer);
+
+        const sizeMb = (buffer.length / (1024 * 1024)).toFixed(2);
+        console.log(`Uploaded video saved: ${filePath} (${sizeMb} MB)`);
+        return res.json({
+          success: true,
+          videoUrl: `/uploads/videos/${fileName}`,
+          fileName,
+          sizeMb,
+        });
+      }
     }
 
     return res.status(400).json({ success: false, error: 'No video payload received' });
@@ -847,26 +1062,53 @@ app.post('/api/admin/upload-video', async (req: Request, res: Response) => {
 // API Route: Get Site Settings
 app.get('/api/site-settings', async (req: Request, res: Response) => {
   try {
-    const fs = await import('fs/promises');
-    const settingsFile = path.resolve(__dirname, 'src', 'data', 'siteSettings.json');
-    const content = await fs.readFile(settingsFile, 'utf8');
-    return res.json(JSON.parse(content));
+    if (useSupabase && supabase) {
+      const { data, error } = await supabase.from('site_settings').select('settings').eq('id', 1).single();
+      if (!error && data?.settings) {
+        return res.json(data.settings);
+      }
+      // If table is empty or record not found, load default and seed Supabase
+      try {
+        const fs = await import('fs/promises');
+        const settingsFile = path.resolve(__dirname, 'src', 'data', 'siteSettings.json');
+        const content = await fs.readFile(settingsFile, 'utf8');
+        const initialSettings = JSON.parse(content);
+        await supabase.from('site_settings').upsert({ id: 1, settings: initialSettings }, { onConflict: 'id' });
+        return res.json(initialSettings);
+      } catch (fallbackErr) {
+        console.error('Fallback site_settings read error:', fallbackErr);
+      }
+      return res.status(500).json({ error: 'Failed to read site settings' });
+    } else {
+      const fs = await import('fs/promises');
+      const settingsFile = path.resolve(__dirname, 'src', 'data', 'siteSettings.json');
+      const content = await fs.readFile(settingsFile, 'utf8');
+      return res.json(JSON.parse(content));
+    }
   } catch (e: any) {
-    console.error('Error reading siteSettings.json:', e);
+    console.error('Error reading site settings:', e);
     return res.status(500).json({ error: 'Failed to read site settings' });
   }
 });
 
 // API Route: Update Site Settings
 app.post('/api/admin/site-settings', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
-    const fs = await import('fs/promises');
-    const settingsFile = path.resolve(__dirname, 'src', 'data', 'siteSettings.json');
-    await fs.writeFile(settingsFile, JSON.stringify(req.body, null, 2), 'utf8');
+    if (useSupabase && supabase) {
+      const { error } = await supabase.from('site_settings').upsert({
+        id: 1,
+        settings: req.body,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'id' });
+      if (error) {
+        console.error('Supabase site_settings write error:', error.message);
+        return res.status(500).json({ success: false, error: 'Failed to save site settings' });
+      }
+    } else {
+      const fs = await import('fs/promises');
+      const settingsFile = path.resolve(__dirname, 'src', 'data', 'siteSettings.json');
+      await fs.writeFile(settingsFile, JSON.stringify(req.body, null, 2), 'utf8');
+    }
     console.log('Site settings updated successfully');
     return res.json({ success: true, settings: req.body });
   } catch (e: any) {
@@ -875,22 +1117,44 @@ app.post('/api/admin/site-settings', async (req: Request, res: Response) => {
   }
 });
 
-// API Route: Get Localities (Safe JSON parse, no eval)
+// API Route: Get Localities
 app.get('/api/localities', async (req: Request, res: Response) => {
   try {
-    const fs = await import('fs/promises');
-    const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
-    try {
-      const data = await fs.readFile(jsonPath, 'utf8');
-      return res.json(JSON.parse(data));
-    } catch {
-      const tsPath = path.resolve(__dirname, 'src', 'data', 'localities.ts');
-      const tsContent = await fs.readFile(tsPath, 'utf8');
-      const match = tsContent.match(/export const NOIDA_LOCALITIES:\s*LocalityInfo\[\]\s*=\s*(\[\s*[\s\S]*\]);?\s*$/);
-      if (match) {
-        return res.json(JSON.parse(match[1]));
+    if (useSupabase && supabase) {
+      const { data, error } = await supabase.from('localities').select('*');
+      if (!error && data && data.length > 0) {
+        return res.json(data.map(localityRowToApi));
       }
-      return res.status(500).json({ error: 'Localities not found' });
+      // If table empty, fallback to local json/ts and auto-seed Supabase
+      try {
+        const fs = await import('fs/promises');
+        const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
+        const fileData = await fs.readFile(jsonPath, 'utf8');
+        const initialLocs = JSON.parse(fileData);
+        if (Array.isArray(initialLocs) && initialLocs.length > 0) {
+          const rows = initialLocs.map(apiLocalityToRow);
+          await supabase.from('localities').insert(rows);
+        }
+        return res.json(initialLocs);
+      } catch (seedErr) {
+        console.error('Error auto-seeding localities to Supabase:', seedErr);
+      }
+      return res.json([]);
+    } else {
+      const fs = await import('fs/promises');
+      const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
+      try {
+        const fileData = await fs.readFile(jsonPath, 'utf8');
+        return res.json(JSON.parse(fileData));
+      } catch {
+        const tsPath = path.resolve(__dirname, 'src', 'data', 'localities.ts');
+        const tsContent = await fs.readFile(tsPath, 'utf8');
+        const match = tsContent.match(/export const NOIDA_LOCALITIES:\s*LocalityInfo\[\]\s*=\s*(\[\s*[\s\S]*\]);?\s*$/);
+        if (match) {
+          return res.json(JSON.parse(match[1]));
+        }
+        return res.status(500).json({ error: 'Localities not found' });
+      }
     }
   } catch (e: any) {
     console.error('Error reading localities:', e);
@@ -900,20 +1164,29 @@ app.get('/api/localities', async (req: Request, res: Response) => {
 
 // API Route: Update Localities
 app.post('/api/admin/localities', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
-    const fs = await import('fs/promises');
-    const file = path.resolve(__dirname, 'src', 'data', 'localities.ts');
-    const newContent = `import { LocalityInfo } from '../types';\n\nexport const NOIDA_LOCALITIES: LocalityInfo[] = ${JSON.stringify(req.body, null, 2)};\n`;
-    await fs.writeFile(file, newContent, 'utf8');
-    
-    // Also keep localities.json synchronized
-    const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
-    await fs.writeFile(jsonPath, JSON.stringify(req.body, null, 2), 'utf8');
-
+    if (useSupabase && supabase) {
+      // Delete existing and re-insert all (full replacement pattern)
+      const localities: any[] = Array.isArray(req.body) ? req.body : [];
+      await supabase.from('localities').delete().neq('id', '');
+      if (localities.length > 0) {
+        const rows = localities.map(apiLocalityToRow);
+        const { error } = await supabase.from('localities').insert(rows);
+        if (error) {
+          console.error('Supabase localities write error:', error.message);
+          return res.status(500).json({ success: false, error: 'Failed to update localities' });
+        }
+      }
+    } else {
+      const fs = await import('fs/promises');
+      const file = path.resolve(__dirname, 'src', 'data', 'localities.ts');
+      const newContent = `import { LocalityInfo } from '../types';\n\nexport const NOIDA_LOCALITIES: LocalityInfo[] = ${JSON.stringify(req.body, null, 2)};\n`;
+      await fs.writeFile(file, newContent, 'utf8');
+      
+      // Also keep localities.json synchronized
+      const jsonPath = path.resolve(__dirname, 'src', 'data', 'localities.json');
+      await fs.writeFile(jsonPath, JSON.stringify(req.body, null, 2), 'utf8');
+    }
     return res.json({ success: true });
   } catch (e: any) {
     console.error('Error updating localities:', e);
@@ -921,10 +1194,46 @@ app.post('/api/admin/localities', async (req: Request, res: Response) => {
   }
 });
 
-// Helper to read properties.ts safely (Pure JSON.parse, zero eval)
-async function getPropertiesArray() {
-  const fs = await import('fs/promises');
+// Helper to read properties safely (Supabase first with auto-seed, local fallback)
+async function getPropertiesArray(): Promise<{ properties: any[]; propertyFile: string }> {
   const propertyFile = path.resolve(__dirname, 'src', 'data', 'properties.ts');
+  if (useSupabase && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data) {
+        if (data.length === 0) {
+          console.log('Supabase properties table is empty. Auto-seeding initial properties from properties.ts...');
+          const fs = await import('fs/promises');
+          const content = await fs.readFile(propertyFile, 'utf8');
+          const match = content.match(/export const NOIDA_PROPERTIES:\s*Property\[\]\s*=\s*(\[\s*[\s\S]*\]);?\s*$/);
+          if (match) {
+            const initialList = JSON.parse(match[1]);
+            const rows = initialList.map(apiPropertyToRow);
+            const { error: seedErr } = await supabase.from('properties').insert(rows);
+            if (!seedErr) {
+              console.log(`✅ Successfully auto-seeded ${rows.length} properties to Supabase!`);
+              return { properties: initialList, propertyFile };
+            } else {
+              console.error('Supabase auto-seed properties error:', seedErr.message);
+            }
+          }
+        } else {
+          return { properties: data.map(propertyRowToApi), propertyFile };
+        }
+      } else if (error) {
+        console.error('Supabase fetch properties error:', error.message);
+      }
+    } catch (e: any) {
+      console.error('Error fetching properties from Supabase:', e.message);
+    }
+  }
+
+  // Fallback to local properties.ts file
+  const fs = await import('fs/promises');
   const content = await fs.readFile(propertyFile, 'utf8');
   const match = content.match(/export const NOIDA_PROPERTIES:\s*Property\[\]\s*=\s*(\[\s*[\s\S]*\]);?\s*$/);
   if (!match) {
@@ -934,11 +1243,15 @@ async function getPropertiesArray() {
   return { properties, propertyFile };
 }
 
-// Helper to write properties.ts safely
+// Helper to write properties.ts safely in local/dev
 async function writePropertiesArray(properties: any[], propertyFile: string) {
-  const fs = await import('fs/promises');
-  const newContent = `import { Property } from '../types';\n\nexport const NOIDA_PROPERTIES: Property[] = ${JSON.stringify(properties, null, 2)};\n`;
-  await fs.writeFile(propertyFile, newContent, 'utf8');
+  try {
+    const fs = await import('fs/promises');
+    const newContent = `import { Property } from '../types';\n\nexport const NOIDA_PROPERTIES: Property[] = ${JSON.stringify(properties, null, 2)};\n`;
+    await fs.writeFile(propertyFile, newContent, 'utf8');
+  } catch (err) {
+    console.warn('Local properties.ts file write skipped or failed:', err);
+  }
 }
 
 // API Route: Public/Client Get All Properties
@@ -952,67 +1265,60 @@ app.get('/api/properties', async (_req: Request, res: Response) => {
   }
 });
 
-// Process Base64 image uploads helper with strict extension whitelisting
-async function processUploadedImages(body: any) {
-  const fs = await import('fs/promises');
-  const uploadsDir = path.resolve(__dirname, 'public', 'uploads');
-  await fs.mkdir(uploadsDir, { recursive: true });
-
+// Process Base64 image uploads (uses Supabase Storage in production, local fs in dev)
+async function processUploadedImages(body: any): Promise<string[]> {
   const ALLOWED_IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
   const uploadedUrls: string[] = [];
 
+  const handleUpload = async (fileObj: { name?: string; base64: string }, index: number = 0): Promise<string | null> => {
+    try {
+      const { name, base64 } = fileObj;
+      if (!base64) return null;
+      const rawExt = (name && name.split('.').pop()?.toLowerCase()) || 'jpg';
+      if (!ALLOWED_IMAGE_EXTS.includes(rawExt)) {
+        console.warn(`Blocked non-whitelisted image upload extension: .${rawExt}`);
+        return null;
+      }
+      const fileName = `upload-${Date.now()}-${index + 1}.${rawExt}`;
+
+      if (useSupabase && supabase) {
+        const publicUrl = await uploadToSupabaseStorage(base64, `images/${fileName}`, 'uploads');
+        if (publicUrl) return publicUrl;
+        console.warn('Supabase storage upload failed, falling back to local fs...');
+      }
+
+      // Local filesystem storage
+      const fs = await import('fs/promises');
+      const uploadsDir = path.resolve(__dirname, 'public', 'uploads');
+      await fs.mkdir(uploadsDir, { recursive: true });
+      const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+      const imageBuffer = matches && matches.length === 3 ? Buffer.from(matches[2], 'base64') : Buffer.from(base64, 'base64');
+      const filePath = path.resolve(uploadsDir, fileName);
+      await fs.writeFile(filePath, imageBuffer);
+      return `/uploads/${fileName}`;
+    } catch (err) {
+      console.error('Error processing uploaded image:', err);
+      return null;
+    }
+  };
+
   if (Array.isArray(body.uploadedImages) && body.uploadedImages.length > 0) {
     for (let i = 0; i < body.uploadedImages.length; i++) {
-      const fileObj = body.uploadedImages[i];
-      try {
-        const { name, base64 } = fileObj;
-        const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-        if (matches && matches.length === 3) {
-          const imageBuffer = Buffer.from(matches[2], 'base64');
-          const rawExt = (name && name.split('.').pop()?.toLowerCase()) || 'jpg';
-          if (!ALLOWED_IMAGE_EXTS.includes(rawExt)) {
-            console.warn(`Blocked non-whitelisted image upload extension: .${rawExt}`);
-            continue;
-          }
-          const fileName = `upload-${Date.now()}-${i + 1}.${rawExt}`;
-          const filePath = path.resolve(uploadsDir, fileName);
-          await fs.writeFile(filePath, imageBuffer);
-          uploadedUrls.push(`/uploads/${fileName}`);
-        }
-      } catch (imgError) {
-        console.error(`Error saving uploaded image #${i + 1}:`, imgError);
-      }
+      const url = await handleUpload(body.uploadedImages[i], i);
+      if (url) uploadedUrls.push(url);
     }
     delete body.uploadedImages;
   } else if (body.coverImageFile) {
-    try {
-      const { name, base64 } = body.coverImageFile;
-      const matches = base64.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-      if (matches && matches.length === 3) {
-        const imageBuffer = Buffer.from(matches[2], 'base64');
-        const rawExt = (name && name.split('.').pop()?.toLowerCase()) || 'jpg';
-        if (ALLOWED_IMAGE_EXTS.includes(rawExt)) {
-          const fileName = `upload-${Date.now()}.${rawExt}`;
-          const filePath = path.resolve(uploadsDir, fileName);
-          await fs.writeFile(filePath, imageBuffer);
-          uploadedUrls.push(`/uploads/${fileName}`);
-        }
-      }
-    } catch (imgError) {
-      console.error('Error saving uploaded image:', imgError);
-    }
+    const url = await handleUpload(body.coverImageFile, 0);
+    if (url) uploadedUrls.push(url);
     delete body.coverImageFile;
   }
 
   return uploadedUrls;
 }
 
-// API Route: Local Admin - Add Property
+// API Route: Admin - Add Property (Writes to Supabase DB, local file in dev)
 app.post('/api/admin/properties', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { properties, propertyFile } = await getPropertiesArray();
     const uploadedUrls = await processUploadedImages(req.body);
@@ -1097,8 +1403,21 @@ app.post('/api/admin/properties', async (req: Request, res: Response) => {
       delete req.body.videoTour;
     }
 
-    properties.push(req.body);
-    await writePropertiesArray(properties, propertyFile);
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const row = apiPropertyToRow(req.body);
+      const { error: insertErr } = await supabase.from('properties').insert(row);
+      if (insertErr) {
+        console.error('Supabase property insert error:', insertErr.message);
+        return res.status(500).json({ error: `Failed to save property to database: ${insertErr.message}` });
+      }
+    }
+
+    // Also sync local file if in dev
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      properties.push(req.body);
+      await writePropertiesArray(properties, propertyFile);
+    }
 
     res.json({ success: true, message: 'Property added successfully!', property: req.body });
   } catch (error: any) {
@@ -1107,12 +1426,8 @@ app.post('/api/admin/properties', async (req: Request, res: Response) => {
   }
 });
 
-// API Route: Local Admin - Update Property
+// API Route: Admin - Update Property (POST)
 app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { id } = req.params;
     const { properties, propertyFile } = await getPropertiesArray();
@@ -1132,7 +1447,6 @@ app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
         url,
         caption: `${req.body.title || existing.title} - Photo ${idx + 1}`
       }));
-      // Keep existing non-empty gallery images and append new ones
       const currentGallery = Array.isArray(req.body.galleryImages) && req.body.galleryImages.length > 0
         ? req.body.galleryImages.filter((g: any) => g.url && !g.url.startsWith('data:'))
         : (existing.galleryImages || []);
@@ -1143,7 +1457,7 @@ app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
     const updatedProperty = {
       ...existing,
       ...req.body,
-      id: existing.id, // Preserve original ID
+      id: existing.id,
       developer: req.body.developer?.trim() || existing.developer || 'Direct Owner / Private',
       sector: req.body.sector?.trim() || existing.sector || 'Noida',
       priceDisplay: req.body.priceDisplay?.trim() || (req.body.priceNumInCrores ? `₹${req.body.priceNumInCrores} Cr` : existing.priceDisplay || 'Price on Request'),
@@ -1162,9 +1476,23 @@ app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
         description: req.body.videoTour.description?.trim() || `4K aerial inspection and architectural walkthrough of ${updatedProperty.title} in ${updatedProperty.sector}.`
       };
     }
+    delete (updatedProperty as any).deleteVideoTour;
 
-    properties[existingIndex] = updatedProperty;
-    await writePropertiesArray(properties, propertyFile);
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const row = apiPropertyToRow(updatedProperty);
+      const { error: updateErr } = await supabase.from('properties').upsert(row);
+      if (updateErr) {
+        console.error('Supabase property update error:', updateErr.message);
+        return res.status(500).json({ error: `Failed to update property in database: ${updateErr.message}` });
+      }
+    }
+
+    // Also sync local file if in dev
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      properties[existingIndex] = updatedProperty;
+      await writePropertiesArray(properties, propertyFile);
+    }
 
     res.json({ success: true, message: 'Property updated successfully!', property: updatedProperty });
   } catch (error: any) {
@@ -1175,10 +1503,6 @@ app.post('/api/admin/properties/:id', async (req: Request, res: Response) => {
 
 // Also support PUT method for update
 app.put('/api/admin/properties/:id', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { id } = req.params;
     const { properties, propertyFile } = await getPropertiesArray();
@@ -1224,9 +1548,23 @@ app.put('/api/admin/properties/:id', async (req: Request, res: Response) => {
         description: req.body.videoTour.description?.trim() || `4K aerial inspection and architectural walkthrough of ${updatedProperty.title} in ${updatedProperty.sector}.`
       };
     }
+    delete (updatedProperty as any).deleteVideoTour;
 
-    properties[existingIndex] = updatedProperty;
-    await writePropertiesArray(properties, propertyFile);
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const row = apiPropertyToRow(updatedProperty);
+      const { error: updateErr } = await supabase.from('properties').upsert(row);
+      if (updateErr) {
+        console.error('Supabase property update error:', updateErr.message);
+        return res.status(500).json({ error: `Failed to update property in database: ${updateErr.message}` });
+      }
+    }
+
+    // Also sync local file if in dev
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      properties[existingIndex] = updatedProperty;
+      await writePropertiesArray(properties, propertyFile);
+    }
 
     res.json({ success: true, message: 'Property updated successfully!', property: updatedProperty });
   } catch (error: any) {
@@ -1235,12 +1573,8 @@ app.put('/api/admin/properties/:id', async (req: Request, res: Response) => {
   }
 });
 
-// API Route: Local Admin - Add or Update Drone Tour for a Property
+// API Route: Admin - Add or Update Drone Tour for a Property
 app.post('/api/admin/properties/:id/drone-tour', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { id } = req.params;
     const { properties, propertyFile } = await getPropertiesArray();
@@ -1264,8 +1598,22 @@ app.post('/api/admin/properties/:id/drone-tour', async (req: Request, res: Respo
       description: description?.trim() || `4K aerial inspection and architectural walkthrough of ${targetProp.title} located in ${targetProp.sector}.`
     };
 
-    properties[existingIndex] = targetProp;
-    await writePropertiesArray(properties, propertyFile);
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const { error: dtErr } = await supabase
+        .from('properties')
+        .update({ video_tour: targetProp.videoTour })
+        .eq('id', id);
+      if (dtErr) {
+        console.error('Supabase drone tour update error:', dtErr.message);
+        return res.status(500).json({ error: 'Failed to save drone tour to database' });
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      properties[existingIndex] = targetProp;
+      await writePropertiesArray(properties, propertyFile);
+    }
 
     res.json({ success: true, message: 'Drone tour saved successfully!', property: targetProp, videoTour: targetProp.videoTour });
   } catch (error: any) {
@@ -1274,12 +1622,8 @@ app.post('/api/admin/properties/:id/drone-tour', async (req: Request, res: Respo
   }
 });
 
-// API Route: Local Admin - Delete Drone Tour from a Property
+// API Route: Admin - Delete Drone Tour from a Property
 app.delete('/api/admin/properties/:id/drone-tour', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { id } = req.params;
     const { properties, propertyFile } = await getPropertiesArray();
@@ -1289,8 +1633,22 @@ app.delete('/api/admin/properties/:id/drone-tour', async (req: Request, res: Res
       return res.status(404).json({ error: `Property with id ${id} not found.` });
     }
 
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const { error: dtDelErr } = await supabase
+        .from('properties')
+        .update({ video_tour: null })
+        .eq('id', id);
+      if (dtDelErr) {
+        console.error('Supabase drone tour delete error:', dtDelErr.message);
+        return res.status(500).json({ error: 'Failed to delete drone tour from database' });
+      }
+    }
+
     delete properties[existingIndex].videoTour;
-    await writePropertiesArray(properties, propertyFile);
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      await writePropertiesArray(properties, propertyFile);
+    }
 
     res.json({ success: true, message: 'Drone tour deleted successfully!', property: properties[existingIndex] });
   } catch (error: any) {
@@ -1299,12 +1657,8 @@ app.delete('/api/admin/properties/:id/drone-tour', async (req: Request, res: Res
   }
 });
 
-// API Route: Local Admin - Delete Property
+// API Route: Admin - Delete Property
 app.delete('/api/admin/properties/:id', async (req: Request, res: Response) => {
-  if (process.env.NODE_ENV === 'production') {
-    return res.status(403).json({ error: 'Admin writes disabled in production' });
-  }
-
   try {
     const { id } = req.params;
     const { properties, propertyFile } = await getPropertiesArray();
@@ -1314,7 +1668,22 @@ app.delete('/api/admin/properties/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ error: `Property with id ${id} not found.` });
     }
 
-    await writePropertiesArray(filtered, propertyFile);
+    // Persist to Supabase if configured
+    if (useSupabase && supabase) {
+      const { error: delErr } = await supabase
+        .from('properties')
+        .delete()
+        .eq('id', id);
+      if (delErr) {
+        console.error('Supabase property delete error:', delErr.message);
+        return res.status(500).json({ error: 'Failed to delete property from database' });
+      }
+    }
+
+    if (process.env.NODE_ENV !== 'production' && propertyFile) {
+      await writePropertiesArray(filtered, propertyFile);
+    }
+
     res.json({ success: true, message: 'Property deleted successfully!' });
   } catch (error: any) {
     console.error('Error deleting property:', error);
@@ -1325,6 +1694,16 @@ app.delete('/api/admin/properties/:id', async (req: Request, res: Response) => {
 // API Route: Admin fetch brochure leads
 app.get('/api/admin/brochure-requests', async (req: Request, res: Response) => {
   try {
+    if (useSupabase && supabase) {
+      const { data, error } = await supabase
+        .from('brochure_requests')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        return res.json(data.map(brochureRowToApi));
+      }
+      if (error) console.error('Supabase brochure-requests error:', error.message);
+    }
     const fs = await import('fs/promises');
     const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
     try {
@@ -1341,6 +1720,17 @@ app.get('/api/admin/brochure-requests', async (req: Request, res: Response) => {
 // API Route: Admin delete single brochure/site lead
 app.delete('/api/admin/brochure-requests/:id', async (req: Request, res: Response) => {
   try {
+    if (useSupabase && supabase) {
+      const { error } = await supabase
+        .from('brochure_requests')
+        .delete()
+        .eq('id', req.params.id);
+      if (error) {
+        console.error('Supabase brochure lead delete error:', error.message);
+        return res.status(500).json({ error: 'Failed to delete lead from database' });
+      }
+      return res.json({ success: true, message: 'Lead deleted successfully' });
+    }
     const fs = await import('fs/promises');
     const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
     let list: any[] = [];
@@ -1361,6 +1751,17 @@ app.delete('/api/admin/brochure-requests/:id', async (req: Request, res: Respons
 // API Route: Admin clear all leads
 app.delete('/api/admin/brochure-requests', async (req: Request, res: Response) => {
   try {
+    if (useSupabase && supabase) {
+      const { error } = await supabase
+        .from('brochure_requests')
+        .delete()
+        .neq('id', '');
+      if (error) {
+        console.error('Supabase brochure leads clear error:', error.message);
+        return res.status(500).json({ error: 'Failed to clear leads from database' });
+      }
+      return res.json({ success: true, message: 'All leads cleared successfully' });
+    }
     const fs = await import('fs/promises');
     const brochurePath = path.resolve(__dirname, 'src', 'data', 'brochureRequests.json');
     await fs.writeFile(brochurePath, '[]', 'utf8');
