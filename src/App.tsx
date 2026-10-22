@@ -170,7 +170,7 @@ export default function App() {
 
   return (
     <SiteSettingsProvider>
-      <div className="min-h-screen bg-[#FFF3EB] text-slate-900 flex flex-col font-sans-body selection:bg-amber-500 selection:text-white relative w-full max-w-full overflow-x-hidden">
+      <div className="estate-site min-h-screen bg-[#f8f7f3] text-slate-900 flex flex-col font-sans-body selection:bg-amber-500 selection:text-white relative w-full max-w-full overflow-x-hidden">
 
         {/* Decorative ambient background lighting mesh for luxury peach ambiance */}
         <div className="fixed inset-0 -z-50 overflow-hidden pointer-events-none w-full max-w-full">

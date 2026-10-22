@@ -66,7 +66,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
               OUR SERVICES
             </div>
             <h2 className="font-serif text-2xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
-              End-to-End Real Estate Advisory
+              Good advice. At every step.
             </h2>
             <p className="text-slate-700 text-xs sm:text-sm leading-relaxed font-normal">
               From property search to final transaction, we provide personalized guidance at every step.
@@ -85,10 +85,11 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
           {/* Right Column: 4 Cards in 2-col on Mobile, 4-col on Desktop */}
           <div className="lg:col-span-8 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {services.map((srv, idx) => (
-              <div
+              <button
+                type="button"
                 key={idx}
                 onClick={srv.onClick}
-                className="interactive-card bg-white/95 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-orange-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:-translate-y-1 min-h-[160px] sm:min-h-[220px]"
+                className="estate-service-card text-left interactive-card bg-white/95 rounded-xl sm:rounded-2xl p-3.5 sm:p-5 border border-orange-200/80 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between cursor-pointer group hover:-translate-y-1 min-h-[160px] sm:min-h-[220px]"
               >
                 <div className="space-y-2 sm:space-y-3">
                   {/* Pale Orange Icon Circle */}
@@ -96,7 +97,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     <srv.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
 
-                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 transition-colors line-clamp-1 sm:line-clamp-none">
+                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 group-hover:text-amber-700 transition-colors ">
                     {srv.title}
                   </h3>
 
@@ -110,7 +111,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
                     &rarr;
                   </span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 

@@ -19,13 +19,23 @@ export const Navbar: React.FC<NavbarProps> = ({
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      const sections = [
+        ['home', 'Home'], ['properties', 'Properties'], ['impact', 'About'],
+        ['services', 'Services'], ['contact', 'Contact'],
+      ];
+      const current = sections.filter(([id]) => {
+        const section = document.getElementById(id);
+        return section && section.getBoundingClientRect().top <= 140;
+      }).at(-1);
+      if (current) setActiveTab(current[1]);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+    <header className={`estate-header sticky top-0 z-50 w-full transition-all duration-300 ${
       isScrolled 
         ? 'bg-[#FFF3EB]/95 backdrop-blur-xl border-b border-orange-200/60 shadow-sm' 
         : 'bg-[#FFF3EB]/90 backdrop-blur-md border-b border-orange-200/40'
@@ -33,11 +43,11 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
         
         {/* Left: Brand Monogram & Title */}
-        <a href="#home" className="flex items-center gap-3 group shrink-0">
+        <a href="#home" onClick={() => setActiveTab('Home')} className="flex items-center gap-3 group shrink-0">
           <img 
             src="/kr-logo.png" 
             alt="KR Estate Logo" 
-            className="h-10 w-auto object-contain filter drop-shadow-[0_0_12px_rgba(245,158,11,0.3)] group-hover:drop-shadow-[0_0_18px_rgba(245,158,11,0.6)] group-hover:scale-105 transition-all duration-300"
+            className="h-11 w-11 object-cover rounded-full"
           />
           <div className="flex flex-col">
             <span className="font-serif text-xl font-bold tracking-tight text-slate-900 group-hover:text-amber-700 transition-colors leading-tight">
@@ -50,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </a>
 
         {/* Center: Clean Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-slate-700">
+        <nav className="hidden lg:flex items-center gap-6 text-[13px] font-medium text-slate-700">
           {[
             { name: 'Home', href: '#home' },
             { name: 'Properties', href: '#properties' },
@@ -75,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </nav>
 
         {/* Right: Regulatory Shield and VIP Visit Button */}
-        <div className="hidden lg:flex items-center gap-6 shrink-0">
+        <div className="hidden lg:flex items-center gap-4 shrink-0">
           
           {/* UP RERA Verified */}
           <div className="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
@@ -86,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Book Visit with Shimmer Sweep */}
           <button
             onClick={() => onOpenScheduleModal()}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-slate-950 font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap shine-sweep hover:shadow-lg"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl estate-nav-cta text-slate-950 font-bold text-xs shadow-md hover:brightness-105 active:scale-95 transition-all cursor-pointer whitespace-nowrap shine-sweep hover:shadow-lg"
           >
             <Calendar className="w-3.5 h-3.5" />
             <span>Book Visit</span>
@@ -115,14 +125,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
           <button
             onClick={() => onOpenScheduleModal()}
-            className="px-3.5 py-1.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-lg shadow-sm shine-sweep hover:brightness-105 active:scale-95 transition-all"
+            className="px-3.5 py-1.5 text-xs font-bold text-slate-950 estate-nav-cta rounded-lg shadow-sm shine-sweep hover:brightness-105 active:scale-95 transition-all"
           >
             Book Visit
           </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 text-slate-700 hover:text-slate-950 rounded-lg focus:outline-none bg-white/80 border border-orange-200"
-            aria-label="Toggle menu"
+            aria-label="Toggle menu" aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -132,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-b border-orange-200 bg-[#FFF3EB]/98 backdrop-blur-2xl px-6 pt-4 pb-6 space-y-4 shadow-xl animate-in slide-in-from-top-4 duration-300">
+        <div id="mobile-navigation" className="lg:hidden border-b border-orange-200 bg-[#FFF3EB]/98 backdrop-blur-2xl px-6 pt-4 pb-6 space-y-4 shadow-xl animate-in slide-in-from-top-4 duration-300">
           <div className="flex flex-col space-y-3 text-sm font-semibold text-slate-800">
             {[
               { name: 'Home', href: '#home' },
@@ -167,7 +177,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenScheduleModal();
               }}
-              className="w-full py-2.5 text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 rounded-xl shadow-md"
+              className="w-full py-2.5 text-xs font-bold text-slate-950 estate-nav-cta rounded-xl shadow-md"
             >
               Book Visit
             </button>

@@ -40,7 +40,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   return (
     <article 
       onClick={() => onSelectProperty(property)}
-      className="group interactive-card flex flex-col rounded-2xl sm:rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer relative"
+      className="estate-property-card group interactive-card flex flex-col rounded-2xl sm:rounded-3xl border border-orange-200/70 bg-white/95 backdrop-blur-xl hover:border-amber-500/60 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 cursor-pointer relative"
     >
       {/* ================= TOP PHOTO BANNER ================= */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-900">
@@ -116,8 +116,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
 
           {/* Primary Title */}
-          <h3 className="font-serif-luxury text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition-colors uppercase tracking-tight">
-            {property.title}
+          <h3 className="font-serif-luxury text-xl sm:text-2xl font-bold text-slate-900 group-hover:text-amber-800 transition-colors tracking-tight">
+            <button type="button" onClick={handleSpecsClick} className="text-left cursor-pointer">{property.title}</button>
           </h3>
 
           {/* Short Description */}
@@ -127,7 +127,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* 3-Row Invariant Specs Table */}
-        <div className="space-y-2 py-3 border-y border-orange-200/60 text-xs">
+        <div className="estate-property-specs space-y-2 py-3 border-y border-orange-200/60 text-xs">
           {/* Row 1: Metro */}
           <div className="flex items-center justify-between text-slate-600">
             <span>Metro Transit</span>
@@ -150,10 +150,10 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Pricing & CTA Zone */}
-        <div className="pt-1 flex items-center justify-between gap-3">
+        <div className="estate-property-pricing pt-1 flex items-center justify-between gap-3">
           <div>
             <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold block">
-              INVESTMENT PRICING
+              STARTING FROM
             </span>
             <span className="font-mono font-bold text-base sm:text-lg text-amber-800 tabular-nums">
               {property.priceDisplay || (property.priceNumInCrores ? `₹${property.priceNumInCrores} Cr` : 'Price on Request')}
@@ -164,7 +164,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
             <button
               type="button"
               onClick={handleVisitClick}
-              className="px-4 py-2 rounded-full bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:brightness-105 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95 shine-sweep"
+              className="px-4 py-2 rounded-full estate-nav-cta hover:brightness-105 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95 shine-sweep"
             >
               Book Visit
             </button>

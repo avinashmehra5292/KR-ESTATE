@@ -72,6 +72,19 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
             p.title?.toLowerCase().includes(sec)
         );
       }
+      if (searchFilterParams.budget && searchFilterParams.budget !== 'all') {
+        result = result.filter(p => {
+          const price = p.priceNumInCrores;
+          if (price == null || price <= 0) return false;
+          switch (searchFilterParams.budget) {
+            case 'under_1cr': return price < 1;
+            case '1cr_3cr': return price >= 1 && price < 3;
+            case '3cr_6cr': return price >= 3 && price < 6;
+            case 'above_6cr': return price >= 6;
+            default: return true;
+          }
+        });
+      }
       if (searchFilterParams.type && searchFilterParams.type !== 'all') {
         result = result.filter((p) => p.propertyType === searchFilterParams.type);
       }
@@ -112,7 +125,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
   return (
     <section 
       id="properties" 
-      className="py-12 sm:py-16 lg:py-24 bg-[#FBE8DC] text-slate-900 border-b border-orange-200/60 relative overflow-hidden w-full max-w-full"
+      className="estate-portfolio py-12 sm:py-16 lg:py-24 bg-[#FBE8DC] text-slate-900 border-b border-orange-200/60 relative overflow-hidden w-full max-w-full"
     >
       {/* Subtle ambient lighting */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -120,19 +133,19 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[350px] bg-orange-300/10 blur-[150px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full max-w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
         
         {/* ================= SECTION HEADER ================= */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 sm:mb-8">
           <div>
             <div className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-amber-800 mb-1.5 sm:mb-2 font-mono">
-              VERIFIED PORTFOLIOS
+              THE PROPERTY COLLECTION
             </div>
-            <h2 className="font-serif-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 uppercase leading-[1.15]">
-              CURATED PROPERTIES IN NOIDA &amp; JEWAR CORRIDOR
+            <h2 className="font-serif-luxury text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-slate-900 leading-[1.15]">
+              Distinctive homes. Exceptional possibilities.
             </h2>
             <p className="text-slate-700 text-xs sm:text-sm mt-1.5 sm:mt-2 max-w-3xl leading-relaxed">
-              Hand-vetted residential landmarks and commercial assets with clean land titles, RERA approvals, and institutional developer track records.
+              Explore residences, commercial spaces and plots across Noida and the Jewar corridor. Find the space that fits your next chapter.
             </p>
           </div>
 
@@ -147,7 +160,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
         </div>
 
         {/* ================= FILTER & SEARCH TOOLBAR ================= */}
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-10 pb-2 w-full max-w-full">
+        <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-10 pb-2 w-full max-w-full">
           
           {/* Left Category Tabs (Pills) */}
           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 w-full max-w-full">
@@ -158,6 +171,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
+                  aria-pressed={isActive}
                   className={`px-4 sm:px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                     isActive
                       ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20'
@@ -171,7 +185,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
           </div>
 
           {/* Right Search Input & Sorters */}
-          <div className="flex items-center gap-2.5 self-start lg:self-auto shrink-0 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 estate-listing-controls self-start xl:self-auto shrink-0 w-full sm:w-auto">
             {/* Search Input Box */}
             <div className="relative flex-1 sm:flex-initial">
               <input
@@ -179,13 +193,14 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search builder, sector..."
+                aria-label="Search properties"
                 className="w-full sm:w-60 pl-3.5 pr-8 py-2 text-xs rounded-full bg-white border border-orange-200/80 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-amber-500 transition-colors shadow-sm"
               />
               <Search className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
 
             {/* Filter icon reset */}
-            {(searchQuery || activeTab !== 'all' || (searchFilterParams && searchFilterParams.sector !== 'all')) && (
+            {(searchQuery || activeTab !== 'all' || (searchFilterParams && Object.values(searchFilterParams).some(value => value !== 'all'))) && (
               <button
                 type="button"
                 onClick={handleReset}
@@ -209,6 +224,7 @@ export const PropertyGrid: React.FC<PropertyGridProps> = ({
             {/* Sort Dropdown */}
             <div className="relative">
               <select
+                aria-label="Sort properties"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="appearance-none pl-3.5 pr-8 py-2 text-xs font-semibold rounded-full bg-white border border-orange-200/80 text-slate-800 focus:outline-none focus:border-amber-500 cursor-pointer shadow-sm"

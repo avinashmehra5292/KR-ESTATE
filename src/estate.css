@@ -1,0 +1,145 @@
+/* Public-site visual system. Admin and modal utility styles remain independent. */
+.estate-site {
+  --estate-ink: #173c36;
+  --estate-muted: #64736c;
+  --estate-gold: #dfbd81;
+  --estate-line: #dedfd5;
+  background: #f8f7f3;
+  overflow-x: clip;
+}
+.estate-container { width: min(1280px, 100%); margin-inline: auto; padding-inline: 32px; }
+.estate-site :is(a, button, select, input, textarea):focus-visible {
+  outline: 3px solid #a37934; outline-offset: 4px;
+}
+.estate-site section[id], .estate-site footer[id] { scroll-margin-top: 96px; }
+.estate-header { background: #faf9f5; border-color: var(--estate-line); }
+.estate-header > div:first-child { height: 88px; }
+.estate-header nav a { font-size: 13px; }
+.estate-header nav a:hover { color: var(--estate-ink); }
+.estate-header nav a > span { background: var(--estate-ink); box-shadow: none; }
+.estate-header .estate-nav-cta, .estate-property-card .estate-nav-cta {
+  background: var(--estate-ink); color: white; border-radius: 6px;
+  box-shadow: none; min-height: 42px;
+}
+.estate-header [id="mobile-navigation"] { background: #faf9f5; }
+.estate-button {
+  min-height: 52px; padding: 14px 23px; border-radius: 5px; display: inline-flex;
+  align-items: center; justify-content: center; gap: 18px; font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: background .2s, transform .2s;
+}
+.estate-button:hover { transform: translateY(-2px); }
+.estate-button-gold { background: #e4c38b; color: #20392f; }
+.estate-button-gold:hover { background: #eed3a6; }
+.estate-button-dark { background: var(--estate-ink); color: white; }
+.estate-button-dark:hover { background: #28564b; }
+.estate-hero { background: #f8f7f3; }
+.hero-scene { position: relative; min-height: 610px; color: white; }
+.hero-image, .hero-image img, .hero-shade { position: absolute; inset: 0; height: 100%; width: 100%; }
+.hero-image img { object-fit: cover; object-position: center 48%; }
+.hero-shade { background: linear-gradient(90deg, rgba(9,29,26,.88), rgba(15,30,27,.60) 48%, rgba(15,30,27,.08)), linear-gradient(0deg, rgba(9,29,26,.30), transparent 60%); }
+.hero-editorial { position: relative; padding-top: 85px; padding-bottom: 110px; }
+.estate-eyebrow { display: flex; align-items: center; gap: 12px; font-size: 10px; letter-spacing: .24em; font-weight: 600; color: #e8c991; }
+.estate-eyebrow > span { display: inline-block; height: 1px; width: 35px; background: currentColor; }
+.hero-editorial h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif; font-size: clamp(46px, 5.1vw, 74px);
+  line-height: 1.06; font-weight: 500; letter-spacing: -.035em; margin-block: 26px 24px;
+}
+.hero-editorial h1 em { color: #e8c991; font-weight: 400; }
+.hero-description { max-width: 475px; color: #e2e7e1; font-size: 14px; line-height: 1.9; }
+.hero-actions { display: flex; align-items: center; gap: 26px; margin-top: 30px; }
+.hero-film { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; cursor: pointer; color: white; }
+.hero-film > span { height: 40px; width: 40px; display: grid; place-items: center; border: 1px solid #ffffff70; border-radius: 50%; }
+.hero-film:hover > span { background: #ffffff25; }
+.hero-location { margin-top: 36px; display: flex; align-items: center; gap: 8px; font-size: 11px; color: #e2e7e1; letter-spacing: .05em; }
+.hero-caption { position: absolute; right: max(32px, calc((100vw - 1216px) / 2)); bottom: 100px; display: flex; flex-direction: column; gap: 12px; text-align: right; }
+.hero-caption span:first-child { font-size: 9px; letter-spacing: .23em; }
+.hero-caption span:last-child { font: italic 23px 'Cormorant Garamond', Georgia, serif; }
+.hero-discovery { position: relative; margin-top: -48px; padding-bottom: 16px; }
+.estate-search { display: grid; grid-template-columns: .85fr 1.15fr 1.1fr .9fr 1fr; align-items: center; gap: 20px; padding: 26px; background: #fff; border: 1px solid #e5e5dc; border-radius: 8px; box-shadow: 0 15px 40px #173c3610; }
+.search-intro { display: flex; align-items: center; gap: 12px; color: var(--estate-ink); font-size: 13px; line-height: 1.5; }
+.search-intro svg { color: #98733a; flex-shrink: 0; }
+.search-intro strong { font-weight: 600; }
+.search-field { border-left: 1px solid var(--estate-line); padding-left: 20px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.search-field > span { font-size: 9px; text-transform: uppercase; letter-spacing: .13em; color: #737b70; font-weight: 600; }
+.search-field select { width: 100%; padding-block: 4px; font-size: 12px; color: #203b33; background: transparent; cursor: pointer; }
+.hero-resources { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-block: 24px; font-size: 11px; color: var(--estate-muted); }
+.hero-resources > div { display: flex; flex-wrap: wrap; gap: 26px; }
+.hero-resources a, .hero-resources button { display: inline-flex; align-items: center; gap: 7px; cursor: pointer; }
+.hero-resources a:hover, .hero-resources button:hover { color: #173c36; text-decoration: underline; text-underline-offset: 5px; }
+.estate-site main > section:not(.estate-hero) { background-color: #f8f7f3; border-color: var(--estate-line); }
+.estate-site main > section:nth-of-type(2n + 3) { background-color: #efefe7; }
+.estate-site main > section:not(.estate-hero) h2 { color: var(--estate-ink); font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -.025em; }
+.estate-site main > section:not(.estate-hero) :is(button, a)[class*="from-amber-400"] { background: var(--estate-ink); color: white; box-shadow: none; }
+.estate-portfolio > div.absolute { display: none; }
+.estate-portfolio h2 { max-width: 720px; font-size: clamp(34px, 3.4vw, 48px); text-wrap: balance; }
+.estate-portfolio [aria-pressed] { min-height: 42px; border-radius: 5px; box-shadow: none; border: 1px solid var(--estate-line); }
+.estate-portfolio [aria-pressed="true"] { background: var(--estate-ink); color: white; border-color: var(--estate-ink); }
+.estate-listing-controls { flex-wrap: wrap; }
+.estate-listing-controls :is(input, select) { min-height: 42px; border-color: var(--estate-line); border-radius: 5px; box-shadow: none; }
+.estate-property-card { border: 1px solid var(--estate-line); border-radius: 10px; box-shadow: 0 3px 12px #173c3606; background: white; backdrop-filter: none; }
+.estate-property-card:hover { border-color: #b3bcb0; box-shadow: 0 14px 32px #173c3614; transform: translateY(-4px); }
+.estate-property-card h3 { color: var(--estate-ink); font-weight: 600; }
+.estate-property-card > div:first-child { aspect-ratio: 4 / 3; }
+.estate-property-specs { border-color: #e8e9e2; }
+.estate-property-specs > div { align-items: flex-start; gap: 14px; }
+.estate-property-specs > div > span:first-child { flex-shrink: 0; }
+.estate-property-specs > div > span:last-child { text-align: right; overflow-wrap: anywhere; }
+.estate-property-pricing { flex-wrap: wrap; row-gap: 16px; }
+.estate-property-pricing > div:first-child > span:last-child { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; color: var(--estate-ink); }
+.estate-property-pricing button { min-height: 42px; border-radius: 5px; }
+.estate-service-card { border-radius: 8px; border-color: var(--estate-line); box-shadow: none; }
+.estate-service-card:hover { border-color: #b3bcb0; box-shadow: 0 12px 24px #173c3610; }
+.estate-site #contact { background: #e4e8dd; border-color: #d1d8ca; }
+.estate-site #contact h4 { color: var(--estate-ink); }
+.estate-whatsapp a { background: #205c47; box-shadow: 0 6px 22px #173c3633; border: 1px solid #ffffff55; }
+.estate-whatsapp a > span:first-child { display: none; }
+.estate-whatsapp a:hover { background: #174b39; box-shadow: 0 8px 28px #173c3640; }
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .estate-header .hidden.lg\:flex > div { display: none; }
+  .estate-search { gap: 12px; padding: 22px; }
+  .search-field { padding-left: 12px; }
+  .estate-search .estate-button { padding-inline: 14px; gap: 10px; }
+}
+@media (max-width: 1023px) {
+  .hero-scene { min-height: 590px; }
+  .hero-editorial { padding-top: 65px; }
+  .hero-caption { display: none; }
+  .estate-search { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .search-intro { display: none; }
+  .search-field { border-left: 0; padding-left: 0; border-bottom: 1px solid var(--estate-line); padding-bottom: 10px; }
+  .hero-resources { align-items: flex-start; }
+  .hero-resources > span { display: none; }
+  .hero-resources > div { width: 100%; justify-content: space-between; gap: 20px; }
+}
+@media (max-width: 639px) {
+  .estate-container { padding-inline: 20px; }
+  .estate-header > div:first-child { height: 76px; gap: 8px; padding-inline: 16px; }
+  .estate-header > div:first-child > a { gap: 8px; }
+  .estate-header > div:first-child > a img { width: 36px; height: 36px; }
+  .estate-header button { min-height: 40px; }
+  .hero-scene { min-height: 560px; }
+  .hero-shade { background: linear-gradient(90deg, #091d1ae8, #091d1a60), linear-gradient(0deg, #091d1a55, transparent); }
+  .hero-editorial { padding-top: 50px; padding-bottom: 85px; }
+  .hero-editorial h1 { font-size: clamp(39px, 10.8vw, 61px); margin-block: 24px 22px; }
+  .hero-description { font-size: 13px; line-height: 1.8; max-width: 380px; }
+  .hero-actions { flex-wrap: wrap; gap: 20px; margin-top: 26px; }
+  .hero-film { min-height: 44px; }
+  .hero-location { margin-top: 26px; font-size: 10px; }
+  .hero-discovery { margin-top: -30px; }
+  .estate-search { padding: 20px; gap: 18px; }
+  .search-field:first-of-type { grid-column: 1 / -1; }
+  .search-field select { font-size: 12px; min-height: 32px; }
+  .estate-search .estate-button { grid-column: 1 / -1; }
+  .hero-resources { padding-block: 22px; }
+  .hero-resources > div { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 10px; }
+  .hero-resources a, .hero-resources button { min-height: 30px; font-size: 10px; }
+  .estate-portfolio h2 { font-size: 36px; }
+  .estate-property-card > div:first-child { aspect-ratio: 16 / 10; }
+  .estate-site main > section:not(.estate-hero) { padding-block: 56px; }
+  .estate-whatsapp { right: 16px; bottom: 16px; }
+  .estate-whatsapp a { width: 48px; height: 48px; justify-content: center; padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .estate-site *, .estate-site *::before, .estate-site *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
