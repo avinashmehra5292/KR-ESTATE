@@ -29,6 +29,7 @@ import { SiteSettingsProvider } from './context/SiteSettingsContext';
 import { verifyAdminAuthSession } from './utils/adminAuth';
 
 export default function App() {
+  const [properties, setProperties] = useState<Property[]>(NOIDA_PROPERTIES);
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
   const [preselectedProjectForVisit, setPreselectedProjectForVisit] = useState<string | undefined>(undefined);
@@ -46,6 +47,35 @@ export default function App() {
   const [adminFormOpen, setAdminFormOpen] = useState(false);
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [clientNameParam, setClientNameParam] = useState<string>('Mr. & Mrs. R. Kapoor');
+
+  // Fetch properties dynamically from API (Supabase or server)
+  const fetchProperties = async () => {
+    try {
+      const res = await fetch('/api/properties');
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setProperties(data);
+          setSelectedProperty((prev) => {
+            if (!prev) return null;
+            const updated = data.find((p: Property) => p.id === prev.id);
+            return updated || prev;
+          });
+        }
+      }
+    } catch {
+      // safe fallback
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+    const handlePropertiesUpdated = () => {
+      fetchProperties();
+    };
+    window.addEventListener('kr-properties-updated', handlePropertiesUpdated);
+    return () => window.removeEventListener('kr-properties-updated', handlePropertiesUpdated);
+  }, []);
 
   // Auto-detect client, expressway tour, or /admin URL params
   useEffect(() => {
@@ -134,7 +164,7 @@ export default function App() {
   };
 
   const handleSelectPropertyByName = (title: string) => {
-    const found = NOIDA_PROPERTIES.find((p) => p.title.toLowerCase().includes(title.toLowerCase()));
+    const found = properties.find((p) => p.title.toLowerCase().includes(title.toLowerCase()));
     if (found) {
       setSelectedProperty(found);
     }
@@ -199,7 +229,7 @@ export default function App() {
 
           {/* Curated Properties Portfolio with High-Res Photos & Badges */}
           <PropertyGrid
-            properties={NOIDA_PROPERTIES}
+            properties={properties}
             onSelectProperty={(prop) => setSelectedProperty(prop)}
             onScheduleVisit={(title) => handleOpenScheduleModal(title)}
             onWatchVideo={(prop, video) => handleOpenPropertyVideo(prop, video)}
@@ -322,6 +352,7 @@ export default function App() {
           <AdminDashboard
             onClose={() => {
               setAdminFormOpen(false);
+              fetchProperties();
               try {
                 localStorage.removeItem('kr_admin_auth');
               } catch { }

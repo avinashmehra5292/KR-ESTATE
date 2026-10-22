@@ -1329,7 +1329,11 @@ async function getPropertiesArray(): Promise<{ properties: any[]; propertyFile: 
             }
           }
         } else {
-          return { properties: data.map(propertyRowToApi), propertyFile };
+          const properties = data.map(propertyRowToApi);
+          if (process.env.NODE_ENV !== 'production' && propertyFile) {
+            writePropertiesArray(properties, propertyFile).catch(() => {});
+          }
+          return { properties, propertyFile };
         }
       } else if (error) {
         console.error('Supabase fetch properties error:', error.message);
@@ -1429,7 +1433,7 @@ app.get('/api/properties', async (_req: Request, res: Response) => {
 
 // Process Base64 image uploads (uses Supabase Storage in production, local fs in dev)
 async function processUploadedImages(body: any): Promise<string[]> {
-  const ALLOWED_IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
+  const ALLOWED_IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'jfif', 'heic', 'heif', 'bmp', 'svg'];
   const uploadedUrls: string[] = [];
 
   const handleUpload = async (fileObj: { name?: string; base64: string }, index: number = 0): Promise<string | null> => {

@@ -2,129 +2,6 @@ import { Property } from '../types';
 
 export const NOIDA_PROPERTIES: Property[] = [
   {
-    "id": "mahagun-manorialle-sec128",
-    "title": "Mahagun Manorialle",
-    "developer": "Mahagun Group",
-    "tagline": "Condominiums Overlooking the 18-Hole Graham Cooke Golf Course",
-    "sector": "Sector 128",
-    "locality": "Wish Town Expressway",
-    "propertyType": "luxury_apartment",
-    "status": "ready_to_move",
-    "possessionDate": "Ready for Possession",
-    "priceDisplay": "₹3.90 Cr - ₹9.20 Cr",
-    "priceNumInCrores": 3.9,
-    "pricePerSqFt": 16800,
-    "bhkConfigurations": [
-      "3 BHK",
-      "4 BHK",
-      "5 BHK Duplex"
-    ],
-    "reraNumber": "UPRERAPRJ2051",
-    "totalAcres": 3.85,
-    "openGreensPercentage": 75,
-    "coverImage": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-1.jpg",
-    "galleryImages": [
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-1.jpg",
-        "caption": "Mahagun Manorialle - 40-Storey Golf-Facing Glass Landmark"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-2.jpg",
-        "caption": "Mahagun Manorialle - 180° Uninterrupted 18-Hole Jaypee Golf Course Panorama"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-3.jpg",
-        "caption": "Mahagun Manorialle - 40th Floor Rooftop Sky Lounge & Heated Infinity Pool"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-4.jpg",
-        "caption": "Mahagun Manorialle - Double-Height Palatial Living Salon with Golf Balcony"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-5.jpg",
-        "caption": "Mahagun Manorialle - Master Suite Overlooking Green Golf Fairways"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-6.jpg",
-        "caption": "Mahagun Manorialle - Lush Putting Greens & Championship Golf View"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-7.jpg",
-        "caption": "Mahagun Manorialle - Designer Gourmet Island Kitchen & Wine Cellar"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-8.jpg",
-        "caption": "Mahagun Manorialle - Luxury Marble Jacuzzi Bath with Golf Course Vista"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-9.jpg",
-        "caption": "Mahagun Manorialle - Private Squash Court & Wellness Gymnasium"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-10.jpg",
-        "caption": "Mahagun Manorialle - Sunset Terrace Overlooking Wish Town Golf Fairway"
-      },
-      {
-        "url": "/images/properties/mahagun-manorialle-sec128/mahagun-manorialle-sec128-11.jpg",
-        "caption": "Mahagun Manorialle - Duplex Penthouse Architectural Spiral Staircase"
-      }
-    ],
-    "shortDescription": "40-storey architectural triumph offering continuous golf course views, rooftop infinity deck, and insulated double-glazed facades.",
-    "fullDescription": "Perched in the prestigious Wish Town township in Sector 128, Mahagun Manorialle offers an idyllic front-row seat to an 18-hole championship golf course designed by Graham Cooke. The residences feature Italian marble flooring, 11-foot clear ceiling heights, and energy-efficient low-E double-glazed glass walls framing majestic greens.",
-    "amenities": [
-      "Rooftop Sky Lounge & Infinity Pool at 40th Floor",
-      "18-Hole Championship Golf Course Access",
-      "Temperature-Controlled All-Weather Pool",
-      "Bespoke Fine Dining & Banquet Suites",
-      "High-Speed Schindler Speed Elevators",
-      "Automated Climate Control Systems",
-      "Dedicated Jogging Track amidst Greens"
-    ],
-    "highlights": [
-      "Unobstructed Forever Golf Course Views",
-      "Inside Jaypee Wish Town Gated Masterplan",
-      "Close proximity to Jaypee Hospital and Top International Schools",
-      "Rapid access to DND Flyway and Jewar Corridor"
-    ],
-    "locationAdvantages": [],
-    "floorPlans": [
-      {
-        "name": "3 BHK Golf Haven",
-        "bedrooms": 3,
-        "bathrooms": 4,
-        "priceEstimate": "₹3.90 Cr",
-        "superAreaSqFt": 2700,
-        "carpetAreaSqFt": 1850
-      },
-      {
-        "name": "4 BHK Imperial Horizon",
-        "bedrooms": 4,
-        "bathrooms": 5,
-        "priceEstimate": "₹5.85 Cr",
-        "superAreaSqFt": 3775,
-        "carpetAreaSqFt": 2550
-      },
-      {
-        "name": "5 BHK Golf Duplex Manor",
-        "bedrooms": 5,
-        "bathrooms": 6,
-        "priceEstimate": "₹9.20 Cr",
-        "superAreaSqFt": 5900,
-        "carpetAreaSqFt": 4100
-      }
-    ],
-    "distanceToMetro": "2.5 Km (Sector 137 Metro Station)",
-    "distanceToAirport": "35 Mins (Jewar International Airport)",
-    "distanceToExpressway": "On Noida Expressway Service Corridor",
-    "videoTour": null,
-    "virtualTourUrl": "https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment",
-    "architecturalTheme": {
-      "gradient": "from-blue-950 via-slate-900 to-indigo-950",
-      "iconType": "tower",
-      "accentColor": "#38bdf8"
-    }
-  },
-  {
     "id": "ace-starlit-sec150",
     "title": "ACE Starlit",
     "developer": "ACE Group",
@@ -266,10 +143,154 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "25 Mins (Jewar International Airport)",
     "distanceToExpressway": "1 Min (Noida-Greater Noida Expressway)",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-cyan-950 via-slate-900 to-teal-950",
       "iconType": "tower",
       "accentColor": "#2dd4bf"
+    }
+  },
+  {
+    "id": "mahagun-manorialle-sec128",
+    "title": "Mahagun Manorialle",
+    "developer": "Mahagun Group",
+    "tagline": "Condominiums Overlooking the 18-Hole Graham Cooke Golf Course",
+    "sector": "Sector 128",
+    "locality": "Wish Town Expressway",
+    "propertyType": "luxury_apartment",
+    "status": "ready_to_move",
+    "possessionDate": "Ready for Possession",
+    "priceDisplay": "₹3.90 Cr - ₹9.20 Cr",
+    "priceNumInCrores": 3.9,
+    "pricePerSqFt": 16800,
+    "bhkConfigurations": [
+      "3 BHK",
+      "4 BHK",
+      "5 BHK Duplex"
+    ],
+    "reraNumber": "UPRERAPRJ2051",
+    "totalAcres": 3.85,
+    "openGreensPercentage": 75,
+    "coverImage": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663125576-3.jpg",
+    "galleryImages": [
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663123587-1.jpg",
+        "caption": "Mahagun Manorialle - Photo 1"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663124530-2.jpg",
+        "caption": "Mahagun Manorialle - Photo 2"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663125576-3.jpg",
+        "caption": "Mahagun Manorialle - Photo 3"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663126494-4.jpg",
+        "caption": "Mahagun Manorialle - Photo 4"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663128278-5.jpg",
+        "caption": "Mahagun Manorialle - Photo 5"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663129933-6.jpg",
+        "caption": "Mahagun Manorialle - Photo 6"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663131360-7.jpg",
+        "caption": "Mahagun Manorialle - Photo 7"
+      },
+      {
+        "url": "https://bkpjvadwefoairumdpxb.supabase.co/storage/v1/object/public/uploads/images/upload-1792663131997-8.jpg",
+        "caption": "Mahagun Manorialle - Photo 8"
+      }
+    ],
+    "shortDescription": "40-storey architectural triumph offering continuous golf course views, rooftop infinity deck, and insulated double-glazed facades.",
+    "fullDescription": "Perched in the prestigious Wish Town township in Sector 128, Mahagun Manorialle offers an idyllic front-row seat to an 18-hole championship golf course designed by Graham Cooke. The residences feature Italian marble flooring, 11-foot clear ceiling heights, and energy-efficient low-E double-glazed glass walls framing majestic greens.",
+    "amenities": [
+      "Rooftop Sky Lounge & Infinity Pool at 40th Floor",
+      "18-Hole Championship Golf Course Access",
+      "Temperature-Controlled All-Weather Pool",
+      "Bespoke Fine Dining & Banquet Suites",
+      "High-Speed Schindler Speed Elevators",
+      "Automated Climate Control Systems",
+      "Dedicated Jogging Track amidst Greens"
+    ],
+    "highlights": [
+      "Metro Network Distance - 2.5 Km (Sector 137 Metro Station)",
+      "Jewar International Airport Distance - 35 Mins (Jewar International Airport)",
+      "Expressway Access Distance - On Noida Expressway Service Corridor",
+      "Location Advantage - Unobstructed Forever Golf Course Views",
+      "Location Advantage - Inside Jaypee Wish Town Gated Masterplan",
+      "Location Advantage - Close proximity to Jaypee Hospital and Top International Schools",
+      "Location Advantage - Rapid access to DND Flyway and Jewar Corridor"
+    ],
+    "locationAdvantages": [
+      {
+        "label": "Metro Network Distance",
+        "value": "2.5 Km (Sector 137 Metro Station)"
+      },
+      {
+        "label": "Jewar International Airport Distance",
+        "value": "35 Mins (Jewar International Airport)"
+      },
+      {
+        "label": "Expressway Access Distance",
+        "value": "On Noida Expressway Service Corridor"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Unobstructed Forever Golf Course Views"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Inside Jaypee Wish Town Gated Masterplan"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Close proximity to Jaypee Hospital and Top International Schools"
+      },
+      {
+        "label": "Location Advantage",
+        "value": "Rapid access to DND Flyway and Jewar Corridor"
+      }
+    ],
+    "floorPlans": [
+      {
+        "name": "3 BHK Golf Haven",
+        "bedrooms": 3,
+        "bathrooms": 4,
+        "priceEstimate": "₹3.90 Cr",
+        "superAreaSqFt": 2700,
+        "carpetAreaSqFt": 1850
+      },
+      {
+        "name": "4 BHK Imperial Horizon",
+        "bedrooms": 4,
+        "bathrooms": 5,
+        "priceEstimate": "₹5.85 Cr",
+        "superAreaSqFt": 3775,
+        "carpetAreaSqFt": 2550
+      },
+      {
+        "name": "5 BHK Golf Duplex Manor",
+        "bedrooms": 5,
+        "bathrooms": 6,
+        "priceEstimate": "₹9.20 Cr",
+        "superAreaSqFt": 5900,
+        "carpetAreaSqFt": 4100
+      }
+    ],
+    "distanceToMetro": "2.5 Km (Sector 137 Metro Station)",
+    "distanceToAirport": "35 Mins (Jewar International Airport)",
+    "distanceToExpressway": "On Noida Expressway Service Corridor",
+    "videoTour": null,
+    "virtualTourUrl": "https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment",
+    "architecturalTheme": {
+      "gradient": "from-blue-950 via-slate-900 to-indigo-950",
+      "iconType": "tower",
+      "accentColor": "#38bdf8"
     }
   },
   {
@@ -387,128 +408,11 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "30 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Frontage on Noida Expressway",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-violet-950 via-slate-900 to-purple-950",
       "iconType": "commercial",
       "accentColor": "#a855f7"
-    }
-  },
-  {
-    "id": "gulshan-dynasty-sec144",
-    "title": "Gulshan Dynasty",
-    "developer": "Gulshan Homz",
-    "tagline": "Noida’s First Luxury Wellness Eco-Homes with 76% Open Greens",
-    "sector": "Sector 144",
-    "locality": "Noida Expressway",
-    "propertyType": "luxury_apartment",
-    "status": "under_construction",
-    "possessionDate": "Mid 2026",
-    "priceDisplay": "₹6.20 Cr - ₹10.50 Cr",
-    "priceNumInCrores": 6.2,
-    "pricePerSqFt": 18500,
-    "bhkConfigurations": [
-      "4 BHK Luxury Residence",
-      "Duplex Sky Residence"
-    ],
-    "reraNumber": "UPRERAPRJ958873",
-    "totalAcres": 5.8,
-    "openGreensPercentage": 76,
-    "coverImage": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
-    "galleryImages": [
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
-        "caption": "Gulshan Dynasty - Platinum Wellness Luxury Towers"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-2.jpg",
-        "caption": "Gulshan Dynasty - On-Campus Organic Hydroponic Farm"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-3.jpg",
-        "caption": "Gulshan Dynasty - Temperature-Controlled Indoor Heated Pool"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-4.jpg",
-        "caption": "Gulshan Dynasty - Private Elevator Vestibule to Each Residence"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-5.jpg",
-        "caption": "Gulshan Dynasty - Opulent Living Salon with Italian Marble Accents"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-6.jpg",
-        "caption": "Gulshan Dynasty - Master Bedroom Sanctuary with Private Green Balcony"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-7.jpg",
-        "caption": "Gulshan Dynasty - Japanese Zen Garden & Meditation Pavilion"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-8.jpg",
-        "caption": "Gulshan Dynasty - Rooftop Helipad & Panoramic Sky Lounge"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-9.jpg",
-        "caption": "Gulshan Dynasty - Holistic Ayurvedic Wellness Spa & Salon"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-10.jpg",
-        "caption": "Gulshan Dynasty - Technogym Equipped High-Tech Gymnasium"
-      },
-      {
-        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-11.jpg",
-        "caption": "Gulshan Dynasty - Designer Island Kitchen with Miele Appliances"
-      }
-    ],
-    "shortDescription": "Platinum IGBC pre-certified eco-condominiums featuring dedicated hydroponic organic farming and contact-less elevators.",
-    "fullDescription": "Gulshan Dynasty in Sector 144 elevates residential luxury through the lens of holistic wellness. Comprising only 204 exclusive families across 3 opulent towers, each home includes dedicated staff quarters, separate service entry, double-glazed acoustic windows, and access to on-site organic hydroponic vegetables grown for residents.",
-    "amenities": [
-      "On-Site Hydroponic Organic Farm",
-      "Pet Wellness Care & Agility Park",
-      "Touchless Access & Biometric Lifts",
-      "Rooftop Cinema & Stargazing Telescope",
-      "Heated Magnesium Swimming Pool",
-      "Professional Physiotherapy & Wellness Clinic"
-    ],
-    "highlights": [
-      "Low Density: Only 204 Exclusive Residences",
-      "IGBC Platinum Pre-Certified Green Building",
-      "Walking Distance from Sector 144 Metro Station",
-      "Dedicated Service Core and Butler Entries"
-    ],
-    "locationAdvantages": [],
-    "floorPlans": [
-      {
-        "name": "4 BHK Wellness Manor",
-        "bedrooms": 4,
-        "bathrooms": 5,
-        "priceEstimate": "₹6.20 Cr",
-        "superAreaSqFt": 4100,
-        "carpetAreaSqFt": 2950
-      },
-      {
-        "name": "4 BHK + Family Lounge Sovereign",
-        "bedrooms": 4,
-        "bathrooms": 6,
-        "priceEstimate": "₹7.80 Cr",
-        "superAreaSqFt": 4700,
-        "carpetAreaSqFt": 3450
-      }
-    ],
-    "distanceToMetro": "600 Meters (Sector 144 Aqua Line Metro)",
-    "distanceToAirport": "30 Mins (Jewar International Airport)",
-    "distanceToExpressway": "On Noida Expressway Service Arterial",
-    "videoTour": {
-      "title": "Gulshan Dynasty 4K Drone Tour & Aerial Walkthrough",
-      "videoUrl": "https://www.youtube.com/watch?v=lR5S12tCJUY",
-      "thumbnailUrl": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
-      "duration": "02:45",
-      "description": "4K aerial inspection and architectural walkthrough of Gulshan Dynasty in Sector 144."
-    },
-    "architecturalTheme": {
-      "gradient": "from-emerald-950 via-slate-900 to-teal-950",
-      "iconType": "sparkle",
-      "accentColor": "#34d399"
     }
   },
   {
@@ -626,6 +530,7 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "12 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Entry from 6-Lane Yamuna Expressway",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-orange-950",
       "iconType": "villa",
@@ -738,6 +643,7 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "40 Mins (Jewar International Airport)",
     "distanceToExpressway": "5 Mins (FNG Corridor & Noida Expressway)",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-rose-950",
       "iconType": "tower",
@@ -865,6 +771,7 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "42 Mins (Jewar International Airport)",
     "distanceToExpressway": "2 Mins (Noida-Greater Noida Expressway)",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-emerald-950 via-slate-900 to-emerald-900",
       "iconType": "tree",
@@ -987,6 +894,7 @@ export const NOIDA_PROPERTIES: Property[] = [
       "description": "4K aerial inspection and architectural walkthrough of GYGY MENTIS in Noida Sector 140.",
       "thumbnailUrl": "/images/properties/prop-1791396536248/prop-1791396536248-1.jpg"
     },
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-indigo-950",
       "iconType": "tower",
@@ -1133,10 +1041,130 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "38 Mins (Jewar International Airport)",
     "distanceToExpressway": "Direct Exit on Noida-Greater Noida Expressway",
     "videoTour": null,
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-amber-950 via-slate-900 to-yellow-950",
       "iconType": "sparkle",
       "accentColor": "#d4af37"
+    }
+  },
+  {
+    "id": "gulshan-dynasty-sec144",
+    "title": "Gulshan Dynasty",
+    "developer": "Gulshan Homz",
+    "tagline": "Noida’s First Luxury Wellness Eco-Homes with 76% Open Greens",
+    "sector": "Sector 144",
+    "locality": "Noida Expressway",
+    "propertyType": "luxury_apartment",
+    "status": "under_construction",
+    "possessionDate": "Mid 2026",
+    "priceDisplay": "₹6.20 Cr - ₹10.50 Cr",
+    "priceNumInCrores": 6.2,
+    "pricePerSqFt": 18500,
+    "bhkConfigurations": [
+      "4 BHK Luxury Residence",
+      "Duplex Sky Residence"
+    ],
+    "reraNumber": "UPRERAPRJ958873",
+    "totalAcres": 5.8,
+    "openGreensPercentage": 76,
+    "coverImage": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
+    "galleryImages": [
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg",
+        "caption": "Gulshan Dynasty - Platinum Wellness Luxury Towers"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-2.jpg",
+        "caption": "Gulshan Dynasty - On-Campus Organic Hydroponic Farm"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-3.jpg",
+        "caption": "Gulshan Dynasty - Temperature-Controlled Indoor Heated Pool"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-4.jpg",
+        "caption": "Gulshan Dynasty - Private Elevator Vestibule to Each Residence"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-5.jpg",
+        "caption": "Gulshan Dynasty - Opulent Living Salon with Italian Marble Accents"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-6.jpg",
+        "caption": "Gulshan Dynasty - Master Bedroom Sanctuary with Private Green Balcony"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-7.jpg",
+        "caption": "Gulshan Dynasty - Japanese Zen Garden & Meditation Pavilion"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-8.jpg",
+        "caption": "Gulshan Dynasty - Rooftop Helipad & Panoramic Sky Lounge"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-9.jpg",
+        "caption": "Gulshan Dynasty - Holistic Ayurvedic Wellness Spa & Salon"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-10.jpg",
+        "caption": "Gulshan Dynasty - Technogym Equipped High-Tech Gymnasium"
+      },
+      {
+        "url": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-11.jpg",
+        "caption": "Gulshan Dynasty - Designer Island Kitchen with Miele Appliances"
+      }
+    ],
+    "shortDescription": "Platinum IGBC pre-certified eco-condominiums featuring dedicated hydroponic organic farming and contact-less elevators.",
+    "fullDescription": "Gulshan Dynasty in Sector 144 elevates residential luxury through the lens of holistic wellness. Comprising only 204 exclusive families across 3 opulent towers, each home includes dedicated staff quarters, separate service entry, double-glazed acoustic windows, and access to on-site organic hydroponic vegetables grown for residents.",
+    "amenities": [
+      "On-Site Hydroponic Organic Farm",
+      "Pet Wellness Care & Agility Park",
+      "Touchless Access & Biometric Lifts",
+      "Rooftop Cinema & Stargazing Telescope",
+      "Heated Magnesium Swimming Pool",
+      "Professional Physiotherapy & Wellness Clinic"
+    ],
+    "highlights": [
+      "Low Density: Only 204 Exclusive Residences",
+      "IGBC Platinum Pre-Certified Green Building",
+      "Walking Distance from Sector 144 Metro Station",
+      "Dedicated Service Core and Butler Entries"
+    ],
+    "locationAdvantages": [],
+    "floorPlans": [
+      {
+        "name": "4 BHK Wellness Manor",
+        "bedrooms": 4,
+        "bathrooms": 5,
+        "priceEstimate": "₹6.20 Cr",
+        "superAreaSqFt": 4100,
+        "carpetAreaSqFt": 2950
+      },
+      {
+        "name": "4 BHK + Family Lounge Sovereign",
+        "bedrooms": 4,
+        "bathrooms": 6,
+        "priceEstimate": "₹7.80 Cr",
+        "superAreaSqFt": 4700,
+        "carpetAreaSqFt": 3450
+      }
+    ],
+    "distanceToMetro": "600 Meters (Sector 144 Aqua Line Metro)",
+    "distanceToAirport": "30 Mins (Jewar International Airport)",
+    "distanceToExpressway": "On Noida Expressway Service Arterial",
+    "videoTour": {
+      "title": "Gulshan Dynasty 4K Drone Tour & Aerial Walkthrough",
+      "duration": "02:45",
+      "videoUrl": "https://www.youtube.com/watch?v=lR5S12tCJUY",
+      "description": "4K aerial inspection and architectural walkthrough of Gulshan Dynasty in Sector 144.",
+      "thumbnailUrl": "/images/properties/gulshan-dynasty-sec144/gulshan-dynasty-sec144-1.jpg"
+    },
+    "virtualTourUrl": null,
+    "architecturalTheme": {
+      "gradient": "from-emerald-950 via-slate-900 to-teal-950",
+      "iconType": "sparkle",
+      "accentColor": "#34d399"
     }
   },
   {
@@ -1286,6 +1314,7 @@ export const NOIDA_PROPERTIES: Property[] = [
       "description": "4K aerial inspection and architectural walkthrough of EON Fairfox in Sector 140A, Noida–Greater Noida Expressway.",
       "thumbnailUrl": "/images/properties/prop-1791396945692/prop-1791396945692-1.jpg"
     },
+    "virtualTourUrl": null,
     "architecturalTheme": {
       "gradient": "from-blue-950 via-slate-900 to-cyan-950",
       "iconType": "tower",

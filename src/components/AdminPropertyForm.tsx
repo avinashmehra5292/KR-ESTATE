@@ -792,9 +792,11 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
         reraNumber: resolvedRera,
         floorPlans: resolvedFloorPlans,
         coverImage: resolvedCover,
-        galleryImages: existingGalleryImages.length > 0 ? existingGalleryImages : [
-          { url: resolvedCover, caption: title || 'Architectural Showcase' }
-        ],
+        galleryImages: existingGalleryImages.length > 0 ? existingGalleryImages : (
+          uploadFiles.length > 0 ? [] : [
+            { url: resolvedCover, caption: title || 'Architectural Showcase' }
+          ]
+        ),
         videoTour: cleanVideoTour,
         deleteVideoTour: !hasVideoUrl,
         virtualTourUrl: formData.virtualTourUrl?.trim() || null,
@@ -826,6 +828,9 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
       }
 
       setSuccess(true);
+      try {
+        window.dispatchEvent(new CustomEvent('kr-properties-updated'));
+      } catch { }
       setTimeout(() => {
         onClose();
         window.location.reload();
@@ -1823,7 +1828,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
               ref={fileInputRef}
               multiple
               onChange={handleFileChange}
-              accept="image/jpeg, image/png, image/webp"
+              accept="image/jpeg, image/png, image/webp, image/avif, image/heic, image/heif, image/jfif, image/*"
               className="hidden"
             />
 
@@ -1851,18 +1856,35 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
 
             {/* Thumbnail grid of newly added files */}
             {uploadFiles.length > 0 && (
-              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-bold text-slate-700">
-                    New Photos to Upload ({uploadFiles.length})
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setUploadFiles([])}
-                    className="text-xs text-rose-500 hover:text-rose-700 font-medium cursor-pointer"
-                  >
-                    Clear New Photos
-                  </button>
+              <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-300 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                      {uploadFiles.length} New Photo{uploadFiles.length > 1 ? 's' : ''} Staged for Upload
+                    </span>
+                    <span className="text-[11px] text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-md font-medium">
+                      Ready to save
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="submit"
+                      form="admin-form"
+                      disabled={loading}
+                      className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                    >
+                      <Check className="w-3.5 h-3.5" />
+                      <span>{loading ? 'Saving Changes...' : 'Save & Upload Photos Now'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setUploadFiles([])}
+                      className="text-xs text-rose-600 hover:text-rose-800 font-medium px-2 py-1 rounded-lg hover:bg-rose-50 transition-colors cursor-pointer"
+                    >
+                      Clear
+                    </button>
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2.5 max-h-56 overflow-y-auto p-1">
                   {uploadFiles.map((file, idx) => (
