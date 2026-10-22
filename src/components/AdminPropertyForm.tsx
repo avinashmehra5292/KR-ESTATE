@@ -797,6 +797,7 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
         ],
         videoTour: cleanVideoTour,
         deleteVideoTour: !hasVideoUrl,
+        virtualTourUrl: formData.virtualTourUrl?.trim() || null,
         ...(uploadFiles.length > 0 && {
           uploadedImages: uploadFiles.map(f => ({ name: f.name, base64: f.base64 }))
         })
@@ -1278,6 +1279,19 @@ export const AdminPropertyForm: React.FC<AdminPropertyFormProps> = ({
                     placeholder="e.g. Experience panoramic aerial views and luxury specifications..." 
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                  360° Virtual Tour URL (e.g. Housing Digitour, Matterport, Kuula)
+                </label>
+                <input 
+                  name="virtualTourUrl" 
+                  value={formData.virtualTourUrl || ''} 
+                  onChange={(e) => setFormData(prev => ({ ...prev, virtualTourUrl: e.target.value }))} 
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400" 
+                  placeholder="e.g. https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment" 
+                />
               </div>
 
               {/* Live Video Preview if URL exists */}

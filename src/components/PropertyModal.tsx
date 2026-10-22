@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Property, FloorPlan } from '../types';
 import { SafeImage } from './SafeImage';
-import { X, Check, FileDown, Calendar, Play, ChevronLeft, ChevronRight, Maximize2, Camera } from 'lucide-react';
+import { X, Check, FileDown, Calendar, Play, ChevronLeft, ChevronRight, Maximize2, Camera, Compass, ExternalLink } from 'lucide-react';
 import { useSiteSettings } from '../context/SiteSettingsContext';
 
 interface PropertyModalProps {
@@ -221,6 +221,39 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
                       Play Video Walkthrough
                     </button>
                   )}
+                </div>
+              )}
+
+              {/* 360° Virtual Tour Callout Banner */}
+              {property.virtualTourUrl && (
+                <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-[#111728] to-[#111728] border border-amber-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-11 w-11 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/20">
+                      <Compass className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-500/30">
+                        Interactive 3D Walkthrough
+                      </span>
+                      <h4 className="font-semibold text-white text-sm mt-1">
+                        Virtual Tour &bull; Sample Apartment
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        Experience the palatial layouts, luxury interiors, and golf course vistas in interactive 360°.
+                      </p>
+                    </div>
+                  </div>
+
+                  <a
+                    href={property.virtualTourUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition-all cursor-pointer whitespace-nowrap self-start sm:self-auto shadow-md hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                  >
+                    <Compass className="w-3.5 h-3.5" />
+                    <span>Virtual Tour</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
                 </div>
               )}
 
@@ -544,6 +577,17 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
               </div>
 
               <div className="flex items-center gap-2.5">
+                {property.virtualTourUrl && (
+                  <a
+                    href={property.virtualTourUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 text-xs font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-full shadow-lg shadow-amber-500/25 transition-all flex items-center gap-1.5 cursor-pointer hover:scale-105 active:scale-95"
+                  >
+                    <Compass className="h-4 w-4" />
+                    <span>Virtual Tour</span>
+                  </a>
+                )}
                 <a
                   href={`https://wa.me/917870433580?text=Hi%20KR%20Estate%20Noida%2C%20I%20am%20interested%20in%20${encodeURIComponent(property.title)}%20at%20${encodeURIComponent(property.sector || 'Noida')}%20(krestatenoida.com)`}
                   target="_blank"
@@ -606,6 +650,18 @@ _Source: ${settings.agency.name || 'KR Estate Noida'} (${settings.agency.domain 
                     <span className="hidden sm:inline">Watch Project Video</span>
                     <span className="sm:hidden">Video</span>
                   </button>
+                )}
+
+                {property.virtualTourUrl && (
+                  <a
+                    href={property.virtualTourUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full transition-all shadow-lg hover:scale-105 active:scale-95 cursor-pointer"
+                  >
+                    <Compass className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                    <span>Virtual Tour</span>
+                  </a>
                 )}
               </div>
 

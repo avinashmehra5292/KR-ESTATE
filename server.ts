@@ -58,6 +58,7 @@ function propertyRowToApi(row: any): any {
     distanceToAirport: row.distance_to_airport,
     distanceToExpressway: row.distance_to_expressway,
     videoTour: row.video_tour,
+    virtualTourUrl: row.virtual_tour_url || (row.id === 'mahagun-manorialle-sec128' ? 'https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment' : null),
     architecturalTheme: row.architectural_theme,
   };
 }
@@ -92,6 +93,7 @@ function apiPropertyToRow(p: any): any {
     distance_to_airport: p.distanceToAirport || null,
     distance_to_expressway: p.distanceToExpressway || null,
     video_tour: p.videoTour || null,
+    virtual_tour_url: p.virtualTourUrl || (p.id === 'mahagun-manorialle-sec128' ? 'https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment' : null),
     architectural_theme: p.architecturalTheme || null,
   };
 }

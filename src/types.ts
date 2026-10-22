@@ -46,6 +46,7 @@ export interface Property {
     duration: string;
     description: string;
   } | null;
+  virtualTourUrl?: string | null;
   architecturalTheme?: {
     gradient: string;
     accentColor: string;

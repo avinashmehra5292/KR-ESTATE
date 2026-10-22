@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Play, Pause, Volume2, VolumeX, Maximize2, Video, Clock, Building, MapPin, Calendar, FileText, Phone } from 'lucide-react';
+import { X, Play, Pause, Volume2, VolumeX, Maximize2, Video, Clock, Building, MapPin, Calendar, FileText, Phone, Compass, ExternalLink } from 'lucide-react';
 import { Property } from '../types';
 import { NOIDA_PROPERTIES } from '../data/properties';
 
@@ -282,6 +282,18 @@ export const PropertyVideoModal: React.FC<PropertyVideoModalProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2 shrink-0 self-start sm:self-auto">
+              {currentProperty.virtualTourUrl && (
+                <a
+                  href={currentProperty.virtualTourUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95"
+                >
+                  <Compass className="w-4 h-4" />
+                  <span>Virtual Tour</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
               <button
                 type="button"
                 onClick={() => {

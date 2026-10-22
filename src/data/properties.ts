@@ -117,6 +117,7 @@ export const NOIDA_PROPERTIES: Property[] = [
     "distanceToAirport": "35 Mins (Jewar International Airport)",
     "distanceToExpressway": "On Noida Expressway Service Corridor",
     "videoTour": null,
+    "virtualTourUrl": "https://digitour.housing.com/projects/Mahagun_Group/Sample_Apartment",
     "architecturalTheme": {
       "gradient": "from-blue-950 via-slate-900 to-indigo-950",
       "iconType": "tower",

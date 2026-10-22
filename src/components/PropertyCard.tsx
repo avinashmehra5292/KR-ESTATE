@@ -1,7 +1,7 @@
 import React from 'react';
 import { Property } from '../types';
 import { SafeImage } from './SafeImage';
-import { Camera, Play, ArrowUpRight } from 'lucide-react';
+import { Camera, Play, ArrowUpRight, Compass } from 'lucide-react';
 
 interface PropertyCardProps {
   property: Property;
@@ -87,6 +87,20 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
                 <span>Video Tour</span>
               </button>
             )}
+
+            {property.virtualTourUrl && (
+              <a
+                href={property.virtualTourUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-bold text-slate-950 bg-amber-400 hover:bg-amber-300 px-3 py-1 rounded-full transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95 group/tour"
+                title={`Open ${property.title} Virtual Tour`}
+              >
+                <Compass className="h-3 w-3 fill-current group-hover/tour:rotate-45 transition-transform" />
+                <span>Virtual Tour</span>
+              </a>
+            )}
           </div>
 
           <button
@@ -161,6 +175,19 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {property.virtualTourUrl && (
+              <a
+                href={property.virtualTourUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="px-3.5 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs shadow-md transition-all cursor-pointer whitespace-nowrap hover:scale-105 active:scale-95 flex items-center gap-1.5"
+                title={`Explore ${property.title} Virtual Tour`}
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span>Virtual Tour</span>
+              </a>
+            )}
             <button
               type="button"
               onClick={handleVisitClick}
